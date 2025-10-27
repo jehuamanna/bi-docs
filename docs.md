@@ -49,12 +49,13 @@ The minimal core provides essential infrastructure:
 
 **BI Dashboard Examples**:
 
-| Platform | Registry Pattern | Implementation |
+| Platform | Registry Pattern | Extension Method |
 |----------|-----------------|----------------|
 | **Observable** | Module-based registry | • Notebook cells as components<br>• Dynamic import for modules<br>• Runtime dependency resolution<br>• Version pinning per notebook |
 | **Evidence** | File-based convention | • Components auto-discovered from /components<br>• Svelte component registry<br>• Build-time registration<br>• No runtime DI |
-| **Grafana** | Plugin registry | • Panel plugin registry<br>• Data source registry<br>• App plugin registry<br>• Lazy loading with metadata |
-| **Metabase** | Clojure multimethods | • Multimethod dispatch for components<br>• Dynamic registration<br>• Type-based routing |
+| **Count.co** | Component library | • Pre-built visualization components<br>• SQL-driven component binding<br>• Canvas-based layout registry<br>• Drag-and-drop component system |
+| **tldraw** | Shape registry | • Shape definitions as components<br>• Tool registry pattern<br>• Custom shape API<br>• Runtime shape registration |
+| **Omni Docs** | Plugin registry | • Plugin-based documentation system<br>• Markdown-based content<br>• Custom plugin API<br>• Runtime plugin registration |
 
 **Recommended Architecture**:
 
@@ -161,12 +162,13 @@ class ComponentRegistry {
 
 **BI Dashboard Examples**:
 
-| Platform | Event System | Implementation |
+| Platform | Event Pattern | Implementation |
 |----------|-------------|----------------|
 | **Observable** | Reactive cells | • Cell dependencies as events<br>• Automatic re-execution<br>• Dataflow graph<br>• No explicit pub/sub |
 | **Evidence** | Component events | • Svelte component events<br>• Custom events for data updates<br>• Build-time event binding |
-| **Grafana** | Angular/React events | • Dashboard events (refresh, time change)<br>• Panel events (data received)<br>• Plugin communication bus |
-| **Metabase** | Redux actions | • Action-based events<br>• Centralized state updates<br>• Middleware for side effects |
+| **Count.co** | Canvas events | • Cell update events<br>• Query execution events<br>• Collaboration events (real-time)<br>• Canvas state changes |
+| **tldraw** | Shape events | • Shape change events<br>• Selection events<br>• Canvas interaction events<br>• History events (undo/redo) |
+| **Omni Docs** | Plugin events | • Plugin-based event system<br>• Custom event API<br>• Runtime event registration |
 
 **Recommended Architecture**:
 
@@ -263,12 +265,13 @@ class TypedEventBus {
 
 **BI Dashboard Examples**:
 
-| Platform | State Management | Implementation |
+| Platform | State Pattern | Implementation |
 |----------|-----------------|----------------|
 | **Observable** | Reactive cells | • Each cell is state<br>• Automatic dependency tracking<br>• Dataflow graph execution<br>• No central store |
 | **Evidence** | Svelte stores | • Writable stores for state<br>• Derived stores for computed<br>• Context for component state |
-| **Grafana** | Redux (migrating to Zustand) | • Redux for dashboard state<br>• Panel-local state<br>• Query state management |
-| **Metabase** | Redux | • Centralized Redux store<br>• Normalized state<br>• Selectors for derived data |
+| **Count.co** | Canvas state | • Canvas-level state management<br>• Cell state with SQL results<br>• Collaborative state sync<br>• Local + server state |
+| **tldraw** | Zustand store | • Centralized Zustand store<br>• Shape state management<br>• History state (undo/redo)<br>• Computed selectors |
+| **Omni Docs** | Plugin state | • Plugin-based state management<br>• Custom state API<br>• Runtime state registration |
 
 **Recommended Architecture**:
 
@@ -383,9 +386,9 @@ const useDashboardStore = create<DashboardState>()(
 |----------|--------------|----------------|
 | **Observable** | Runtime imports | • Dynamic import() for modules<br>• npm: prefix for packages<br>• Version pinning<br>• No formal plugin API |
 | **Evidence** | Component discovery | • File-based plugin system<br>• Auto-discovery from directories<br>• Build-time integration<br>• Svelte components |
-| **Grafana** | Plugin architecture | • Panel plugins (visualization)<br>• Data source plugins<br>• App plugins (full apps)<br>• Plugin.json metadata<br>• Lazy loading |
-| **VS Code** | Extension API | • Extension manifest<br>• Activation events<br>• Contribution points<br>• Extension host process |
-| **WordPress** | PHP plugins | • Plugin hooks/filters<br>• Activation/deactivation<br>• Auto-updates<br>• Dependency management |
+| **Count.co** | Canvas plugins | • Visualization plugins<br>• Data connector plugins<br>• SQL function extensions<br>• Custom cell types |
+| **tldraw** | Shape plugins | • Custom shape definitions<br>• Tool plugins<br>• UI override plugins<br>• Runtime registration |
+| **Omni Docs** | Plugin system | • Markdown plugins<br>• Custom renderers<br>• Build-time and runtime plugins<br>• Plugin manifest |
 
 **Recommended Architecture**:
 
@@ -528,7 +531,8 @@ The keybinding system follows a **command-based architecture** where:
 
 - **Observable**: Command palette (Cmd+K) with fuzzy search, cell-specific shortcuts, notebook-level keybindings
 - **Evidence**: Vim-like modal keybindings for power users, context-aware navigation
-- **Grafana**: Dashboard shortcuts (d=dashboard, h=home, e=edit), panel-specific bindings
+- **Count.co**: Canvas shortcuts (navigation, cell execution, query editing), SQL editor keybindings
+- **tldraw**: Canvas shortcuts (shape creation, selection, transformation), tool-specific bindings
 - **VS Code** (pattern): Comprehensive "when" clause system, keybinding editor UI
 
 *See Section 9.1.2 for detailed architectural analysis, pros/cons comparison, and implementation strategies.*
@@ -619,10 +623,9 @@ A command palette is a **searchable command interface** that provides:
 |----------|---------------|----------|------------|
 | **Observable** | Custom React component | • Fuzzy search across notebooks<br>• Recent notebooks<br>• Command suggestions<br>• Cell navigation<br>• Keyboard shortcuts reference | Cmd/Ctrl+K |
 | **Evidence** | Custom implementation | • Page navigation<br>• Component search<br>• Query execution<br>• Documentation search<br>• Settings access | Cmd/Ctrl+K |
-| **Grafana** | Custom Angular/React | • Dashboard search<br>• Panel creation<br>• Data source selection<br>• Plugin commands<br>• Keyboard shortcuts | Cmd/Ctrl+K or / |
+| **Count.co** | Custom React | • Canvas search<br>• Cell navigation<br>• Query execution<br>• Data source selection<br>• Quick actions | Cmd/Ctrl+K |
+| **tldraw** | Custom implementation | • Shape search<br>• Tool selection<br>• Canvas actions<br>• Quick commands<br>• Keyboard shortcuts | Cmd/Ctrl+K |
 | **Linear** (inspiration) | cmdk-based | • Issue search<br>• Project navigation<br>• Quick actions<br>• Nested commands<br>• Beautiful animations | Cmd/Ctrl+K |
-| **GitHub** | Custom implementation | • Repository search<br>• File navigation<br>• Command execution<br>• Settings access | Cmd/Ctrl+K or / |
-| **VS Code** | Custom Electron | • File search<br>• Command execution<br>• Symbol search<br>• Extension commands<br>• Multi-mode (files/commands) | Cmd/Ctrl+P, Cmd/Ctrl+Shift+P |
 
 **Recommended Architecture for BI Dashboards**:
 
@@ -846,9 +849,9 @@ The hooks and advice system provides a **plugin architecture** that enables:
 |----------|-------------|---------------|------------------------|
 | **Observable** | Custom event system | Runtime notebook hooks | • Cell execution hooks<br>• Import hooks<br>• Reactive dependency tracking<br>• Custom hook for data loading |
 | **Evidence** | Component lifecycle | Build-time hooks | • Page build hooks<br>• Component mount/unmount<br>• Data query hooks<br>• Markdown processing hooks |
-| **Grafana** | Plugin lifecycle API | Panel plugin hooks | • Dashboard load/save hooks<br>• Data source query hooks<br>• Panel render hooks<br>• Alert evaluation hooks |
+| **Count.co** | Canvas lifecycle | Canvas hooks | • Cell execution hooks<br>• Query lifecycle hooks<br>• Canvas render hooks<br>• Collaboration hooks |
+| **tldraw** | Shape lifecycle | Shape hooks | • Shape creation/update hooks<br>• Canvas interaction hooks<br>• History hooks (undo/redo)<br>• Selection hooks |
 | **VS Code** | Extension API | Command/menu contribution | • Activation events<br>• Language server hooks<br>• Workspace events<br>• Decoration providers |
-| **WordPress** | Action/Filter hooks | PHP-based hooks | • Post save hooks<br>• Content filters<br>• Admin menu hooks<br>• Theme customization |
 | **Webpack** | Tapable hooks | Compilation hooks | • Compiler hooks<br>• Compilation hooks<br>• Module hooks<br>• Asset optimization |
 
 **Recommended Architecture for BI Dashboards**:
@@ -1122,8 +1125,8 @@ dashboard "Sales Overview" {
 |----------|-----------------|------------------|
 | **Observable** | Reactive cells | • Custom cells with JavaScript<br>• Import external libraries<br>• Inline HTML/SVG<br>• D3.js visualizations |
 | **Evidence** | Svelte components | • Custom Svelte components in /components<br>• Markdown with component tags<br>• SQL + component binding |
-| **Grafana** | Panel plugins | • React panel plugins<br>• Plugin.json manifest<br>• PanelPlugin API<br>• Custom editors |
-| **Metabase** | Visualization plugins | • Clojure visualization definitions<br>• JavaScript rendering<br>• Settings schema |
+| **Count.co** | Canvas components | • Custom visualization cells<br>• SQL-driven components<br>• React-based extensions<br>• Drag-and-drop integration |
+| **tldraw** | Shape components | • Custom shape definitions<br>• SVG-based rendering<br>• Tool components<br>• React shape API |
 
 **Recommended Architecture**:
 
@@ -1181,7 +1184,8 @@ extensionAPI.registerComponent({
 |----------|------------------|------------------|
 | **Observable** | Built-in shortcuts | • Limited customization<br>• Cell-level shortcuts<br>• Cmd+K command palette |
 | **Evidence** | Not extensible | • Fixed keybindings<br>• No custom shortcuts |
-| **Grafana** | Keyboard shortcuts | • JSON config in plugin<br>• Dashboard-level shortcuts<br>• Panel shortcuts |
+| **Count.co** | Canvas shortcuts | • Cell navigation keys<br>• Query execution shortcuts<br>• Custom keybindings |
+| **tldraw** | Tool shortcuts | • Shape creation keys<br>• Canvas navigation<br>• Tool-specific bindings |
 | **VS Code** | Keybindings API | • keybindings.json<br>• when clauses<br>• Full customization |
 
 **Recommended API**:
@@ -1233,7 +1237,8 @@ extensionAPI.registerMacro({
 |----------|---------------|------------------|
 | **Observable** | Cell execution | • Cells as commands<br>• Function exports<br>• Import and call |
 | **Evidence** | Build commands | • npm scripts<br>• CLI commands<br>• No runtime commands |
-| **Grafana** | Plugin commands | • Command API<br>• Menu contributions<br>• Toolbar buttons |
+| **Count.co** | Canvas commands | • Cell execution commands<br>• Query commands<br>• Canvas actions |
+| **tldraw** | Tool commands | • Shape commands<br>• Canvas commands<br>• Tool actions |
 | **VS Code** | Commands API | • commands.registerCommand<br>• Command palette<br>• Keybinding integration |
 
 **Recommended API**:
@@ -1290,8 +1295,8 @@ extensionAPI.registerPipeline({
 |----------|-------------|------------------|
 | **Observable** | CSS variables | • Custom CSS in cells<br>• Theme cells<br>• CSS imports |
 | **Evidence** | Tailwind config | • tailwind.config.js<br>• Custom CSS<br>• Component styling |
-| **Grafana** | Theme JSON | • Theme plugin<br>• SCSS variables<br>• JSON theme config |
-| **Metabase** | CSS + Settings | • Custom CSS<br>• Color settings<br>• Limited customization |
+| **Count.co** | Theme settings | • Color customization<br>• Canvas themes<br>• CSS variables |
+| **tldraw** | Theme system | • CSS variables<br>• Custom themes<br>• Dark/light mode<br>• Color overrides |
 
 **Recommended API**:
 
@@ -1347,8 +1352,8 @@ extensionAPI.registerTheme({
 |----------|--------------|------------------|
 | **Observable** | Notebook flow | • Linear cell layout<br>• Custom layouts via HTML<br>• Grid layouts in cells |
 | **Evidence** | Page templates | • Markdown-based<br>• Component slots<br>• Fixed layouts |
-| **Grafana** | Grid layout | • JSON dashboard definition<br>• Panel positioning<br>• Row containers |
-| **Metabase** | Dashboard grid | • Drag-and-drop<br>• JSON export<br>• Template dashboards |
+| **Count.co** | Canvas layout | • Free-form canvas<br>• Cell positioning<br>• Auto-layout options<br>• Responsive grids |
+| **tldraw** | Canvas system | • Infinite canvas<br>• Shape positioning<br>• Grouping and frames<br>• Custom layouts |
 
 **Recommended API**:
 
@@ -1425,8 +1430,8 @@ extensionAPI.registerLayoutTemplate({
 |----------|-----------|----------------|
 | **Observable** | Live evaluation | • Cell re-execution on change<br>• Reactive dependency tracking<br>• Instant feedback<br>• State in cells |
 | **Evidence** | Vite HMR | • Vite dev server<br>• Svelte HMR<br>• Fast refresh<br>• Component state preserved |
-| **Grafana** | Webpack HMR | • Webpack dev server<br>• React Fast Refresh<br>• Plugin hot reload<br>• State management integration |
-| **Metabase** | Webpack HMR | • Webpack HMR<br>• Figwheel (Clojure)<br>• Live code reload |
+| **Count.co** | Vite HMR | • React Fast Refresh<br>• Canvas state preservation<br>• Cell hot reload<br>• Query result caching |
+| **tldraw** | Vite HMR | • Shape state preservation<br>• Canvas hot reload<br>• Tool hot swap<br>• History preservation |
 
 **Error Recovery Patterns**:
 
@@ -1521,8 +1526,8 @@ window.addEventListener('error', (event) => {
 |----------|---------------|----------------|
 | **Observable** | Runtime sandboxing | • Restricted global scope<br>• No direct DOM access<br>• Controlled imports<br>• Rate limiting |
 | **Evidence** | Build-time validation | • Component validation<br>• SQL parameterization<br>• No runtime eval<br>• Static analysis |
-| **Grafana** | Plugin sandboxing | • Plugin API boundaries<br>• Permission system<br>• Code signing<br>• Marketplace review |
-| **Metabase** | Server-side execution | • Backend validation<br>• SQL injection prevention<br>• User permissions<br>• Audit logging |
+| **Count.co** | SQL sandboxing | • Parameterized queries<br>• Query validation<br>• Permission-based access<br>• Audit logging |
+| **tldraw** | Client-side validation | • Shape validation<br>• Canvas bounds checking<br>• User permissions<br>• Collaboration security |
 
 **DOM Access Control**:
 
