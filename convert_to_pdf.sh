@@ -17,8 +17,13 @@ pandoc docs.md \
   --variable linestretch=1.0 \
   --variable pagestyle=plain \
   --variable documentclass=report \
+  --variable subparagraph \
+  -V header-includes='\usepackage{titlesec}' \
+  -V header-includes='\titlespacing*{\section}{0pt}{12pt plus 4pt minus 2pt}{6pt plus 2pt minus 2pt}' \
+  -V header-includes='\titlespacing*{\subsection}{0pt}{10pt plus 4pt minus 2pt}{4pt plus 2pt minus 2pt}' \
+  -V header-includes='\titlespacing*{\subsubsection}{0pt}{8pt plus 4pt minus 2pt}{3pt plus 2pt minus 2pt}' \
   --metadata title="Extensible BI Dashboard Framework - Technical Documentation" \
-  --metadata author="Technical Architecture Team" \
+  --metadata author="Jehu Shalom Amanna - Frontend Solutions Architect" \
   --metadata date="$(date '+%B %d, %Y')"
 
 if [ $? -eq 0 ]; then
