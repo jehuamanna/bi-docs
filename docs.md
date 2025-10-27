@@ -6,6 +6,7 @@ abstract: |
 
   **Core Philosophy:**
 
+
   - **Tiny Core, Maximum Extensibility**: Minimal core functionality with comprehensive plugin architecture
   - **Plugin-Based Architecture**: Adopts proven patterns for extensibility and modularity
   - **Developer-First Design**: Prioritizes developer experience with hot reloading, debugging tools, and clear APIs
@@ -30,6 +31,7 @@ abstract: |
 
 **↓**
 
+
 **Layer 2**: Core System Layer
 
 | | | |
@@ -40,6 +42,7 @@ abstract: |
 
 **↓**
 
+
   **Layer 3**: Extension Layer
 
 | | | | | |
@@ -48,6 +51,7 @@ abstract: |
 | **Commands** | **Keybindings** | **Hooks** | **Macros** | |
 
 **↓**
+
 
 **Layer 4**: Security Layer
 
@@ -58,6 +62,7 @@ abstract: |
 
 **↓**
 
+
 **Layer 5**: Persistence Layer
 
 | | | |
@@ -66,6 +71,7 @@ abstract: |
 | **Cloud Sync** (REST/GQL) | **DuckDB WASM** (Analytics) | **Time-Travel** (Zundo) |
 
 **↓**
+
 
 **Layer 6**: Development Layer
 
@@ -77,6 +83,7 @@ abstract: |
 ## Key Architecture Components
 
 1. **Core System Layer**:
+
    - Added Hooks & Advice system for extensibility
    - Theme System with CSS Variables
    - Layout Engine (Grid/Mosaic patterns)
@@ -84,12 +91,14 @@ abstract: |
    - Typed event system with history/replay
 
 2. **Extension Layer**:
+
    - Expanded to include Web Components
    - Commands and Keybindings as first-class extensions
    - Hooks and Macros support
    - Theme and Layout templates
 
 3. **Security Layer**:
+
    - Multiple sandboxing approaches (SES/iframe)
    - Runtime permission validation
    - Versioned API surface
@@ -97,12 +106,14 @@ abstract: |
    - Marketplace review process
 
 4. **Persistence Layer**:
+
    - Tiered storage strategy (Hot/Warm/Cold)
    - DuckDB WASM for analytics
    - Time-travel debugging (Zundo)
    - OPFS for large file storage
 
 5. **Development Layer** (New):
+
    - Hot Module Replacement
    - Source maps and debugging tools
    - Error overlay and recovery
@@ -125,7 +136,11 @@ User Action → UI Layer → Core System → Extension Layer
 
 # Core System Architecture
 
-The Core System Architecture represents Layer 2 of the framework, providing the minimal yet comprehensive foundation for the extensible BI Dashboard ecosystem. This layer implements the "Tiny Core, Maximum Extensibility" philosophy by offering essential services that all other layers depend upon: Component Registry for dynamic UI management, Event System for decoupled communication, State Management for reactive data flow, Plugin Loader for extension lifecycle, Keybinding System for user interactions, Command Registry for action orchestration, Hooks & Advice for aspect-oriented programming, Theme System for visual customization, and Layout Engine for flexible dashboard arrangements. Each component is designed to be lightweight, performant, and extensible, enabling plugins and extensions to build upon a solid, predictable foundation without introducing unnecessary complexity or bloat. This architecture ensures that the framework remains fast and maintainable while supporting unlimited extensibility through well-defined interfaces and patterns.
+The Core System Architecture represents Layer 2 of the framework, providing the minimal yet comprehensive foundation for the extensible BI Dashboard ecosystem.
+
+This layer implements the "Tiny Core, Maximum Extensibility" philosophy by offering essential services that all other layers depend upon: Component Registry for dynamic UI management, Event System for decoupled communication, State Management for reactive data flow, Plugin Loader for extension lifecycle, Keybinding System for user interactions, Command Registry for action orchestration, Hooks & Advice for aspect-oriented programming, Theme System for visual customization, and Layout Engine for flexible dashboard arrangements.
+
+Each component is designed to be lightweight, performant, and extensible, enabling plugins and extensions to build upon a solid, predictable foundation without introducing unnecessary complexity or bloat. This architecture ensures that the framework remains fast and maintainable while supporting unlimited extensibility through well-defined interfaces and patterns.
 
 ---
 
@@ -237,7 +252,9 @@ class ComponentRegistry {
 
 ### Purpose
 
-Pub/sub event bus for inter-component communication in the BI Dashboard Framework. The Event System serves as the nervous system of the application, enabling loosely-coupled communication between components, plugins, and core systems without creating direct dependencies. It facilitates real-time updates across dashboard cells, synchronizes state changes between visualizations, broadcasts user actions to interested listeners, coordinates plugin lifecycle events, and enables reactive data flows throughout the application. This decoupled architecture allows components to communicate efficiently while maintaining modularity—when a data query completes, visualization updates, user interaction occurs, or plugin state changes, relevant components can respond without tight coupling. The system supports both synchronous and asynchronous event handling, provides event history for debugging and time-travel, and offers scoped channels to prevent event namespace pollution in complex dashboards.
+Pub/sub event bus for inter-component communication in the BI Dashboard Framework. The Event System serves as the nervous system of the application, enabling loosely-coupled communication between components, plugins, and core systems without creating direct dependencies. It facilitates real-time updates across dashboard cells, synchronizes state changes between visualizations, broadcasts user actions to interested listeners, coordinates plugin lifecycle events, and enables reactive data flows throughout the application.
+
+This decoupled architecture allows components to communicate efficiently while maintaining modularity—when a data query completes, visualization updates, user interaction occurs, or plugin state changes, relevant components can respond without tight coupling. The system supports both synchronous and asynchronous event handling, provides event history for debugging and time-travel, and offers scoped channels to prevent event namespace pollution in complex dashboards.
 
 ### Core Features
 - Global and scoped event channels
@@ -458,7 +475,11 @@ const useDashboardStore = create<DashboardState>()(
 
 ### Purpose
 
-Dynamic loading and management of extensions in the BI Dashboard Framework. The Plugin Loader serves as the extensibility engine of the application, enabling the framework to evolve beyond its core capabilities by dynamically loading, managing, and executing third-party extensions at runtime. It orchestrates the complete plugin lifecycle—from discovery and loading to activation, hot-swapping, and graceful shutdown—while maintaining system stability and security. This component enables developers to extend dashboard functionality with custom visualizations, data connectors, transformation pipelines, UI components, and business logic without modifying the core codebase. The loader supports hot module replacement for seamless development workflows, manages complex plugin dependency graphs to ensure correct load order, provides sandboxed execution contexts to isolate plugin code from the core system, and enforces permission-based access control to protect sensitive APIs. By treating plugins as first-class citizens with well-defined lifecycle hooks (init, activate, deactivate, destroy), the loader ensures predictable behavior, proper resource cleanup, and the ability to enable/disable extensions on-the-fly without requiring application restarts. This architecture transforms the BI Dashboard from a static application into a living platform that can be customized and extended to meet diverse business requirements while maintaining performance, security, and developer experience.
+Dynamic loading and management of extensions in the BI Dashboard Framework. The Plugin Loader serves as the extensibility engine of the application, enabling the framework to evolve beyond its core capabilities by dynamically loading, managing, and executing third-party extensions at runtime. It orchestrates the complete plugin lifecycle—from discovery and loading to activation, hot-swapping, and graceful shutdown—while maintaining system stability and security.
+
+This component enables developers to extend dashboard functionality with custom visualizations, data connectors, transformation pipelines, UI components, and business logic without modifying the core codebase. The loader supports hot module replacement for seamless development workflows, manages complex plugin dependency graphs to ensure correct load order, provides sandboxed execution contexts to isolate plugin code from the core system, and enforces permission-based access control to protect sensitive APIs.
+
+By treating plugins as first-class citizens with well-defined lifecycle hooks (init, activate, deactivate, destroy), the loader ensures predictable behavior, proper resource cleanup, and the ability to enable/disable extensions on-the-fly without requiring application restarts. This architecture transforms the BI Dashboard from a static application into a living platform that can be customized and extended to meet diverse business requirements while maintaining performance, security, and developer experience.
 
 ### Core Features
 - Hot module replacement (HMR)
@@ -605,7 +626,11 @@ class PluginLoader {
 
 # Extension System
 
-The Extension System represents Layer 3 of the framework architecture, providing the mechanisms and interfaces through which developers extend, customize, and enhance the BI Dashboard beyond its core capabilities. This layer embodies the framework's "Maximum Extensibility" philosophy by offering multiple pathways for extension: a custom Domain-Specific Language (DSL) for declarative, safe UI composition; full JavaScript/TypeScript support for programmatic control; and a rich set of extension points covering UI components, commands, keybindings, data transformations, themes, and layouts. The system is designed to accommodate developers of all skill levels—from business analysts using the DSL to create simple dashboards, to advanced developers building complex visualizations with React and external libraries. Each extension type is sandboxed for security, versioned for compatibility, and hot-reloadable for rapid development. Extensions can register new chart types, contribute commands to the palette, define custom keybindings, hook into application lifecycle events, override default behaviors through the advice system, and even extend other extensions through a composable plugin architecture. This multi-layered approach ensures that the framework remains accessible to non-technical users while providing the depth and flexibility that power users demand, all while maintaining security boundaries, performance characteristics, and a consistent developer experience across different extension methods.
+The Extension System represents Layer 3 of the framework architecture, providing the mechanisms and interfaces through which developers extend, customize, and enhance the BI Dashboard beyond its core capabilities. This layer embodies the framework's "Maximum Extensibility" philosophy by offering multiple pathways for extension: a custom Domain-Specific Language (DSL) for declarative, safe UI composition; full JavaScript/TypeScript support for programmatic control; and a rich set of extension points covering UI components, commands, keybindings, data transformations, themes, and layouts.
+
+The system is designed to accommodate developers of all skill levels—from business analysts using the DSL to create simple dashboards, to advanced developers building complex visualizations with React and external libraries. Each extension type is sandboxed for security, versioned for compatibility, and hot-reloadable for rapid development.
+
+Extensions can register new chart types, contribute commands to the palette, define custom keybindings, hook into application lifecycle events, override default behaviors through the advice system, and even extend other extensions through a composable plugin architecture. This multi-layered approach ensures that the framework remains accessible to non-technical users while providing the depth and flexibility that power users demand, all while maintaining security boundaries, performance characteristics, and a consistent developer experience across different extension methods.
 
 ---
 
@@ -615,7 +640,13 @@ The Extension System represents Layer 3 of the framework architecture, providing
 
 #### Purpose
 
-Declarative, safe UI composition for the BI Dashboard Framework. The Custom DSL provides a high-level, domain-specific language tailored specifically for creating dashboard layouts, visualizations, and data-driven interfaces without requiring deep programming knowledge. This language serves as the primary extension method for business analysts, data scientists, and non-technical users who need to build sophisticated dashboards quickly and safely. The DSL abstracts away the complexity of React components, state management, and event handling, presenting instead a clean, readable syntax that focuses on what to display rather than how to implement it. By design, the DSL is intentionally constrained to safe operations—preventing arbitrary code execution, file system access, or network requests—making it ideal for multi-tenant environments and scenarios where untrusted users need to create custom dashboards. The language compiles directly to optimized React components, ensuring that DSL-defined dashboards perform identically to hand-coded JavaScript equivalents while maintaining type safety through static analysis. This approach democratizes dashboard creation, enabling rapid prototyping and iteration through hot-reloading, while the compiler catches errors at build time rather than runtime. The DSL supports common BI patterns out-of-the-box—grid layouts, chart configurations, data queries, filters, and interactions—reducing boilerplate and allowing users to express complex dashboard logic in just a few lines of declarative code.
+Declarative, safe UI composition for the BI Dashboard Framework. The Custom DSL provides a high-level, domain-specific language tailored specifically for creating dashboard layouts, visualizations, and data-driven interfaces without requiring deep programming knowledge. This language serves as the primary extension method for business analysts, data scientists, and non-technical users who need to build sophisticated dashboards quickly and safely.
+
+The DSL abstracts away the complexity of React components, state management, and event handling, presenting instead a clean, readable syntax that focuses on what to display rather than how to implement it. By design, the DSL is intentionally constrained to safe operations—preventing arbitrary code execution, file system access, or network requests—making it ideal for multi-tenant environments and scenarios where untrusted users need to create custom dashboards.
+
+The language compiles directly to optimized React components, ensuring that DSL-defined dashboards perform identically to hand-coded JavaScript equivalents while maintaining type safety through static analysis. This approach democratizes dashboard creation, enabling rapid prototyping and iteration through hot-reloading, while the compiler catches errors at build time rather than runtime.
+
+The DSL supports common BI patterns out-of-the-box—grid layouts, chart configurations, data queries, filters, and interactions—reducing boilerplate and allowing users to express complex dashboard logic in just a few lines of declarative code.
 
 #### Features
 - Simple, readable syntax for common patterns
@@ -646,7 +677,13 @@ dashboard "Sales Overview" {
 
 ### Purpose
 
-Full programmatic control for advanced use cases in the BI Dashboard Framework. JavaScript Extensions provide unrestricted access to the framework's extension API, enabling advanced developers to build sophisticated features that go beyond the capabilities of the declarative DSL. This extension method is designed for scenarios requiring complex business logic, custom algorithms, integration with external services, advanced data transformations, or novel visualization techniques that cannot be expressed through the DSL's constrained syntax. JavaScript extensions have full access to the React ecosystem, allowing developers to leverage popular libraries like D3.js for custom visualizations, date-fns for temporal calculations, or lodash for data manipulation. Unlike the DSL, JavaScript extensions can implement stateful components with complex lifecycle management, perform asynchronous operations like API calls and database queries, subscribe to real-time data streams, and interact with browser APIs for features like clipboard access or file downloads. While this power comes with increased responsibility—JavaScript extensions run in a sandboxed environment with permission-based access control to prevent malicious code from compromising the application—developers retain the flexibility to build virtually any feature imaginable. The framework provides a comprehensive extension API that exposes core services (component registry, event bus, state store, command palette) while maintaining security boundaries, ensuring that even powerful JavaScript extensions cannot break the application or access unauthorized resources. This dual-language approach—safe DSL for common cases, powerful JavaScript for advanced scenarios—strikes the optimal balance between accessibility and capability.
+Full programmatic control for advanced use cases in the BI Dashboard Framework. JavaScript Extensions provide unrestricted access to the framework's extension API, enabling advanced developers to build sophisticated features that go beyond the capabilities of the declarative DSL. This extension method is designed for scenarios requiring complex business logic, custom algorithms, integration with external services, advanced data transformations, or novel visualization techniques that cannot be expressed through the DSL's constrained syntax.
+
+JavaScript extensions have full access to the React ecosystem, allowing developers to leverage popular libraries like D3.js for custom visualizations, date-fns for temporal calculations, or lodash for data manipulation. Unlike the DSL, JavaScript extensions can implement stateful components with complex lifecycle management, perform asynchronous operations like API calls and database queries, subscribe to real-time data streams, and interact with browser APIs for features like clipboard access or file downloads.
+
+While this power comes with increased responsibility—JavaScript extensions run in a sandboxed environment with permission-based access control to prevent malicious code from compromising the application—developers retain the flexibility to build virtually any feature imaginable. The framework provides a comprehensive extension API that exposes core services (component registry, event bus, state store, command palette) while maintaining security boundaries, ensuring that even powerful JavaScript extensions cannot break the application or access unauthorized resources.
+
+This dual-language approach—safe DSL for common cases, powerful JavaScript for advanced scenarios—strikes the optimal balance between accessibility and capability.
 
 ### Features
 - Access to extension API
@@ -658,11 +695,23 @@ Full programmatic control for advanced use cases in the BI Dashboard Framework. 
 
 ### Extension Points
 
-The framework provides multiple extension points for customizing every aspect of the system, enabling developers to inject custom behavior, UI elements, and functionality at strategic integration points throughout the application lifecycle. These extension points represent the framework's commitment to the "Maximum Extensibility" philosophy, offering well-defined interfaces where plugins can hook into core systems without modifying the underlying codebase. Extension points span the entire application stack: **UI Components** for custom visualizations and widgets, **Commands** for registering actions in the command palette, **Keybindings** for keyboard shortcuts, **Hooks** for intercepting and augmenting function calls, **Advice** for wrapping existing methods with additional behavior, **Themes** for visual customization, **Layouts** for dashboard arrangement patterns, **Data Transformations** for processing query results, **Event Listeners** for reacting to application state changes, and **Lifecycle Hooks** for plugin initialization and cleanup. Each extension point is designed with composability in mind—multiple extensions can contribute to the same point without conflicts, thanks to priority systems, namespacing, and conflict resolution strategies. The framework guarantees that extensions registered at these points receive stable, versioned APIs that won't break between releases, and provides comprehensive TypeScript definitions for type-safe extension development. This architecture allows the core framework to remain minimal while supporting unlimited extensibility, as new capabilities can be added through extensions rather than core modifications, ensuring the system scales gracefully as requirements evolve.
+The framework provides multiple extension points for customizing every aspect of the system, enabling developers to inject custom behavior, UI elements, and functionality at strategic integration points throughout the application lifecycle. These extension points represent the framework's commitment to the "Maximum Extensibility" philosophy, offering well-defined interfaces where plugins can hook into core systems without modifying the underlying codebase.
+
+Extension points span the entire application stack: **UI Components** for custom visualizations and widgets, **Commands** for registering actions in the command palette, **Keybindings** for keyboard shortcuts, **Hooks** for intercepting and augmenting function calls, **Advice** for wrapping existing methods with additional behavior, **Themes** for visual customization, **Layouts** for dashboard arrangement patterns, **Data Transformations** for processing query results, **Event Listeners** for reacting to application state changes, and **Lifecycle Hooks** for plugin initialization and cleanup.
+
+Each extension point is designed with composability in mind—multiple extensions can contribute to the same point without conflicts, thanks to priority systems, namespacing, and conflict resolution strategies. The framework guarantees that extensions registered at these points receive stable, versioned APIs that won't break between releases, and provides comprehensive TypeScript definitions for type-safe extension development.
+
+This architecture allows the core framework to remain minimal while supporting unlimited extensibility, as new capabilities can be added through extensions rather than core modifications, ensuring the system scales gracefully as requirements evolve.
 
 ### UI Components
 
-UI Components represent the most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs. Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms). The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences. All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
+UI Components represent the most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs.
+
+Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms).
+
+The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences.
+
+All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
 
 ### Extension Capabilities
 - Custom chart types and visualizations
@@ -754,6 +803,7 @@ A command palette is a **searchable command interface** that provides:
 ### Architecture Patterns
 
 1. **Command Registration Pattern**
+
    ```typescript
    interface Command {
      id: string;
@@ -768,6 +818,8 @@ A command palette is a **searchable command interface** that provides:
    ```
 
 2. **Search Ranking Strategy**
+
+
    - Exact match (highest priority)
    - Prefix match
    - Fuzzy match with position weighting
@@ -776,6 +828,8 @@ A command palette is a **searchable command interface** that provides:
    - Frequency boost
 
 3. **UI State Management**
+
+
    - Open/closed state
    - Search query
    - Selected command index
@@ -869,21 +923,28 @@ const modes = {
 ### Advanced Features
 
 1. **Nested Commands** (Breadcrumb navigation)
+
    - Parent command opens sub-menu
    - Back navigation with Escape
    - Visual breadcrumb trail
 
 2. **Command Scoring**
+
+
    - Frecency (frequency + recency)
    - User preference learning
    - Context-aware boosting
 
 3. **Multi-Step Commands**
+
+
    - Command with parameter prompts
    - Wizard-like flows
    - Validation and error handling
 
 4. **Command Chaining**
+
+
    - Execute multiple commands in sequence
    - Macro recording
    - Batch operations
@@ -1080,7 +1141,13 @@ extensionAPI.registerMacro({
 
 ### Purpose
 
-Themes represent the third most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs. Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms). The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences. All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
+Themes represent the third most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs.
+
+Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms).
+
+The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences.
+
+All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
 
 ### Extension Capabilities
 
@@ -1141,7 +1208,13 @@ extensionAPI.registerTheme({
 
 ### Purpose
 
-Layouts represent the fourth most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs. Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms). The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences. All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
+Layouts represent the fourth most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs.
+
+Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms).
+
+The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences.
+
+All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
 
 ### Buffer/Window Model
 
@@ -1209,7 +1282,13 @@ extensionAPI.registerLayoutTemplate({
 
 ### Purpose
 
-Hooks and advice represent the fifth most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs. Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms). The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences. All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
+Hooks and advice represent the fifth most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs.
+
+Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms).
+
+The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences.
+
+All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
 
 ### Core Concepts
 
@@ -1432,6 +1511,7 @@ class AdviceSystem {
 ### Common Hook Patterns
 
 1. **Data Transformation Pipeline**
+
    ```typescript
    // Transform data through multiple plugins
    hooks.on('data-transform', (data) => {
@@ -1442,6 +1522,7 @@ class AdviceSystem {
    ```
 
 2. **Validation Chain**
+
    ```typescript
    // Validate with multiple validators
    hooks.on('validate-dashboard', (dashboard) => {
@@ -1451,6 +1532,7 @@ class AdviceSystem {
    ```
 
 3. **Lifecycle Management**
+
    ```typescript
    // Plugin initialization
    hooks.on('plugin-loaded', async (plugin) => {
@@ -1460,6 +1542,7 @@ class AdviceSystem {
    ```
 
 4. **Conditional Execution**
+
    ```typescript
    // Execute only if condition met
    hooks.on('before-save', (data) => {
@@ -1491,21 +1574,29 @@ class AdviceSystem {
 ### Advanced Features
 
 1. **Hook Composition**
+
+
    - Combine multiple hooks into one
    - Reusable hook patterns
    - Hook inheritance
 
 2. **Conditional Hooks**
+
+
    - Execute only when condition met
    - Context-aware activation
    - Dynamic hook registration
 
 3. **Hook Debugging**
+
+
    - Hook execution tracing
    - Performance profiling
    - Dependency visualization
 
 4. **Hook Versioning**
+
+
    - API version compatibility
    - Deprecation warnings
    - Migration helpers
@@ -1539,7 +1630,15 @@ class AdviceSystem {
 
 ### Overview
 
-Hot Module Replacement (HMR) enables developers to update extensions in real-time without losing application state, dramatically improving development velocity and the overall developer experience in the BI Dashboard Framework. HMR represents a critical component of the "Developer-First Design" philosophy, transforming the traditional edit-save-refresh-navigate workflow into an instantaneous feedback loop where code changes appear immediately in the running application while preserving the current application state, user interactions, and data context. This capability is particularly valuable in dashboard development scenarios where developers need to iterate on visualizations, tweak styling, adjust data transformations, or debug complex interactions—activities that traditionally required full page reloads, losing the current dashboard state, query results, filter selections, and navigation context. The framework's HMR implementation goes beyond simple module replacement by intelligently handling extension lifecycle management: when an extension's code changes, the system gracefully unloads the old version (cleaning up event listeners, timers, and resources), loads the new version, restores relevant state (dashboard configuration, user preferences, cached data), and re-mounts components in their previous positions with their previous props. This sophisticated orchestration ensures that developers can modify extension code, see changes instantly, and continue working from exactly where they left off without manually recreating their testing scenario. The HMR system also provides robust error handling—if a code change introduces a syntax error or runtime exception, the framework displays a helpful error overlay with stack traces and source maps, allows developers to fix the issue, and automatically recovers without requiring a manual page refresh. This combination of speed, state preservation, and error resilience creates a development experience that feels more like live coding than traditional web development, enabling rapid experimentation and iteration that would be impractical with conventional reload-based workflows.
+Hot Module Replacement (HMR) enables developers to update extensions in real-time without losing application state, dramatically improving development velocity and the overall developer experience in the BI Dashboard Framework. HMR represents a critical component of the "Developer-First Design" philosophy, transforming the traditional edit-save-refresh-navigate workflow into an instantaneous feedback loop where code changes appear immediately in the running application while preserving the current application state, user interactions, and data context.
+
+This capability is particularly valuable in dashboard development scenarios where developers need to iterate on visualizations, tweak styling, adjust data transformations, or debug complex interactions—activities that traditionally required full page reloads, losing the current dashboard state, query results, filter selections, and navigation context.
+
+The framework's HMR implementation goes beyond simple module replacement by intelligently handling extension lifecycle management: when an extension's code changes, the system gracefully unloads the old version (cleaning up event listeners, timers, and resources), loads the new version, restores relevant state (dashboard configuration, user preferences, cached data), and re-mounts components in their previous positions with their previous props.
+
+This sophisticated orchestration ensures that developers can modify extension code, see changes instantly, and continue working from exactly where they left off without manually recreating their testing scenario. The HMR system also provides robust error handling—if a code change introduces a syntax error or runtime exception, the framework displays a helpful error overlay with stack traces and source maps, allows developers to fix the issue, and automatically recovers without requiring a manual page refresh.
+
+This combination of speed, state preservation, and error resilience creates a development experience that feels more like live coding than traditional web development, enabling rapid experimentation and iteration that would be impractical with conventional reload-based workflows.
 
 ### Core Capabilities
 
@@ -1646,7 +1745,13 @@ window.addEventListener('error', (event) => {
 
 ### Overview
 
-The framework supports live evaluation and hot reloading of both DSL and JavaScript code blocks within dashboards, enabling rapid development and interactive data exploration. This capability represents the convergence of the framework's extensibility philosophy with modern development practices, creating an Observable-style notebook experience where code cells can be written in either the custom DSL or full JavaScript, evaluated instantly, and automatically re-executed when their dependencies change. Live evaluation transforms the dashboard from a static configuration into a dynamic, programmable environment where developers and data analysts can experiment with queries, test visualizations, prototype transformations, and explore data interactively without the friction of traditional compile-deploy-test cycles. The system maintains a dependency graph between cells—when a cell's output changes, all dependent cells automatically re-evaluate in topological order, ensuring consistency while minimizing unnecessary computation. This reactive evaluation model, combined with hot module replacement for code changes and intelligent state preservation across reloads, creates a development experience that feels immediate and responsive. The framework's dual-language support means that simple dashboards can be built entirely in the declarative DSL for safety and simplicity, while complex scenarios can leverage JavaScript's full power for custom logic, external API integration, or advanced data processing. Both evaluation paths are sandboxed for security, versioned for compatibility, and integrated with the same state management, event system, and component registry, ensuring a consistent experience regardless of which language is used. This live evaluation capability is particularly powerful for data exploration workflows—analysts can write SQL queries, transform results with JavaScript, visualize data with DSL-defined charts, and iterate on all three in real-time, seeing results update instantly as they refine their analysis.
+The framework supports live evaluation and hot reloading of both DSL and JavaScript code blocks within dashboards, enabling rapid development and interactive data exploration. This capability represents the convergence of the framework's extensibility philosophy with modern development practices, creating an Observable-style notebook experience where code cells can be written in either the custom DSL or full JavaScript, evaluated instantly, and automatically re-executed when their dependencies change.
+
+Live evaluation transforms the dashboard from a static configuration into a dynamic, programmable environment where developers and data analysts can experiment with queries, test visualizations, prototype transformations, and explore data interactively without the friction of traditional compile-deploy-test cycles. The system maintains a dependency graph between cells—when a cell's output changes, all dependent cells automatically re-evaluate in topological order, ensuring consistency while minimizing unnecessary computation.
+
+This reactive evaluation model, combined with hot module replacement for code changes and intelligent state preservation across reloads, creates a development experience that feels immediate and responsive. The framework's dual-language support means that simple dashboards can be built entirely in the declarative DSL for safety and simplicity, while complex scenarios can leverage JavaScript's full power for custom logic, external API integration, or advanced data processing.
+
+Both evaluation paths are sandboxed for security, versioned for compatibility, and integrated with the same state management, event system, and component registry, ensuring a consistent experience regardless of which language is used. This live evaluation capability is particularly powerful for data exploration workflows—analysts can write SQL queries, transform results with JavaScript, visualize data with DSL-defined charts, and iterate on all three in real-time, seeing results update instantly as they refine their analysis.
 
 ### Core Capabilities
 
@@ -1660,7 +1765,11 @@ The framework supports live evaluation and hot reloading of both DSL and JavaScr
 
 #### Architecture Pattern
 
-Observable-style reactive cells with sandboxed execution. This pattern implements a cell-based evaluation model inspired by Observable notebooks and Jupyter, where each JavaScript code block is treated as an independent computational unit (cell) with explicit dependencies on other cells or data sources. The architecture maintains a directed acyclic graph (DAG) of cell dependencies, automatically tracking which cells reference which variables or outputs, and orchestrating re-evaluation in the correct order when upstream cells change. Each cell executes in a sandboxed environment with controlled access to browser APIs, framework services, and other cells' outputs, preventing malicious code from compromising the application while still allowing legitimate use cases like data fetching, DOM manipulation, and state updates. The system supports both synchronous and asynchronous cell evaluation, handles circular dependency detection, provides detailed error reporting with source maps, and integrates with the HMR system to preserve cell outputs across code changes. This architecture enables powerful interactive programming capabilities—cells can define functions used by other cells, fetch data from APIs, perform complex transformations, generate visualizations, or even dynamically register new components—all while maintaining security boundaries and providing instant feedback as code changes.
+Observable-style reactive cells with sandboxed execution. This pattern implements a cell-based evaluation model inspired by Observable notebooks and Jupyter, where each JavaScript code block is treated as an independent computational unit (cell) with explicit dependencies on other cells or data sources. The architecture maintains a directed acyclic graph (DAG) of cell dependencies, automatically tracking which cells reference which variables or outputs, and orchestrating re-evaluation in the correct order when upstream cells change.
+
+Each cell executes in a sandboxed environment with controlled access to browser APIs, framework services, and other cells' outputs, preventing malicious code from compromising the application while still allowing legitimate use cases like data fetching, DOM manipulation, and state updates. The system supports both synchronous and asynchronous cell evaluation, handles circular dependency detection, provides detailed error reporting with source maps, and integrates with the HMR system to preserve cell outputs across code changes.
+
+This architecture enables powerful interactive programming capabilities—cells can define functions used by other cells, fetch data from APIs, perform complex transformations, generate visualizations, or even dynamically register new components—all while maintaining security boundaries and providing instant feedback as code changes.
 
 #### Implementation
 
@@ -1757,7 +1866,13 @@ class SecureJSEvaluator extends LiveJSEvaluator {
 
 #### Architecture Pattern
 
-Compile-to-React with Vite HMR integration. This pattern treats DSL code as a high-level declarative specification that compiles down to optimized React components at build time or runtime, leveraging Vite's fast HMR capabilities to provide instant feedback during development. The compilation pipeline parses DSL syntax into an abstract syntax tree (AST), validates the structure against the DSL schema, transforms the AST into React component definitions with proper hooks and lifecycle methods, and generates TypeScript-typed components that integrate seamlessly with the framework's component registry. Unlike traditional template languages that require runtime interpretation, this compile-to-React approach produces first-class React components that benefit from React's optimization strategies (memoization, virtual DOM diffing, concurrent rendering) while maintaining the simplicity and safety of the DSL syntax. The Vite HMR integration enables incremental compilation—when DSL code changes, only the affected components are recompiled and hot-swapped into the running application, preserving component state and avoiding full page reloads. This architecture provides the best of both worlds: the developer-friendly syntax and safety guarantees of a DSL, combined with the performance and ecosystem benefits of React. The compiler also generates source maps that map DSL line numbers to React component code, enabling proper debugging and error reporting that references the original DSL source rather than the compiled output.
+Compile-to-React with Vite HMR integration. This pattern treats DSL code as a high-level declarative specification that compiles down to optimized React components at build time or runtime, leveraging Vite's fast HMR capabilities to provide instant feedback during development.
+
+The compilation pipeline parses DSL syntax into an abstract syntax tree (AST), validates the structure against the DSL schema, transforms the AST into React component definitions with proper hooks and lifecycle methods, and generates TypeScript-typed components that integrate seamlessly with the framework's component registry.
+
+Unlike traditional template languages that require runtime interpretation, this compile-to-React approach produces first-class React components that benefit from React's optimization strategies (memoization, virtual DOM diffing, concurrent rendering) while maintaining the simplicity and safety of the DSL syntax. The Vite HMR integration enables incremental compilation—when DSL code changes, only the affected components are recompiled and hot-swapped into the running application, preserving component state and avoiding full page reloads.
+
+This architecture provides the best of both worlds: the developer-friendly syntax and safety guarantees of a DSL, combined with the performance and ecosystem benefits of React. The compiler also generates source maps that map DSL line numbers to React component code, enabling proper debugging and error reporting that references the original DSL source rather than the compiled output.
 
 #### Implementation
 
@@ -1849,7 +1964,11 @@ class DSLLiveCompiler {
 
 #### Recommended Architecture
 
-Combines DSL and JavaScript evaluation with unified state management into a cohesive hybrid system that supports both languages within the same dashboard, sharing state, data, and components seamlessly. This architecture recognizes that different parts of a dashboard have different requirements—some are best expressed declaratively in DSL (layouts, standard charts, simple filters), while others need JavaScript's full power (custom algorithms, API integrations, complex transformations)—and provides a unified execution environment where both can coexist and interoperate. The system maintains a single dependency graph that tracks relationships between DSL cells, JavaScript cells, and shared data sources, ensuring that changes propagate correctly regardless of which language produced the output. State management is centralized through the framework's Zustand store, allowing DSL components to read and write the same state that JavaScript cells manipulate, creating a truly integrated experience. The hybrid engine handles the complexity of coordinating two different evaluation models (compile-time DSL compilation vs. runtime JavaScript interpretation), managing their different security profiles (DSL is inherently safe, JavaScript requires sandboxing), and ensuring consistent behavior across both. This architecture enables powerful composition patterns—a JavaScript cell can fetch data from an API, a DSL cell can visualize that data, another JavaScript cell can process user interactions, and a DSL cell can display the results—all working together as a cohesive unit with automatic dependency tracking and reactive updates.
+Combines DSL and JavaScript evaluation with unified state management into a cohesive hybrid system that supports both languages within the same dashboard, sharing state, data, and components seamlessly. This architecture recognizes that different parts of a dashboard have different requirements—some are best expressed declaratively in DSL (layouts, standard charts, simple filters), while others need JavaScript's full power (custom algorithms, API integrations, complex transformations)—and provides a unified execution environment where both can coexist and interoperate.
+
+The system maintains a single dependency graph that tracks relationships between DSL cells, JavaScript cells, and shared data sources, ensuring that changes propagate correctly regardless of which language produced the output. State management is centralized through the framework's Zustand store, allowing DSL components to read and write the same state that JavaScript cells manipulate, creating a truly integrated experience. The hybrid engine handles the complexity of coordinating two different evaluation models (compile-time DSL compilation vs.
+
+runtime JavaScript interpretation), managing their different security profiles (DSL is inherently safe, JavaScript requires sandboxing), and ensuring consistent behavior across both. This architecture enables powerful composition patterns—a JavaScript cell can fetch data from an API, a DSL cell can visualize that data, another JavaScript cell can process user interactions, and a DSL cell can display the results—all working together as a cohesive unit with automatic dependency tracking and reactive updates.
 
 #### Implementation
 
@@ -2136,9 +2255,13 @@ class CellErrorBoundary extends React.Component<Props, State> {
 
 ## Overview
 
-A comprehensive security model protects users from malicious code execution while enabling powerful customization capabilities in an infinite canvas dashboard environment. The security model addresses the unique challenges of allowing users to write and execute custom JavaScript and DSL code within dashboard cells alongside trusted built-in components like tables, charts, inputs, and code editors. The architecture employs a defense-in-depth strategy with multiple layers: sandboxed execution environments that isolate user code in separate iframes with their own origins, proxy-based API control that restricts built-in components to only their required permissions, runtime validation that checks every API call, resource limits that prevent runaway code from consuming excessive CPU or memory, audit logging for debugging and compliance, and rate limiting to prevent abuse.
+A comprehensive security model protects users from malicious code execution while enabling powerful customization capabilities in an infinite canvas dashboard environment. The security model addresses the unique challenges of allowing users to write and execute custom JavaScript and DSL code within dashboard cells alongside trusted built-in components like tables, charts, inputs, and code editors.
 
-This multi-layered approach recognizes that no single security mechanism is perfect—iframe sandboxing provides strong isolation but has communication overhead, proxy-based controls are performant but can be bypassed, and resource limits may need tuning—so the framework employs multiple overlapping defenses to ensure that even if one layer fails, others provide protection. The security model is designed to be transparent to legitimate users: they can write normal JavaScript or custom DSL without learning complex security models, console logging works as expected, and the provided API surface is intuitive. Meanwhile, malicious code encounters multiple barriers: iframe origin isolation prevents access to the parent window, message validation blocks unauthorized communication, CSP policies restrict network access, and timeout mechanisms terminate long-running code.
+The architecture employs a defense-in-depth strategy with multiple layers: sandboxed execution environments that isolate user code in separate iframes with their own origins, proxy-based API control that restricts built-in components to only their required permissions, runtime validation that checks every API call, resource limits that prevent runaway code from consuming excessive CPU or memory, audit logging for debugging and compliance, and rate limiting to prevent abuse.
+
+This multi-layered approach recognizes that no single security mechanism is perfect—iframe sandboxing provides strong isolation but has communication overhead, proxy-based controls are performant but can be bypassed, and resource limits may need tuning—so the framework employs multiple overlapping defenses to ensure that even if one layer fails, others provide protection.
+
+The security model is designed to be transparent to legitimate users: they can write normal JavaScript or custom DSL without learning complex security models, console logging works as expected, and the provided API surface is intuitive. Meanwhile, malicious code encounters multiple barriers: iframe origin isolation prevents access to the parent window, message validation blocks unauthorized communication, CSP policies restrict network access, and timeout mechanisms terminate long-running code.
 
 This comprehensive approach allows the infinite canvas dashboard to support dynamic, user-generated code execution while maintaining the security, stability, and performance guarantees that production applications demand. The framework provides developer tooling—execution sandboxes for testing code safely, permission documentation for understanding API access, and clear error messages for security violations—ensuring that security becomes an enabler rather than an obstacle to building powerful, interactive dashboards.
 
@@ -2154,6 +2277,7 @@ For an infinite canvas dashboard with dynamic cells (tables, charts, inputs, Cod
 
   - **Why it's ideal:**
 
+
     - **Strong Isolation**: Custom JS/DSL code runs in complete isolation from main canvas
     - **No Page Reload**: iframes can be dynamically created/destroyed without affecting the main page
     - **Separate Crash Domain**: If user code crashes, it won't break the entire dashboard
@@ -2163,6 +2287,7 @@ For an infinite canvas dashboard with dynamic cells (tables, charts, inputs, Cod
 - **Secondary: Proxy-Based** (for built-in components)
 
   - **Why it complements well:**
+
 
     - **Performance**: Built-in components (tables, charts, inputs) run in main context with controlled API access
     - **Fine-Grained Control**: Audit and limit what APIs each component type can access
@@ -2174,6 +2299,7 @@ For an infinite canvas dashboard with dynamic cells (tables, charts, inputs, Cod
 
 - **SES (Secure ECMAScript) - Not Suitable**
 
+
   - **Too restrictive**: No DOM access means you can't render UI components
   - **Learning curve**: Users would need to learn capability-based security
   - **Compatibility**: Many libraries won't work in frozen realm
@@ -2181,11 +2307,13 @@ For an infinite canvas dashboard with dynamic cells (tables, charts, inputs, Cod
 
 - **Web Workers (alone) - Not Suitable**
 
+
   - **No DOM access**: Can't render tables, charts, or UI elements
   - **Message passing overhead**: Serialization cost for every UI update
   - **Limited use**: Only good for background computation (can be used as Layer 3)
 
 - **VM Isolation - Not Suitable**
+
 
   - **Too heavy**: Significant overhead (1MB+) for each cell
   - **Limited browser support**: QuickJS-WASM not widely supported
@@ -2597,42 +2725,56 @@ async function executeCell(cell: Cell): Promise<CellResult> {
 #### Benefits for Infinite Canvas Dashboard
 
 1. **Performance**
+
+
    - Built-in components run at native speed in main context
    - No serialization overhead for trusted components
    - iframe pooling reduces creation overhead
    - Web Workers handle heavy computation without blocking UI
 
 2. **Safety**
+
+
    - User code completely isolated in iframes
    - Each iframe has its own origin (null origin)
    - Proxy layer prevents unauthorized API access
    - Crash in one cell doesn't affect others
 
 3. **No Reload Required**
+
+
    - All execution happens dynamically
    - iframes created/destroyed on demand
    - Canvas state preserved across cell executions
    - Hot module replacement possible
 
 4. **Scalability**
+
+
    - Each cell is independent
    - Can have hundreds of cells on canvas
    - Lazy loading: only execute visible cells
    - iframe pooling reduces memory footprint
 
 5. **Developer Experience**
+
+
    - Users write normal JavaScript/DSL
    - No need to learn new security models
    - Rich API provided through `api` object
    - Console logging works as expected
 
 6. **Audit Trail**
+
+
    - Proxy layer logs all API usage
    - Track which cells access what data
    - Security monitoring and debugging
    - Compliance and forensics
 
 7. **Flexibility**
+
+
    - Easy to add new component types
    - Can adjust permissions per component
    - Support multiple languages (JS, TS, DSL)
@@ -2968,9 +3110,11 @@ class PluginHost {
 #### 1. SES (Secure ECMAScript)
 
 **Overview:**
+
 SES is a hardened subset of JavaScript developed by Agoric that provides deterministic, secure execution by removing ambient authority and non-deterministic features. It creates a "frozen realm" where all built-in objects are immutable and access to global state is controlled.
 
 **How It Works:**
+
 
 - **Compartments**: Creates isolated execution contexts with their own global scope
 - **Frozen Intrinsics**: All built-in prototypes (`Object.prototype`, `Array.prototype`, etc.) are frozen to prevent prototype pollution
@@ -2978,6 +3122,7 @@ SES is a hardened subset of JavaScript developed by Agoric that provides determi
 - **Deterministic Execution**: Removes `Date.now()`, `Math.random()`, and other non-deterministic APIs
 
 **Implementation Example:**
+
 ```javascript
 import { lockdown, Compartment } from 'ses';
 
@@ -3003,6 +3148,7 @@ const result = compartment.evaluate(`
 
 **Pros:**
 
+
 - **Strong Isolation**: Complete separation from host environment
 - **Deterministic**: Same input always produces same output (useful for testing)
 - **Prototype Safety**: Immune to prototype pollution attacks
@@ -3010,6 +3156,7 @@ const result = compartment.evaluate(`
 - **Standards-Based**: Built on TC39 proposals
 
 **Cons:**
+
 
 - **Limited APIs**: No access to DOM, timers, network by default
 - **Learning Curve**: Capability-based security requires different thinking
@@ -3019,6 +3166,7 @@ const result = compartment.evaluate(`
 
 **Best For:**
 
+
 - Financial applications requiring deterministic execution
 - Plugin systems with untrusted code
 - Smart contracts and blockchain applications
@@ -3026,6 +3174,7 @@ const result = compartment.evaluate(`
 - Multi-tenant SaaS platforms
 
 **Real-World Usage:**
+
 
 - **Agoric**: Blockchain smart contracts
 - **MetaMask Snaps**: Browser extension plugins
@@ -3036,9 +3185,11 @@ const result = compartment.evaluate(`
 #### 2. iframe Sandbox
 
 **Overview:**
+
 Uses HTML5 sandboxed iframes to create a completely isolated browsing context with its own origin, DOM, and JavaScript environment. The `sandbox` attribute restricts capabilities like form submission, scripts, and top navigation.
 
 **How It Works:**
+
 
 - **Origin Isolation**: Creates unique opaque origin (null origin)
 - **CSP Integration**: Content Security Policy for additional restrictions
@@ -3046,6 +3197,7 @@ Uses HTML5 sandboxed iframes to create a completely isolated browsing context wi
 - **Message Passing**: `postMessage` API for secure communication
 
 **Implementation Example:**
+
 ```javascript
 // Create sandboxed iframe
 const iframe = document.createElement('iframe');
@@ -3077,6 +3229,7 @@ document.body.appendChild(iframe);
 
 **Sandbox Flags:**
 
+
 - `allow-scripts`: Enable JavaScript execution
 - `allow-same-origin`: Allow same-origin access (dangerous with allow-scripts)
 - `allow-forms`: Allow form submission
@@ -3086,6 +3239,7 @@ document.body.appendChild(iframe);
 
 **Pros:**
 
+
 - **True Isolation**: Separate origin and execution context
 - **Browser Native**: No external libraries required
 - **CSP Support**: Leverage Content Security Policy
@@ -3093,6 +3247,7 @@ document.body.appendChild(iframe);
 - **Well-Tested**: Battle-tested browser security feature
 
 **Cons:**
+
 
 - **Communication Overhead**: `postMessage` adds latency
 - **Performance**: Full document context is heavyweight
@@ -3102,6 +3257,7 @@ document.body.appendChild(iframe);
 
 **Best For:**
 
+
 - Embedding untrusted third-party content
 - User-generated HTML/CSS/JavaScript
 - Widget systems (ads, embeds)
@@ -3109,6 +3265,7 @@ document.body.appendChild(iframe);
 - Multi-tenant dashboards with custom visualizations
 
 **Security Considerations:**
+
 ```javascript
 // DANGEROUS: Never combine these flags
 iframe.sandbox = 'allow-scripts allow-same-origin';
@@ -3130,9 +3287,11 @@ window.addEventListener('message', (event) => {
 #### 3. Web Workers
 
 **Overview:**
+
 Web Workers run JavaScript in background threads separate from the main UI thread. They have no access to the DOM and communicate via message passing, providing natural isolation for compute-heavy tasks.
 
 **How It Works:**
+
 
 - **Thread Isolation**: Runs in separate thread (not process)
 - **No DOM Access**: Cannot access `window`, `document`, or DOM APIs
@@ -3140,6 +3299,7 @@ Web Workers run JavaScript in background threads separate from the main UI threa
 - **Shared Memory**: Optional `SharedArrayBuffer` for advanced use cases
 
 **Implementation Example:**
+
 ```javascript
 // Main thread
 const worker = new Worker('worker.js');
@@ -3166,11 +3326,13 @@ self.addEventListener('message', (event) => {
 
 **Types of Workers:**
 
+
 - **Dedicated Workers**: One-to-one with creating script
 - **Shared Workers**: Shared across multiple scripts/tabs
 - **Service Workers**: Network proxy for offline support
 
 **Pros:**
+
 
 - **No DOM Access**: Natural security boundary
 - **Parallel Execution**: True multi-threading
@@ -3180,6 +3342,7 @@ self.addEventListener('message', (event) => {
 
 **Cons:**
 
+
 - **No UI Manipulation**: Cannot update DOM directly
 - **Message Passing Overhead**: Serialization costs
 - **Limited APIs**: No access to many browser APIs
@@ -3187,6 +3350,7 @@ self.addEventListener('message', (event) => {
 - **Cold Start**: Worker initialization time
 
 **Best For:**
+
 
 - CPU-intensive calculations (data processing, parsing)
 - Background data synchronization
@@ -3196,6 +3360,7 @@ self.addEventListener('message', (event) => {
 - Real-time data analysis
 
 **Advanced Pattern - Comlink:**
+
 ```javascript
 // Using Comlink library for easier RPC
 import * as Comlink from 'comlink';
@@ -3223,9 +3388,11 @@ console.log(result); // [2, 4, 6]
 #### 4. Proxy-Based Sandboxing
 
 **Overview:**
+
 Uses JavaScript Proxy objects to intercept and control access to APIs, objects, and properties. Provides fine-grained control over what code can access and how it behaves.
 
 **How It Works:**
+
 
 - **Interception**: Proxy traps intercept property access, function calls, etc.
 - **Whitelisting**: Only allow access to approved APIs
@@ -3233,6 +3400,7 @@ Uses JavaScript Proxy objects to intercept and control access to APIs, objects, 
 - **Transformation**: Modify behavior of existing APIs
 
 **Implementation Example:**
+
 ```javascript
 // Create sandboxed global object
 function createSandbox(permissions) {
@@ -3285,6 +3453,7 @@ fn(sandbox);
 ```
 
 **Advanced Pattern - Membrane:**
+
 ```javascript
 // Membrane pattern: wrap all objects transitively
 function createMembrane(target) {
@@ -3317,6 +3486,7 @@ function createMembrane(target) {
 
 **Pros:**
 
+
 - **Fine-Grained Control**: Precise API access control
 - **Flexible**: Can modify behavior dynamically
 - **Auditable**: Log all access attempts
@@ -3324,6 +3494,7 @@ function createMembrane(target) {
 - **Gradual Adoption**: Can wrap existing code incrementally
 
 **Cons:**
+
 
 - **Performance Overhead**: Proxy traps add latency
 - **Complex Implementation**: Easy to make mistakes
@@ -3333,6 +3504,7 @@ function createMembrane(target) {
 
 **Best For:**
 
+
 - API usage monitoring and analytics
 - Gradual security hardening
 - Development/debugging tools
@@ -3340,6 +3512,7 @@ function createMembrane(target) {
 - Legacy code that can't be fully sandboxed
 
 **Security Limitations:**
+
 ```javascript
 // ⚠️ Proxy-based sandboxing can be bypassed:
 
@@ -3362,9 +3535,11 @@ try {
 #### 5. VM Isolation (Separate JavaScript VM)
 
 **Overview:**
+
 Creates a completely separate JavaScript virtual machine with its own heap, garbage collector, and execution context. Provides the strongest isolation but with significant overhead.
 
 **How It Works:**
+
 
 - **Process Isolation**: Separate OS process (in some implementations)
 - **Memory Isolation**: Separate heap and garbage collector
@@ -3372,6 +3547,7 @@ Creates a completely separate JavaScript virtual machine with its own heap, garb
 - **API Bridging**: Explicit serialization boundary
 
 **Implementation Example (Node.js vm2):**
+
 ```javascript
 // Note: vm2 is Node.js only, not browser
 const { VM } = require('vm2');
@@ -3406,6 +3582,7 @@ try {
 ```
 
 **Browser Implementation (QuickJS-WASM):**
+
 ```javascript
 import { getQuickJS } from 'quickjs-emscripten';
 
@@ -3438,6 +3615,7 @@ console.log(result); // 4
 
 **Pros:**
 
+
 - **Complete Isolation**: Strongest security boundary
 - **Resource Limits**: Enforce CPU, memory, time limits
 - **Crash Isolation**: VM crash doesn't affect host
@@ -3445,6 +3623,7 @@ console.log(result); // 4
 - **Deterministic**: Can control all non-determinism
 
 **Cons:**
+
 
 - **Large Overhead**: Significant memory and CPU cost
 - **Complex Setup**: Requires VM management
@@ -3454,6 +3633,7 @@ console.log(result); // 4
 
 **Best For:**
 
+
 - Maximum security requirements (financial, healthcare)
 - Multi-tenant serverless platforms
 - Code execution services (online IDEs, playgrounds)
@@ -3461,6 +3641,7 @@ console.log(result); // 4
 - Blockchain smart contract execution
 
 **Resource Limiting:**
+
 ```javascript
 const { VM } = require('vm2');
 
@@ -4043,7 +4224,13 @@ class PermissionManager {
 
 ### Purpose
 
-The API surface provides a carefully curated set of functions, hooks, and interfaces that define how extensions interact with the dashboard framework, serving as the contract between the core system and third-party code. This API represents the framework's public interface—the stable, versioned, documented set of capabilities that extensions can depend on across releases—and is designed with several critical goals in mind: minimalism (exposing only necessary functionality to reduce attack surface and maintenance burden), type safety (comprehensive TypeScript definitions that catch errors at compile time rather than runtime), explicitness (clear, self-documenting function names and parameters that make code intent obvious), auditability (logging all sensitive operations for security monitoring and debugging), and stability (maintaining backward compatibility through semantic versioning and deprecation policies). The API surface acts as a security boundary, mediating all extension access to core framework capabilities—component registration, state management, event subscription, command execution, data access, and UI manipulation—through well-defined entry points that enforce permissions, validate inputs, and log operations. By controlling what extensions can do through a limited API rather than exposing internal implementation details, the framework maintains flexibility to refactor internals, optimize performance, and fix bugs without breaking extensions. The API is organized into logical namespaces (components, commands, state, events, storage, network) that group related functionality, uses consistent patterns across all endpoints (promise-based async operations, error handling conventions, naming schemes), and provides both low-level primitives for advanced use cases and high-level convenience functions for common patterns. This thoughtful API design ensures that extension developers have the power they need while the framework maintains the control it requires for security, stability, and evolution.
+The API surface provides a carefully curated set of functions, hooks, and interfaces that define how extensions interact with the dashboard framework, serving as the contract between the core system and third-party code.
+
+This API represents the framework's public interface—the stable, versioned, documented set of capabilities that extensions can depend on across releases—and is designed with several critical goals in mind: minimalism (exposing only necessary functionality to reduce attack surface and maintenance burden), type safety (comprehensive TypeScript definitions that catch errors at compile time rather than runtime), explicitness (clear, self-documenting function names and parameters that make code intent obvious), auditability (logging all sensitive operations for security monitoring and debugging), and stability (maintaining backward compatibility through semantic versioning and deprecation policies).
+
+The API surface acts as a security boundary, mediating all extension access to core framework capabilities—component registration, state management, event subscription, command execution, data access, and UI manipulation—through well-defined entry points that enforce permissions, validate inputs, and log operations. By controlling what extensions can do through a limited API rather than exposing internal implementation details, the framework maintains flexibility to refactor internals, optimize performance, and fix bugs without breaking extensions.
+
+The API is organized into logical namespaces (components, commands, state, events, storage, network) that group related functionality, uses consistent patterns across all endpoints (promise-based async operations, error handling conventions, naming schemes), and provides both low-level primitives for advanced use cases and high-level convenience functions for common patterns. This thoughtful API design ensures that extension developers have the power they need while the framework maintains the control it requires for security, stability, and evolution.
 
 ### API Design Principles
 
@@ -4216,7 +4403,27 @@ function getExtensionTrust(extension: Extension): ExtensionTrust {
 
 # Advanced Features
 
-Modern BI dashboard capabilities that elevate the framework beyond traditional static dashboards into a sophisticated, interactive data exploration and collaboration platform. This section covers advanced architectural patterns and features that distinguish cutting-edge BI tools from conventional reporting systems: **Canvas Architecture** for infinite, free-form workspace layouts inspired by tools like Count.co and tldraw, enabling users to arrange visualizations spatially rather than being constrained by rigid grid systems; **SQL Integration** that treats SQL as a first-class language alongside the DSL and JavaScript, with live query execution, result caching, and intelligent query optimization; **Real-Time Collaboration** enabling multiple users to work simultaneously on the same dashboard with operational transformation for conflict resolution, presence awareness showing who's viewing what, and live cursors tracking collaborator actions; **Performance Optimization** strategies including virtualization for rendering only visible elements, memoization to prevent unnecessary re-renders, code splitting for faster initial loads, and Web Workers for offloading CPU-intensive computations; **Time-Travel Debugging** that records application state over time, allowing developers to step backward through state changes to diagnose issues; **Offline Support** through service workers and local-first architecture, ensuring dashboards remain functional without network connectivity; and **Advanced Data Processing** with DuckDB WASM for in-browser analytics on large datasets, streaming data support for real-time updates, and incremental computation for efficient reactive updates. These advanced features transform the BI Dashboard Framework from a simple visualization tool into a comprehensive platform for data analysis, enabling workflows that were previously only possible in desktop applications or specialized tools. Each feature is designed to integrate seamlessly with the core architecture—canvas interfaces work with the component registry, SQL cells participate in the dependency graph, collaboration syncs through the state management system, and performance optimizations respect the plugin lifecycle—ensuring that advanced capabilities enhance rather than complicate the developer experience.
+Modern BI dashboard capabilities that elevate the framework beyond traditional static dashboards into a sophisticated, interactive data exploration and collaboration platform.
+
+This section covers advanced architectural patterns and features that distinguish cutting-edge BI tools from conventional reporting systems:
+
+**Canvas Architecture** for infinite, free-form workspace layouts inspired by tools like Count.co and tldraw, enabling users to arrange visualizations spatially rather than being constrained by rigid grid systems.
+
+**SQL Integration** that treats SQL as a first-class language alongside the DSL and JavaScript, with live query execution, result caching, and intelligent query optimization.
+
+**Real-Time Collaboration** enabling multiple users to work simultaneously on the same dashboard with operational transformation for conflict resolution, presence awareness showing who's viewing what, and live cursors tracking collaborator actions.
+
+**Performance Optimization** strategies including virtualization for rendering only visible elements, memoization to prevent unnecessary re-renders, code splitting for faster initial loads, and Web Workers for offloading CPU-intensive computations.
+
+**Time-Travel Debugging** that records application state over time, allowing developers to step backward through state changes to diagnose issues.
+
+**Offline Support** through service workers and local-first architecture, ensuring dashboards remain functional without network connectivity.
+
+**Advanced Data Processing** with DuckDB WASM for in-browser analytics on large datasets, streaming data support for real-time updates, and incremental computation for efficient reactive updates.
+
+These advanced features transform the BI Dashboard Framework from a simple visualization tool into a comprehensive platform for data analysis, enabling workflows that were previously only possible in desktop applications or specialized tools.
+
+Each feature is designed to integrate seamlessly with the core architecture—canvas interfaces work with the component registry, SQL cells participate in the dependency graph, collaboration syncs through the state management system, and performance optimizations respect the plugin lifecycle—ensuring that advanced capabilities enhance rather than complicate the developer experience.
 
 ---
 
@@ -4224,7 +4431,17 @@ Modern BI dashboard capabilities that elevate the framework beyond traditional s
 
 ### Overview
 
-Canvas-based interfaces (inspired by Count.co and tldraw) provide infinite workspace for flexible data exploration and visualization, fundamentally reimagining how users interact with dashboards by replacing traditional fixed-grid layouts with a boundless, zoomable canvas where visualizations, data tables, text annotations, and interactive elements can be positioned freely in two-dimensional space. This canvas paradigm mirrors physical whiteboards and design tools like Figma or Miro, creating an intuitive spatial environment where users can organize information according to their mental models rather than conforming to predetermined layouts. The infinite canvas architecture enables powerful workflows: users can zoom out to see the big picture of an entire analysis, zoom in to focus on specific details, pan across different sections of a dashboard, group related visualizations spatially, draw connections between data points, and create hierarchical layouts where high-level summaries link to detailed drill-downs positioned nearby. This approach is particularly valuable for exploratory data analysis, where the structure of the analysis emerges organically as users investigate data, add visualizations, annotate findings, and reorganize elements to tell a coherent story. The technical implementation leverages HTML5 Canvas or WebGL for high-performance rendering, viewport transformation matrices for smooth pan and zoom, spatial indexing (R-trees or quadtrees) for efficient collision detection and visibility queries, and virtualization to render only elements within the visible viewport, ensuring performance even with hundreds of visualization cells. The canvas system integrates deeply with the framework's component architecture—any registered component can be instantiated as a canvas cell, cells can communicate through the event system, state changes trigger selective re-renders, and the entire canvas state serializes for persistence and collaboration. This canvas-first approach represents a significant evolution in BI dashboard design, moving from static report layouts to dynamic, explorable workspaces that adapt to user needs rather than imposing rigid structure.
+Canvas-based interfaces (inspired by Count.co and tldraw) provide infinite workspace for flexible data exploration and visualization, fundamentally reimagining how users interact with dashboards by replacing traditional fixed-grid layouts with a boundless, zoomable canvas where visualizations, data tables, text annotations, and interactive elements can be positioned freely in two-dimensional space.
+
+This canvas paradigm mirrors physical whiteboards and design tools like Figma or Miro, creating an intuitive spatial environment where users can organize information according to their mental models rather than conforming to predetermined layouts.
+
+The infinite canvas architecture enables powerful workflows: users can zoom out to see the big picture of an entire analysis, zoom in to focus on specific details, pan across different sections of a dashboard, group related visualizations spatially, draw connections between data points, and create hierarchical layouts where high-level summaries link to detailed drill-downs positioned nearby.
+
+This approach is particularly valuable for exploratory data analysis, where the structure of the analysis emerges organically as users investigate data, add visualizations, annotate findings, and reorganize elements to tell a coherent story.
+
+The technical implementation leverages HTML5 Canvas or WebGL for high-performance rendering, viewport transformation matrices for smooth pan and zoom, spatial indexing (R-trees or quadtrees) for efficient collision detection and visibility queries, and virtualization to render only elements within the visible viewport, ensuring performance even with hundreds of visualization cells.
+
+The canvas system integrates deeply with the framework's component architecture—any registered component can be instantiated as a canvas cell, cells can communicate through the event system, state changes trigger selective re-renders, and the entire canvas state serializes for persistence and collaboration. This canvas-first approach represents a significant evolution in BI dashboard design, moving from static report layouts to dynamic, explorable workspaces that adapt to user needs rather than imposing rigid structure.
 
 ### Infinite Canvas Pattern
 
@@ -4628,7 +4845,13 @@ async function loadCollaboration() {
 
 # Data Persistence
 
-Comprehensive data persistence architecture for the BI Dashboard Framework, encompassing configuration management, user preferences, dashboard state, query results, cached data, and application metadata. Data Persistence represents one of the most critical architectural concerns in modern web applications, particularly for data-intensive BI tools where users expect their work to be preserved across sessions, synchronized across devices, and accessible even when offline. This system must balance competing requirements: performance (fast reads and writes), reliability (no data loss), scalability (handle large datasets), security (encrypt sensitive data), and user experience (seamless synchronization, conflict resolution, offline support). The framework implements a multi-tiered persistence strategy that leverages browser storage APIs (localStorage, IndexedDB, Cache API), optional cloud backends (REST APIs, WebSocket for real-time sync), and intelligent caching layers to provide optimal performance while ensuring data durability. Unlike traditional server-centric applications where persistence is straightforward—write to database, read from database—client-side web applications face unique challenges including storage quota limits (typically 50MB-1GB depending on browser), lack of transactions across storage types, browser-specific quirks and bugs, and the need to handle offline scenarios gracefully. The Data Persistence architecture addresses these challenges through careful storage selection (localStorage for small key-value data, IndexedDB for structured data and large objects, Cache API for HTTP responses), intelligent quota management (compression, cleanup policies, user notifications), and robust error handling (fallbacks, retries, user-facing error messages). This section explores the complete persistence stack from low-level storage APIs through high-level abstractions like settings management and state synchronization, providing architectural guidance, implementation patterns, performance optimizations, and security best practices for building a production-grade BI dashboard framework.
+Comprehensive data persistence architecture for the BI Dashboard Framework, encompassing configuration management, user preferences, dashboard state, query results, cached data, and application metadata. Data Persistence represents one of the most critical architectural concerns in modern web applications, particularly for data-intensive BI tools where users expect their work to be preserved across sessions, synchronized across devices, and accessible even when offline.
+
+This system must balance competing requirements: performance (fast reads and writes), reliability (no data loss), scalability (handle large datasets), security (encrypt sensitive data), and user experience (seamless synchronization, conflict resolution, offline support). The framework implements a multi-tiered persistence strategy that leverages browser storage APIs (localStorage, IndexedDB, Cache API), optional cloud backends (REST APIs, WebSocket for real-time sync), and intelligent caching layers to provide optimal performance while ensuring data durability.
+
+Unlike traditional server-centric applications where persistence is straightforward—write to database, read from database—client-side web applications face unique challenges including storage quota limits (typically 50MB-1GB depending on browser), lack of transactions across storage types, browser-specific quirks and bugs, and the need to handle offline scenarios gracefully.
+
+The Data Persistence architecture addresses these challenges through careful storage selection (localStorage for small key-value data, IndexedDB for structured data and large objects, Cache API for HTTP responses), intelligent quota management (compression, cleanup policies, user notifications), and robust error handling (fallbacks, retries, user-facing error messages). This section explores the complete persistence stack from low-level storage APIs through high-level abstractions like settings management and state synchronization, providing architectural guidance, implementation patterns, performance optimizations, and security best practices for building a production-grade BI dashboard framework.
 
 ## Overview
 
@@ -4637,6 +4860,8 @@ Comprehensive data persistence architecture for the BI Dashboard Framework, enco
 The framework implements a three-tier persistence architecture, each layer serving distinct purposes with specific trade-offs:
 
 **1. Client-Side Persistence (Browser Storage)**
+
+
 - **Purpose**: Immediate access, offline support, reduced server load
 - **Technologies**: localStorage, IndexedDB, Cache API, Service Workers
 - **Use Cases**: User preferences, dashboard layouts, cached query results, offline data
@@ -4645,6 +4870,8 @@ The framework implements a three-tier persistence architecture, each layer servi
 - **Data Types**: Settings, UI state, cached responses, temporary data
 
 **2. Server-Side Persistence (Cloud Storage)**
+
+
 - **Purpose**: Cross-device sync, backup, collaboration, unlimited storage
 - **Technologies**: PostgreSQL, MongoDB, S3, Redis
 - **Use Cases**: Shared dashboards, user accounts, large datasets, audit logs
@@ -4653,6 +4880,8 @@ The framework implements a three-tier persistence architecture, each layer servi
 - **Data Types**: User accounts, shared resources, historical data, backups
 
 **3. Hybrid Persistence (Offline-First with Sync)**
+
+
 - **Purpose**: Best of both worlds—offline capability with cloud backup
 - **Technologies**: IndexedDB + REST API, Service Worker + Background Sync
 - **Use Cases**: Collaborative dashboards, mobile access, unreliable networks
@@ -4676,6 +4905,8 @@ The framework implements a three-tier persistence architecture, each layer servi
 The framework persists several distinct categories of data, each with different requirements:
 
 **1. Configuration Data**
+
+
 - User preferences (theme, language, timezone)
 - Application settings (auto-save, notifications)
 - Workspace configurations (panel layouts, shortcuts)
@@ -4685,6 +4916,8 @@ The framework persists several distinct categories of data, each with different 
 - **Sync**: Optional cloud backup
 
 **2. Dashboard State**
+
+
 - Dashboard definitions (layouts, components, queries)
 - Filter states and selections
 - Drill-down paths and navigation history
@@ -4694,6 +4927,8 @@ The framework persists several distinct categories of data, each with different 
 - **Sync**: Required for collaboration
 
 **3. Query Results**
+
+
 - Cached data from database queries
 - Aggregated metrics and calculations
 - Time-series data for charts
@@ -4703,6 +4938,8 @@ The framework persists several distinct categories of data, each with different 
 - **Sync**: Not synced (regenerated on-demand)
 
 **4. User-Generated Content**
+
+
 - Annotations and comments
 - Custom calculations and formulas
 - Saved filters and bookmarks
@@ -4712,6 +4949,8 @@ The framework persists several distinct categories of data, each with different 
 - **Sync**: Required for sharing
 
 **5. Application Metadata**
+
+
 - Audit logs and usage analytics
 - Error reports and diagnostics
 - Performance metrics
@@ -4722,7 +4961,9 @@ The framework persists several distinct categories of data, each with different 
 
 ### Persistence Strategies
 
-Choosing the right persistence strategy is critical for balancing data safety, performance, and user experience. The BI Dashboard Framework supports multiple persistence patterns, each optimized for different data types, update frequencies, and criticality levels. The strategy selection depends on several factors: how frequently the data changes (high-frequency updates benefit from debouncing), how critical the data is (user settings require immediate persistence), whether the operation is user-initiated or automatic (manual vs. automatic saves), network availability (offline scenarios need local-first approaches), and performance constraints (large datasets may require background processing). Modern applications often employ a hybrid approach, using different strategies for different data categories—immediate persistence for critical settings, debounced persistence for UI state, periodic auto-save for documents, and optimistic updates for collaborative features. Understanding these patterns and their trade-offs enables developers to build robust persistence layers that feel responsive while ensuring data durability.
+Choosing the right persistence strategy is critical for balancing data safety, performance, and user experience. The BI Dashboard Framework supports multiple persistence patterns, each optimized for different data types, update frequencies, and criticality levels. The strategy selection depends on several factors: how frequently the data changes (high-frequency updates benefit from debouncing), how critical the data is (user settings require immediate persistence), whether the operation is user-initiated or automatic (manual vs.
+
+automatic saves), network availability (offline scenarios need local-first approaches), and performance constraints (large datasets may require background processing). Modern applications often employ a hybrid approach, using different strategies for different data categories—immediate persistence for critical settings, debounced persistence for UI state, periodic auto-save for documents, and optimistic updates for collaborative features. Understanding these patterns and their trade-offs enables developers to build robust persistence layers that feel responsive while ensuring data durability.
 
 #### Strategy Comparison Matrix
 
@@ -4741,12 +4982,15 @@ Choosing the right persistence strategy is critical for balancing data safety, p
 Write data to storage synchronously or with minimal delay immediately after every change, ensuring maximum data safety at the cost of performance.
 
 **Characteristics**
+
+
 - Zero or minimal delay between change and persistence
 - Blocks UI until write completes (if synchronous)
 - Guarantees data is saved before next operation
 - Simple error handling (fail immediately)
 
 **Implementation Patterns**
+
 
 ```typescript
 // Pattern 1: Synchronous localStorage (simple, blocking)
@@ -4790,6 +5034,8 @@ async function updateSettingImmediate(key: string, value: any) {
 ```
 
 **Use Cases**
+
+
 - User explicitly clicks "Save" button
 - Critical settings (security preferences, data source credentials)
 - One-time configuration changes
@@ -4797,12 +5043,17 @@ async function updateSettingImmediate(key: string, value: any) {
 - When data loss is unacceptable
 
 **Advantages**
+
+
 - Maximum data safety—no risk of losing unsaved changes
 - Simple mental model for users (save = persisted)
 - Immediate feedback on storage errors
 - No complex timing logic required
 
+
 **Disadvantages**
+
+
 - Performance overhead on every change
 - Can cause UI lag if persistence is slow
 - May trigger excessive writes for rapid changes
@@ -4813,12 +5064,15 @@ async function updateSettingImmediate(key: string, value: any) {
 Batch multiple rapid changes and persist only after a quiet period (e.g., 500ms-2s after last change), optimizing for performance while maintaining reasonable data safety.
 
 **Characteristics**
+
+
 - Delays persistence until user stops making changes
 - Cancels pending writes when new changes occur
 - Reduces write frequency for rapid successive updates
 - Balances performance and data safety
 
 **Implementation Patterns**
+
 
 ```typescript
 // Pattern 1: Basic debounce with lodash
@@ -4936,6 +5190,8 @@ function createLeadingDebounce<T>(
 ```
 
 **Use Cases**
+
+
 - Text input fields (search queries, filter values)
 - Slider controls (adjusting chart parameters)
 - Drag-and-drop positioning (panel layouts)
@@ -4943,18 +5199,24 @@ function createLeadingDebounce<T>(
 - Form fields with auto-save
 
 **Advantages**
+
+
 - Reduces write frequency (better performance)
 - Smooth user experience (no lag on each keystroke)
 - Automatically batches rapid changes
 - Lower storage wear and tear
 
 **Disadvantages**
+
+
 - Potential data loss if browser crashes during delay
 - Complexity in managing pending writes
 - Requires careful handling of navigation/logout
 - May confuse users about save state
 
 **Best Practices**
+
+
 - Use 500ms-2s delay depending on data criticality
 - Flush pending writes on `beforeunload` event
 - Show "Saving..." indicator during debounce period
@@ -4966,12 +5228,15 @@ function createLeadingDebounce<T>(
 Save data at fixed time intervals (e.g., every 30 seconds) regardless of whether changes occurred, providing predictable auto-save behavior.
 
 **Characteristics**
+
+
 - Saves on a fixed schedule (e.g., every 30s, 1min, 5min)
 - Independent of user actions
 - Predictable save points
 - May save unchanged data (wasteful)
 
 **Implementation Patterns**
+
 
 ```typescript
 // Pattern 1: Simple interval-based auto-save
@@ -5116,6 +5381,8 @@ class VersionedAutoSave {
 ```
 
 **Use Cases**
+
+
 - Document editors (Google Docs-style auto-save)
 - Long-form content creation
 - Dashboard builder with complex state
@@ -5123,18 +5390,24 @@ class VersionedAutoSave {
 - Compliance requirements (regular backups)
 
 **Advantages**
+
+
 - Predictable save behavior (users know when saves occur)
 - Simple implementation (just setInterval)
 - Works even if user forgets to save
 - Can implement version history easily
 
 **Disadvantages**
+
+
 - May lose up to interval duration of work
 - Wastes resources saving unchanged data
 - Fixed interval may not match user activity patterns
 - Can interfere with user actions if not careful
 
 **Best Practices**
+
+
 - Use 30-60 second intervals for documents
 - Only save if data has changed (dirty flag)
 - Show visual indicator of last auto-save time
@@ -5146,12 +5419,16 @@ class VersionedAutoSave {
 User explicitly triggers save operations via UI controls (buttons, keyboard shortcuts), giving users full control over when data is persisted.
 
 **Characteristics**
+
+
 - User initiates all save operations
 - No automatic persistence
 - Clear save/unsaved state indication
 - Familiar desktop application model
 
 **Implementation Patterns**
+
+
 
 ```typescript
 // Pattern 1: Basic manual save with dirty tracking
@@ -5277,6 +5554,8 @@ saveManager.registerSaveCommand({
 ```
 
 **Use Cases**
+
+
 - Power-user tools (IDEs, design software)
 - Large documents where auto-save is expensive
 - Applications with complex save logic
@@ -5284,18 +5563,24 @@ saveManager.registerSaveCommand({
 - Desktop-like applications
 
 **Advantages**
+
+
 - User has full control over persistence
 - No unexpected saves during editing
 - Minimal performance overhead (save only when needed)
 - Clear mental model (familiar to desktop users)
 
 **Disadvantages**
+
+
 - Users must remember to save (risk of data loss)
 - Requires UI elements (save button, indicators)
 - Poor UX for web applications (users expect auto-save)
 - Need to handle navigation/close events
 
 **Best Practices**
+
+
 - Show clear unsaved changes indicator (* in title)
 - Support Ctrl+S keyboard shortcut
 - Warn on navigation if unsaved changes exist
@@ -5307,12 +5592,15 @@ saveManager.registerSaveCommand({
 Update UI immediately while persisting asynchronously in the background, providing the best user experience with eventual consistency guarantees.
 
 **Characteristics**
+
+
 - UI updates instantly (no waiting for persistence)
 - Persistence happens asynchronously
 - Requires rollback mechanism on failure
 - Eventual consistency model
 
 **Implementation Patterns**
+
 
 ```typescript
 // Pattern 1: Optimistic update with rollback
@@ -5454,6 +5742,8 @@ class CollaborativeOptimistic {
 ```
 
 **Use Cases**
+
+
 - Collaborative editing (Google Docs, Figma)
 - Real-time dashboards with live updates
 - Mobile applications with unreliable networks
@@ -5461,18 +5751,24 @@ class CollaborativeOptimistic {
 - Any UI requiring instant feedback
 
 **Advantages**
+
+
 - Best user experience (instant feedback)
 - Works well with unreliable networks
 - Enables offline-first applications
 - Reduces perceived latency
 
 **Disadvantages**
+
+
 - Complex implementation (rollback logic)
 - Requires conflict resolution for collaborative features
 - May confuse users if rollbacks are frequent
 - Difficult to debug
 
 **Best Practices**
+
+
 - Always save previous state for rollback
 - Show subtle indicators for pending operations
 - Implement retry logic for network failures
@@ -5484,6 +5780,7 @@ class CollaborativeOptimistic {
 Defer persistence until absolutely necessary (e.g., when data is about to be evicted from memory or user navigates away), minimizing storage operations.
 
 **Implementation**
+
 
 ```typescript
 class LazyPersistence {
@@ -5517,6 +5814,8 @@ window.addEventListener('beforeunload', () => {
 ```
 
 **Use Cases**
+
+
 - Non-critical cache data
 - Temporary UI state
 - Prefetched data
@@ -5527,6 +5826,7 @@ window.addEventListener('beforeunload', () => {
 Group multiple related changes into atomic transactions that either all succeed or all fail, ensuring data consistency.
 
 **Implementation**
+
 
 ```typescript
 class TransactionalPersistence {
@@ -5558,6 +5858,8 @@ await transactional.executeTransaction([
 ```
 
 **Use Cases**
+
+
 - Multi-step data updates
 - Ensuring referential integrity
 - Financial transactions
@@ -5568,34 +5870,50 @@ await transactional.executeTransaction([
 Choose persistence strategy based on these criteria:
 
 **Data Criticality**
+
+
 - **Critical** (settings, user data): Immediate or Transactional
 - **Important** (dashboards, documents): Debounced or Periodic
 - **Nice-to-have** (UI state, cache): Lazy or Optimistic
 
+
 **Update Frequency**
+
+
 - **High** (>10/sec): Debounced or Lazy
 - **Medium** (1-10/sec): Debounced or Periodic
 - **Low** (<1/sec): Immediate or Manual
 
 **User Expectations**
+
+
 - **Desktop-like**: Manual with Ctrl+S
 - **Web-like**: Debounced or Periodic
 - **Real-time**: Optimistic with sync
 
 **Network Dependency**
+
+
 - **Offline-capable**: Optimistic with queue
 - **Online-only**: Immediate to server
 - **Hybrid**: Optimistic local + eventual server sync
 
 ### Storage Quota Management
 
-Browser storage quotas represent one of the most significant constraints for client-side data persistence, requiring sophisticated management strategies to prevent data loss, maintain application functionality, and provide transparent user experiences. Unlike server-side databases with virtually unlimited storage, browser storage APIs impose strict limits that vary by browser, operating system, available disk space, and user settings. These quotas are designed to prevent malicious websites from consuming excessive disk space, but they create challenges for legitimate applications—particularly data-intensive BI dashboards that cache large query results, store extensive dashboard configurations, and maintain offline-capable datasets. The framework must implement proactive quota monitoring to detect approaching limits before they cause failures, intelligent cleanup policies to automatically reclaim space from stale or low-priority data, user-facing notifications that explain storage usage and provide actionable remediation options, and graceful degradation strategies that maintain core functionality even when storage is exhausted. Effective quota management requires understanding browser-specific behaviors (Safari's aggressive eviction policies, Chrome's generous quotas, Firefox's user prompts), implementing prioritization schemes that preserve critical data while sacrificing cache, and providing escape hatches like cloud sync or data export when local storage proves insufficient.
+Browser storage quotas represent one of the most significant constraints for client-side data persistence, requiring sophisticated management strategies to prevent data loss, maintain application functionality, and provide transparent user experiences. Unlike server-side databases with virtually unlimited storage, browser storage APIs impose strict limits that vary by browser, operating system, available disk space, and user settings.
+
+These quotas are designed to prevent malicious websites from consuming excessive disk space, but they create challenges for legitimate applications—particularly data-intensive BI dashboards that cache large query results, store extensive dashboard configurations, and maintain offline-capable datasets.
+
+The framework must implement proactive quota monitoring to detect approaching limits before they cause failures, intelligent cleanup policies to automatically reclaim space from stale or low-priority data, user-facing notifications that explain storage usage and provide actionable remediation options, and graceful degradation strategies that maintain core functionality even when storage is exhausted.
+
+Effective quota management requires understanding browser-specific behaviors (Safari's aggressive eviction policies, Chrome's generous quotas, Firefox's user prompts), implementing prioritization schemes that preserve critical data while sacrificing cache, and providing escape hatches like cloud sync or data export when local storage proves insufficient.
 
 #### Quota Limits by Browser
 
 Different browsers implement vastly different storage quota policies, requiring applications to adapt their persistence strategies accordingly:
 
 **Desktop Browsers**
+
 
 | Browser | Quota Calculation | Typical Limit | Eviction Policy | User Prompts |
 |---------|-------------------|---------------|-----------------|---------------|
@@ -5606,6 +5924,7 @@ Different browsers implement vastly different storage quota policies, requiring 
 
 **Mobile Browsers**
 
+
 | Browser | Quota Calculation | Typical Limit | Eviction Policy | Considerations |
 |---------|-------------------|---------------|-----------------|----------------|
 | **Chrome Mobile** | ~60% of available space | 50-500MB (device-dependent) | Best-effort | Limited by device storage |
@@ -5614,6 +5933,7 @@ Different browsers implement vastly different storage quota policies, requiring 
 | **Samsung Internet** | Similar to Chrome | 50-500MB | Best-effort | Android storage limits |
 
 **Storage API Quota Estimation**
+
 
 ```typescript
 interface StorageEstimate {
@@ -5637,6 +5957,7 @@ console.log(`Percentage used: ${(estimate.usage! / estimate.quota!) * 100}%`);
 The framework implements a multi-layered approach to quota management, combining proactive monitoring, automatic cleanup, user notifications, and graceful degradation.
 
 **1. Proactive Monitoring**
+
 
 Continuously track storage usage and predict when quota limits will be reached, enabling preemptive action before failures occur.
 
@@ -5749,6 +6070,7 @@ type QuotaLevel = 'normal' | 'warning' | 'critical' | 'emergency';
 ```
 
 **2. Automatic Cleanup**
+
 
 Implement intelligent cleanup policies that automatically reclaim storage space from low-priority or stale data.
 
@@ -5934,6 +6256,7 @@ interface CleanupResult {
 
 **3. User Notifications**
 
+
 Provide transparent, actionable notifications that help users understand and manage storage usage.
 
 ```typescript
@@ -5997,6 +6320,7 @@ class StorageNotificationManager {
 ```
 
 **4. Graceful Degradation**
+
 
 Maintain core functionality even when storage quota is exceeded by implementing fallback strategies.
 
@@ -6087,23 +6411,31 @@ class GracefulDegradationManager {
 #### Browser-Specific Considerations
 
 **Safari**
+
+
 - Extremely aggressive eviction (7 days of inactivity)
 - Request persistent storage: `await navigator.storage.persist()`
 - Warn users about Safari's limitations
 - Recommend cloud sync for Safari users
 
 **Firefox**
+
+
 - Prompts users at 50MB and 100MB thresholds
 - Persistent storage prevents eviction
 - Better quota management than Safari
 
 **Chrome/Edge**
+
+
 - Generous quotas (60% of disk space)
 - Rarely evicts data
 - Best-effort storage by default
 - Request persistent storage for critical apps
 
 **Mobile Browsers**
+
+
 - Much stricter limits (50-500MB)
 - More aggressive eviction
 - Prioritize critical data only
@@ -6111,13 +6443,20 @@ class GracefulDegradationManager {
 
 ### Security and Privacy
 
-Data persistence in browser storage introduces significant security and privacy challenges that must be carefully addressed to protect sensitive user data, comply with regulations like GDPR and CCPA, and prevent unauthorized access or data leakage. Unlike server-side databases protected by firewalls, authentication layers, and network isolation, browser storage is inherently more vulnerable—data persists on user devices that may be shared, stolen, or compromised, storage APIs are accessible to any JavaScript code running in the same origin, and browser developer tools provide direct access to inspect and modify stored data. The framework must implement defense-in-depth security strategies including encryption at rest for sensitive data, strict data isolation between users and workspaces, comprehensive privacy controls that respect user preferences and regulatory requirements, and secure transmission protocols for synchronizing data with remote servers. Security considerations extend beyond technical controls to include user education (warning about shared devices), audit logging (tracking who accessed what data when), and incident response procedures (detecting and responding to potential breaches). Privacy compliance requires implementing data minimization (only store necessary data), retention policies (automatically delete old data), user rights (export, deletion, portability), and transparency (clear privacy policies explaining what data is stored and why).
+Data persistence in browser storage introduces significant security and privacy challenges that must be carefully addressed to protect sensitive user data, comply with regulations like GDPR and CCPA, and prevent unauthorized access or data leakage.
+
+Unlike server-side databases protected by firewalls, authentication layers, and network isolation, browser storage is inherently more vulnerable—data persists on user devices that may be shared, stolen, or compromised, storage APIs are accessible to any JavaScript code running in the same origin, and browser developer tools provide direct access to inspect and modify stored data.
+
+The framework must implement defense-in-depth security strategies including encryption at rest for sensitive data, strict data isolation between users and workspaces, comprehensive privacy controls that respect user preferences and regulatory requirements, and secure transmission protocols for synchronizing data with remote servers. Security considerations extend beyond technical controls to include user education (warning about shared devices), audit logging (tracking who accessed what data when), and incident response procedures (detecting and responding to potential breaches).
+
+Privacy compliance requires implementing data minimization (only store necessary data), retention policies (automatically delete old data), user rights (export, deletion, portability), and transparency (clear privacy policies explaining what data is stored and why).
 
 #### 1. Encryption at Rest
 
 Protect sensitive data stored in IndexedDB by encrypting it before persistence, ensuring that even if an attacker gains access to the browser storage, they cannot read the data without the encryption key.
 
 **Encryption Architecture**
+
 
 ```typescript
 class StorageEncryptionService {
@@ -6126,6 +6465,8 @@ class StorageEncryptionService {
   private ivLength = 12; // 96 bits for GCM
   
   /**
+
+
    * Generate encryption key from user password using PBKDF2
    */
   async deriveKeyFromPassword(password: string, salt: Uint8Array): Promise<CryptoKey> {
@@ -6159,17 +6500,43 @@ class StorageEncryptionService {
     );
     
     return key;
-  }\n\n  /**\n   * Generate random encryption key (for session-based encryption)\n   */\n  async generateKey(): Promise<CryptoKey> {\n    return await crypto.subtle.generateKey(\n      {\n        name: this.algorithm,\n        length: this.keyLength,\n      },\n      true, // Extractable (for storage)\n      ['encrypt', 'decrypt']\n    );\n  }\n\n  /**\n   * Encrypt data using AES-GCM\n   */\n  async encrypt(data: any, key: CryptoKey): Promise<EncryptedData> {\n    const encoder = new TextEncoder();\n    const plaintext = encoder.encode(JSON.stringify(data));\n    \n    // Generate random IV\n    const iv = crypto.getRandomValues(new Uint8Array(this.ivLength));\n    \n    // Encrypt\n    const ciphertext = await crypto.subtle.encrypt(\n      {\n        name: this.algorithm,\n        iv: iv,\n      },\n      key,\n      plaintext\n    );\n    \n    return {\n      ciphertext: new Uint8Array(ciphertext),\n      iv: iv,\n      algorithm: this.algorithm,\n    };\n  }\n\n  /**\n   * Decrypt data using AES-GCM\n   */\n  async decrypt(encryptedData: EncryptedData, key: CryptoKey): Promise<any> {\n    try {\n      const plaintext = await crypto.subtle.decrypt(\n        {\n          name: encryptedData.algorithm,\n          iv: encryptedData.iv,\n        },\n        key,\n        encryptedData.ciphertext\n      );\n      \n      const decoder = new TextDecoder();\n      const json = decoder.decode(plaintext);\n      return JSON.parse(json);\n    } catch (error) {\n      throw new Error('Decryption failed. Invalid key or corrupted data.');\n    }\n  }\n\n  /**\n   * Store encrypted data in IndexedDB\n   */\n  async saveEncrypted(key: string, data: any, encryptionKey: CryptoKey) {\n    const encrypted = await this.encrypt(data, encryptionKey);\n    \n    const db = await openDB('secure-storage');\n    await db.put('encrypted-data', {\n      key,\n      ...encrypted,\n      timestamp: Date.now(),\n    });\n  }\n\n  /**\n   * Load and decrypt data from IndexedDB\n   */\n  async loadEncrypted(key: string, encryptionKey: CryptoKey): Promise<any> {\n    const db = await openDB('secure-storage');\n    const encrypted = await db.get('encrypted-data', key);\n    \n    if (!encrypted) {\n      return null;\n    }\n    \n    return await this.decrypt(encrypted, encryptionKey);\n  }\n}\n\ninterface EncryptedData {\n  ciphertext: Uint8Array;\n  iv: Uint8Array;\n  algorithm: string;\n}\n```\n\n**Key Management Strategies**\n\n```typescript\nclass KeyManagementService {\n  /**\n   * Strategy 1: Password-derived key (most secure, requires user password)\n   */\n  async usePasswordDerivedKey(password: string): Promise<CryptoKey> {\n    // Generate or retrieve salt\n    let salt = await this.getSalt();\n    if (!salt) {\n      salt = crypto.getRandomValues(new Uint8Array(16));\n      await this.storeSalt(salt);\n    }\n    \n    const encryption = new StorageEncryptionService();\n    return await encryption.deriveKeyFromPassword(password, salt);\n  }\n\n  /**\n   * Strategy 2: Session-based key (stored in sessionStorage, lost on tab close)\n   */\n  async useSessionKey(): Promise<CryptoKey> {\n    let keyData = sessionStorage.getItem('encryption-key');\n    \n    if (!keyData) {\n      const encryption = new StorageEncryptionService();\n      const key = await encryption.generateKey();\n      \n      // Export and store in sessionStorage\n      const exported = await crypto.subtle.exportKey('jwk', key);\n      sessionStorage.setItem('encryption-key', JSON.stringify(exported));\n      \n      return key;\n    }\n    \n    // Import existing key\n    const jwk = JSON.parse(keyData);\n    return await crypto.subtle.importKey(\n      'jwk',\n      jwk,\n      'AES-GCM',\n      true,\n      ['encrypt', 'decrypt']\n    );\n  }\n\n  /**\n   * Strategy 3: Device-bound key (using Web Authentication API)\n   */\n  async useDeviceBoundKey(): Promise<CryptoKey> {\n    // Use WebAuthn to generate device-bound key\n    // This requires user gesture (biometric or security key)\n    const credential = await navigator.credentials.create({\n      publicKey: {\n        challenge: crypto.getRandomValues(new Uint8Array(32)),\n        rp: { name: 'BI Dashboard' },\n        user: {\n          id: crypto.getRandomValues(new Uint8Array(16)),\n          name: 'user@example.com',\n          displayName: 'User',\n        },\n        pubKeyCredParams: [{ alg: -7, type: 'public-key' }],\n      },\n    });\n    \n    // Derive encryption key from credential\n    // (Simplified - actual implementation more complex)\n    const keyMaterial = new Uint8Array(credential.rawId);\n    return await crypto.subtle.importKey(\n      'raw',\n      keyMaterial,\n      'AES-GCM',\n      false,\n      ['encrypt', 'decrypt']\n    );\n  }\n\n  private async getSalt(): Promise<Uint8Array | null> {\n    const stored = localStorage.getItem('encryption-salt');\n    return stored ? new Uint8Array(JSON.parse(stored)) : null;\n  }\n\n  private async storeSalt(salt: Uint8Array) {\n    localStorage.setItem('encryption-salt', JSON.stringify(Array.from(salt)));\n  }\n}\n```\n\n**Selective Encryption**\n\nOnly encrypt sensitive fields to balance security and performance:\n\n```typescript\ninterface DashboardConfig {\n  id: string;\n  name: string;\n  layout: any; // Not sensitive\n  dataSource: {\n    url: string;\n    credentials: {\n      apiKey: string;      // SENSITIVE - encrypt\n      username: string;    // SENSITIVE - encrypt\n      password: string;    // SENSITIVE - encrypt\n    };\n  };\n  settings: any; // Not sensitive\n}\n\nclass SelectiveEncryptionService {\n  private sensitiveFields = ['apiKey', 'username', 'password', 'token', 'secret'];\n  \n  async encryptSensitiveFields(obj: any, key: CryptoKey): Promise<any> {\n    const encrypted = { ...obj };\n    \n    for (const [field, value] of Object.entries(obj)) {\n      if (this.isSensitive(field)) {\n        encrypted[field] = await this.encryptField(value, key);\n        encrypted[`${field}_encrypted`] = true;\n      } else if (typeof value === 'object' && value !== null) {\n        encrypted[field] = await this.encryptSensitiveFields(value, key);\n      }\n    }\n    \n    return encrypted;\n  }\n\n  async decryptSensitiveFields(obj: any, key: CryptoKey): Promise<any> {\n    const decrypted = { ...obj };\n    \n    for (const [field, value] of Object.entries(obj)) {\n      if (obj[`${field}_encrypted`]) {\n        decrypted[field] = await this.decryptField(value, key);\n        delete decrypted[`${field}_encrypted`];\n      } else if (typeof value === 'object' && value !== null) {\n        decrypted[field] = await this.decryptSensitiveFields(value, key);\n      }\n    }\n    \n    return decrypted;\n  }\n\n  private isSensitive(fieldName: string): boolean {\n    return this.sensitiveFields.some(sensitive => \n      fieldName.toLowerCase().includes(sensitive.toLowerCase())\n    );\n  }\n}\n```\n\n#### 2. Data Isolation\n\nEnsure strict separation of data between users, workspaces, and tenants to prevent unauthorized access and data leakage.\n\n```typescript\nclass DataIsolationService {\n  /**\n   * Create isolated storage namespace for each user/workspace\n   */\n  getDatabaseName(userId: string, workspaceId: string): string {\n    // Use hash to prevent database name enumeration\n    const namespace = `${userId}:${workspaceId}`;\n    const hash = this.hashString(namespace);\n    return `app-${hash}`;\n  }\n\n  /**\n   * Open user-specific database\n   */\n  async openIsolatedDB(userId: string, workspaceId: string): Promise<IDBDatabase> {\n    const dbName = this.getDatabaseName(userId, workspaceId);\n    \n    return await openDB(dbName, 1, {\n      upgrade(db) {\n        // Create object stores\n        db.createObjectStore('dashboards', { keyPath: 'id' });\n        db.createObjectStore('settings', { keyPath: 'key' });\n        db.createObjectStore('cache', { keyPath: 'id' });\n      },\n    });\n  }\n\n  /**\n   * Clear all data for a user (on logout)\n   */\n  async clearUserData(userId: string, workspaceId: string) {\n    const dbName = this.getDatabaseName(userId, workspaceId);\n    \n    // Delete database\n    await deleteDB(dbName);\n    \n    // Clear localStorage entries\n    this.clearLocalStorageForUser(userId, workspaceId);\n    \n    // Clear sessionStorage\n    sessionStorage.clear();\n    \n    // Clear service worker cache\n    await this.clearServiceWorkerCache();\n  }\n\n  /**\n   * Implement access control checks\n   */\n  async checkAccess(userId: string, resourceId: string, permission: Permission): Promise<boolean> {\n    // Load user permissions from secure storage\n    const permissions = await this.loadUserPermissions(userId);\n    \n    // Check if user has required permission for resource\n    return permissions.some(p => \n      p.resourceId === resourceId && p.permission === permission\n    );\n  }\n\n  /**\n   * Audit data access\n   */\n  async auditAccess(userId: string, resourceId: string, action: string) {\n    const auditEntry = {\n      userId,\n      resourceId,\n      action,\n      timestamp: Date.now(),\n      userAgent: navigator.userAgent,\n    };\n    \n    const db = await this.openIsolatedDB(userId, 'audit');\n    await db.add('audit-log', auditEntry);\n  }\n\n  private hashString(str: string): string {\n    // Simple hash for demonstration (use crypto.subtle.digest in production)\n    let hash = 0;\n    for (let i = 0; i < str.length; i++) {\n      const char = str.charCodeAt(i);\n      hash = ((hash << 5) - hash) + char;\n      hash = hash & hash;\n    }\n    return Math.abs(hash).toString(36);\n  }\n\n  private clearLocalStorageForUser(userId: string, workspaceId: string) {\n    const prefix = `${userId}:${workspaceId}:`;\n    const keysToDelete: string[] = [];\n    \n    for (let i = 0; i < localStorage.length; i++) {\n      const key = localStorage.key(i);\n      if (key && key.startsWith(prefix)) {\n        keysToDelete.push(key);\n      }\n    }\n    \n    keysToDelete.forEach(key => localStorage.removeItem(key));\n  }\n\n  private async clearServiceWorkerCache() {\n    if ('caches' in window) {\n      const cacheNames = await caches.keys();\n      await Promise.all(cacheNames.map(name => caches.delete(name)));\n    }\n  }\n}\n\ntype Permission = 'read' | 'write' | 'delete' | 'admin';\n```\n\n#### 3. Privacy Compliance\n\nImplement GDPR, CCPA, and other privacy regulations' requirements for user data management.\n\n```typescript\nclass PrivacyComplianceService {\n  /**\n   * Export all user data (GDPR Article 20 - Right to Data Portability)\n   */\n  async exportUserData(userId: string): Promise<Blob> {\n    const data: any = {};\n    \n    // Collect data from all storage sources\n    data.indexedDB = await this.exportIndexedDB(userId);\n    data.localStorage = this.exportLocalStorage(userId);\n    data.cookies = this.exportCookies();\n    \n    // Add metadata\n    data.exportDate = new Date().toISOString();\n    data.userId = userId;\n    \n    // Create downloadable JSON file\n    const json = JSON.stringify(data, null, 2);\n    return new Blob([json], { type: 'application/json' });\n  }\n\n  /**\n   * Delete all user data (GDPR Article 17 - Right to Erasure)\n   */\n  async deleteUserData(userId: string) {\n    // Delete IndexedDB databases\n    const databases = await this.getUserDatabases(userId);\n    for (const dbName of databases) {\n      await deleteDB(dbName);\n    }\n    \n    // Clear localStorage\n    this.clearLocalStorageForUser(userId);\n    \n    // Clear cookies\n    this.clearCookies();\n    \n    // Clear service worker cache\n    await this.clearServiceWorkerCache();\n    \n    // Log deletion for audit\n    await this.logDataDeletion(userId);\n  }\n\n  /**\n   * Implement data retention policy\n   */\n  async enforceRetentionPolicy() {\n    const retentionPeriod = 365 * 24 * 60 * 60 * 1000; // 1 year\n    const cutoffDate = Date.now() - retentionPeriod;\n    \n    // Delete old audit logs\n    const db = await openDB('audit');\n    const oldLogs = await db.getAllFromIndex(\n      'audit-log',\n      'timestamp',\n      IDBKeyRange.upperBound(cutoffDate)\n    );\n    \n    for (const log of oldLogs) {\n      await db.delete('audit-log', log.id);\n    }\n  }\n\n  /**\n   * Get user consent for data collection\n   */\n  async requestConsent(): Promise<ConsentStatus> {\n    // Show consent dialog\n    const consent = await showConsentDialog({\n      essential: true, // Always required\n      analytics: false, // Optional\n      marketing: false, // Optional\n    });\n    \n    // Store consent preferences\n    await this.storeConsentPreferences(consent);\n    \n    return consent;\n  }\n\n  /**\n   * Respect Do Not Track header\n   */\n  respectDoNotTrack(): boolean {\n    return navigator.doNotTrack === '1' || \n           (window as any).doNotTrack === '1' ||\n           (navigator as any).msDoNotTrack === '1';\n  }\n}\n\ninterface ConsentStatus {\n  essential: boolean;\n  analytics: boolean;\n  marketing: boolean;\n  timestamp: number;\n}\n```\n\n#### 4. Secure Transmission\n\nProtect data during synchronization with remote servers using encryption, authentication, and integrity checks.\n\n```typescript\nclass SecureTransmissionService {\n  private apiUrl = 'https://api.example.com';\n  private authToken: string | null = null;\n\n  /**\n   * Sync data with server using HTTPS and authentication\n   */\n  async syncToServer(data: any) {\n    // Ensure HTTPS\n    if (!this.apiUrl.startsWith('https://')) {\n      throw new Error('Insecure connection. HTTPS required.');\n    }\n    \n    // Get authentication token\n    const token = await this.getAuthToken();\n    \n    // Add CSRF token\n    const csrfToken = await this.getCSRFToken();\n    \n    // Send request\n    const response = await fetch(`${this.apiUrl}/sync`, {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/json',\n        'Authorization': `Bearer ${token}`,\n        'X-CSRF-Token': csrfToken,\n      },\n      body: JSON.stringify(data),\n      credentials: 'include', // Include cookies for session\n    });\n    \n    if (!response.ok) {\n      throw new Error(`Sync failed: ${response.statusText}`);\n    }\n    \n    return await response.json();\n  }\n\n  /**\n   * Implement certificate pinning (for mobile apps)\n   */\n  async verifyCertificate(response: Response): Promise<boolean> {\n    // In web context, browser handles certificate validation\n    // For Electron/mobile apps, implement custom validation\n    return true;\n  }\n\n  /**\n   * Use JWT tokens for authentication\n   */\n  private async getAuthToken(): Promise<string> {\n    if (this.authToken && !this.isTokenExpired(this.authToken)) {\n      return this.authToken;\n    }\n    \n    // Refresh token\n    this.authToken = await this.refreshAuthToken();\n    return this.authToken;\n  }\n\n  private isTokenExpired(token: string): boolean {\n    try {\n      const payload = JSON.parse(atob(token.split('.')[1]));\n      return payload.exp * 1000 < Date.now();\n    } catch {\n      return true;\n    }\n  }\n\n  /**\n   * Implement CSRF protection\n   */\n  private async getCSRFToken(): Promise<string> {\n    let token = sessionStorage.getItem('csrf-token');\n    \n    if (!token) {\n      // Request CSRF token from server\n      const response = await fetch(`${this.apiUrl}/csrf-token`);\n      const data = await response.json();\n      token = data.token;\n      sessionStorage.setItem('csrf-token', token);\n    }\n    \n    return token;\n  }\n}\n```\n\n#### Security Best Practices\n\n**1. Never Store Sensitive Data in Plain Text**\n- Always encrypt API keys, passwords, tokens\n- Use Web Crypto API for encryption\n- Derive keys from user passwords or use session keys\n\n**2. Implement Content Security Policy**\n```html\n<meta http-equiv=\"Content-Security-Policy\" \n      content=\"default-src 'self'; \n               script-src 'self' 'unsafe-inline'; \n               connect-src 'self' https://api.example.com;\">\n```\n\n**3. Sanitize User Input**\n```typescript\nfunction sanitizeInput(input: string): string {\n  return input\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#x27;');\n}\n```\n\n**4. Implement Rate Limiting**\n```typescript\nclass RateLimiter {\n  private attempts = new Map<string, number[]>();\n  \n  checkRateLimit(key: string, maxAttempts: number, windowMs: number): boolean {\n    const now = Date.now();\n    const attempts = this.attempts.get(key) || [];\n    \n    // Remove old attempts outside window\n    const recentAttempts = attempts.filter(time => now - time < windowMs);\n    \n    if (recentAttempts.length >= maxAttempts) {\n      return false; // Rate limit exceeded\n    }\n    \n    recentAttempts.push(now);\n    this.attempts.set(key, recentAttempts);\n    return true;\n  }\n}\n```\n\n**5. Clear Sensitive Data on Logout**\n```typescript\nasync function logout() {\n  // Clear all storage\n  await clearAllDatabases();\n  localStorage.clear();\n  sessionStorage.clear();\n  \n  // Clear cookies\n  document.cookie.split(';').forEach(cookie => {\n    document.cookie = cookie.split('=')[0] + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';\n  });\n  \n  // Redirect to login\n  window.location.href = '/login';\n}
+}\n\n  /**\n   * Generate random encryption key (for session-based encryption)\n   */\n  async generateKey(): Promise<CryptoKey> {\n    return await crypto.subtle.generateKey(\n      {\n        name: this.algorithm,\n        length: this.keyLength,\n      },\n      true, // Extractable (for storage)\n      ['encrypt', 'decrypt']\n    );\n  }\n\n  /**\n   * Encrypt data using AES-GCM\n   */\n  async encrypt(data: any, key: CryptoKey): Promise<EncryptedData> {\n    const encoder = new TextEncoder();\n    const plaintext = encoder.encode(JSON.stringify(data));\n    \n    // Generate random IV\n    const iv = crypto.getRandomValues(new Uint8Array(this.ivLength));\n    \n    // Encrypt\n    const ciphertext = await crypto.subtle.encrypt(\n      {\n        name: this.algorithm,\n        iv: iv,\n      },\n      key,\n      plaintext\n    );\n    \n    return {\n      ciphertext: new Uint8Array(ciphertext),\n      iv: iv,\n      algorithm: this.algorithm,\n    };\n  }\n\n  /**\n   * Decrypt data using AES-GCM\n   */\n  async decrypt(encryptedData: EncryptedData, key: CryptoKey): Promise<any> {\n    try {\n      const plaintext = await crypto.subtle.decrypt(\n        {\n          name: encryptedData.algorithm,\n          iv: encryptedData.iv,\n        },\n        key,\n        encryptedData.ciphertext\n      );\n      \n      const decoder = new TextDecoder();\n      const json = decoder.decode(plaintext);\n      return JSON.parse(json);\n    } catch (error) {\n      throw new Error('Decryption failed.
+
+Invalid key or corrupted data.');\n    }\n  }\n\n  /**\n   * Store encrypted data in IndexedDB\n   */\n  async saveEncrypted(key: string, data: any, encryptionKey: CryptoKey) {\n    const encrypted = await this.encrypt(data, encryptionKey);\n    \n    const db = await openDB('secure-storage');\n    await db.put('encrypted-data', {\n      key,\n      ...encrypted,\n      timestamp: Date.now(),\n    });\n  }\n\n  /**\n   * Load and decrypt data from IndexedDB\n   */\n  async loadEncrypted(key: string, encryptionKey: CryptoKey): Promise<any> {\n    const db = await openDB('secure-storage');\n    const encrypted = await db.get('encrypted-data', key);\n    \n    if (!encrypted) {\n      return null;\n    }\n    \n    return await this.decrypt(encrypted, encryptionKey);\n  }\n}\n\ninterface EncryptedData {\n  ciphertext: Uint8Array;\n  iv: Uint8Array;\n  algorithm: string;\n}\n```\n\n**Key Management Strategies**\n\n```typescript\nclass KeyManagementService {\n  /**\n   * Strategy 1: Password-derived key (most secure, requires user password)\n   */\n  async usePasswordDerivedKey(password: string): Promise<CryptoKey> {\n    // Generate or retrieve salt\n    let salt = await this.getSalt();\n    if (!salt) {\n      salt = crypto.getRandomValues(new Uint8Array(16));\n      await this.storeSalt(salt);\n    }\n    \n    const encryption = new StorageEncryptionService();\n    return await encryption.deriveKeyFromPassword(password, salt);\n  }\n\n  /**\n   * Strategy 2: Session-based key (stored in sessionStorage, lost on tab close)\n   */\n  async useSessionKey(): Promise<CryptoKey> {\n    let keyData = sessionStorage.getItem('encryption-key');\n    \n    if (!keyData) {\n      const encryption = new StorageEncryptionService();\n      const key = await encryption.generateKey();\n      \n      // Export and store in sessionStorage\n      const exported = await crypto.subtle.exportKey('jwk', key);\n      sessionStorage.setItem('encryption-key', JSON.stringify(exported));\n      \n      return key;\n    }\n    \n    // Import existing key\n    const jwk = JSON.parse(keyData);\n    return await crypto.subtle.importKey(\n      'jwk',\n      jwk,\n      'AES-GCM',\n      true,\n      ['encrypt', 'decrypt']\n    );\n  }\n\n  /**\n   * Strategy 3: Device-bound key (using Web Authentication API)\n   */\n  async useDeviceBoundKey(): Promise<CryptoKey> {\n    // Use WebAuthn to generate device-bound key\n    // This requires user gesture (biometric or security key)\n    const credential = await navigator.credentials.create({\n      publicKey: {\n        challenge: crypto.getRandomValues(new Uint8Array(32)),\n        rp: { name: 'BI Dashboard' },\n        user: {\n          id: crypto.getRandomValues(new Uint8Array(16)),\n          name: 'user@example.com',\n          displayName: 'User',\n        },\n        pubKeyCredParams: [{ alg: -7, type: 'public-key' }],\n      },\n    });\n    \n    // Derive encryption key from credential\n    // (Simplified - actual implementation more complex)\n    const keyMaterial = new Uint8Array(credential.rawId);\n    return await crypto.subtle.importKey(\n      'raw',\n      keyMaterial,\n      'AES-GCM',\n      false,\n      ['encrypt', 'decrypt']\n    );\n  }\n\n  private async getSalt(): Promise<Uint8Array | null> {\n    const stored = localStorage.getItem('encryption-salt');\n    return stored ?
+
+new Uint8Array(JSON.parse(stored)) : null;\n  }\n\n  private async storeSalt(salt: Uint8Array) {\n    localStorage.setItem('encryption-salt', JSON.stringify(Array.from(salt)));\n  }\n}\n```\n\n**Selective Encryption**\n\nOnly encrypt sensitive fields to balance security and performance:\n\n```typescript\ninterface DashboardConfig {\n  id: string;\n  name: string;\n  layout: any; // Not sensitive\n  dataSource: {\n    url: string;\n    credentials: {\n      apiKey: string;      // SENSITIVE - encrypt\n      username: string;    // SENSITIVE - encrypt\n      password: string;    // SENSITIVE - encrypt\n    };\n  };\n  settings: any; // Not sensitive\n}\n\nclass SelectiveEncryptionService {\n  private sensitiveFields = ['apiKey', 'username', 'password', 'token', 'secret'];\n  \n  async encryptSensitiveFields(obj: any, key: CryptoKey): Promise<any> {\n    const encrypted = { ...obj };\n    \n    for (const [field, value] of Object.entries(obj)) {\n      if (this.isSensitive(field)) {\n        encrypted[field] = await this.encryptField(value, key);\n        encrypted[`${field}_encrypted`] = true;\n      } else if (typeof value === 'object' && value !== null) {\n        encrypted[field] = await this.encryptSensitiveFields(value, key);\n      }\n    }\n    \n    return encrypted;\n  }\n\n  async decryptSensitiveFields(obj: any, key: CryptoKey): Promise<any> {\n    const decrypted = { ...obj };\n    \n    for (const [field, value] of Object.entries(obj)) {\n      if (obj[`${field}_encrypted`]) {\n        decrypted[field] = await this.decryptField(value, key);\n        delete decrypted[`${field}_encrypted`];\n      } else if (typeof value === 'object' && value !== null) {\n        decrypted[field] = await this.decryptSensitiveFields(value, key);\n      }\n    }\n    \n    return decrypted;\n  }\n\n  private isSensitive(fieldName: string): boolean {\n    return this.sensitiveFields.some(sensitive => \n      fieldName.toLowerCase().includes(sensitive.toLowerCase())\n    );\n  }\n}\n```\n\n#### 2.
+
+Data Isolation\n\nEnsure strict separation of data between users, workspaces, and tenants to prevent unauthorized access and data leakage.\n\n```typescript\nclass DataIsolationService {\n  /**\n   * Create isolated storage namespace for each user/workspace\n   */\n  getDatabaseName(userId: string, workspaceId: string): string {\n    // Use hash to prevent database name enumeration\n    const namespace = `${userId}:${workspaceId}`;\n    const hash = this.hashString(namespace);\n    return `app-${hash}`;\n  }\n\n  /**\n   * Open user-specific database\n   */\n  async openIsolatedDB(userId: string, workspaceId: string): Promise<IDBDatabase> {\n    const dbName = this.getDatabaseName(userId, workspaceId);\n    \n    return await openDB(dbName, 1, {\n      upgrade(db) {\n        // Create object stores\n        db.createObjectStore('dashboards', { keyPath: 'id' });\n        db.createObjectStore('settings', { keyPath: 'key' });\n        db.createObjectStore('cache', { keyPath: 'id' });\n      },\n    });\n  }\n\n  /**\n   * Clear all data for a user (on logout)\n   */\n  async clearUserData(userId: string, workspaceId: string) {\n    const dbName = this.getDatabaseName(userId, workspaceId);\n    \n    // Delete database\n    await deleteDB(dbName);\n    \n    // Clear localStorage entries\n    this.clearLocalStorageForUser(userId, workspaceId);\n    \n    // Clear sessionStorage\n    sessionStorage.clear();\n    \n    // Clear service worker cache\n    await this.clearServiceWorkerCache();\n  }\n\n  /**\n   * Implement access control checks\n   */\n  async checkAccess(userId: string, resourceId: string, permission: Permission): Promise<boolean> {\n    // Load user permissions from secure storage\n    const permissions = await this.loadUserPermissions(userId);\n    \n    // Check if user has required permission for resource\n    return permissions.some(p => \n      p.resourceId === resourceId && p.permission === permission\n    );\n  }\n\n  /**\n   * Audit data access\n   */\n  async auditAccess(userId: string, resourceId: string, action: string) {\n    const auditEntry = {\n      userId,\n      resourceId,\n      action,\n      timestamp: Date.now(),\n      userAgent: navigator.userAgent,\n    };\n    \n    const db = await this.openIsolatedDB(userId, 'audit');\n    await db.add('audit-log', auditEntry);\n  }\n\n  private hashString(str: string): string {\n    // Simple hash for demonstration (use crypto.subtle.digest in production)\n    let hash = 0;\n    for (let i = 0; i < str.length; i++) {\n      const char = str.charCodeAt(i);\n      hash = ((hash << 5) - hash) + char;\n      hash = hash & hash;\n    }\n    return Math.abs(hash).toString(36);\n  }\n\n  private clearLocalStorageForUser(userId: string, workspaceId: string) {\n    const prefix = `${userId}:${workspaceId}:`;\n    const keysToDelete: string[] = [];\n    \n    for (let i = 0; i < localStorage.length; i++) {\n      const key = localStorage.key(i);\n      if (key && key.startsWith(prefix)) {\n        keysToDelete.push(key);\n      }\n    }\n    \n    keysToDelete.forEach(key => localStorage.removeItem(key));\n  }\n\n  private async clearServiceWorkerCache() {\n    if ('caches' in window) {\n      const cacheNames = await caches.keys();\n      await Promise.all(cacheNames.map(name => caches.delete(name)));\n    }\n  }\n}\n\ntype Permission = 'read' | 'write' | 'delete' | 'admin';\n```\n\n#### 3.
+
+Privacy Compliance\n\nImplement GDPR, CCPA, and other privacy regulations' requirements for user data management.\n\n```typescript\nclass PrivacyComplianceService {\n  /**\n   * Export all user data (GDPR Article 20 - Right to Data Portability)\n   */\n  async exportUserData(userId: string): Promise<Blob> {\n    const data: any = {};\n    \n    // Collect data from all storage sources\n    data.indexedDB = await this.exportIndexedDB(userId);\n    data.localStorage = this.exportLocalStorage(userId);\n    data.cookies = this.exportCookies();\n    \n    // Add metadata\n    data.exportDate = new Date().toISOString();\n    data.userId = userId;\n    \n    // Create downloadable JSON file\n    const json = JSON.stringify(data, null, 2);\n    return new Blob([json], { type: 'application/json' });\n  }\n\n  /**\n   * Delete all user data (GDPR Article 17 - Right to Erasure)\n   */\n  async deleteUserData(userId: string) {\n    // Delete IndexedDB databases\n    const databases = await this.getUserDatabases(userId);\n    for (const dbName of databases) {\n      await deleteDB(dbName);\n    }\n    \n    // Clear localStorage\n    this.clearLocalStorageForUser(userId);\n    \n    // Clear cookies\n    this.clearCookies();\n    \n    // Clear service worker cache\n    await this.clearServiceWorkerCache();\n    \n    // Log deletion for audit\n    await this.logDataDeletion(userId);\n  }\n\n  /**\n   * Implement data retention policy\n   */\n  async enforceRetentionPolicy() {\n    const retentionPeriod = 365 * 24 * 60 * 60 * 1000; // 1 year\n    const cutoffDate = Date.now() - retentionPeriod;\n    \n    // Delete old audit logs\n    const db = await openDB('audit');\n    const oldLogs = await db.getAllFromIndex(\n      'audit-log',\n      'timestamp',\n      IDBKeyRange.upperBound(cutoffDate)\n    );\n    \n    for (const log of oldLogs) {\n      await db.delete('audit-log', log.id);\n    }\n  }\n\n  /**\n   * Get user consent for data collection\n   */\n  async requestConsent(): Promise<ConsentStatus> {\n    // Show consent dialog\n    const consent = await showConsentDialog({\n      essential: true, // Always required\n      analytics: false, // Optional\n      marketing: false, // Optional\n    });\n    \n    // Store consent preferences\n    await this.storeConsentPreferences(consent);\n    \n    return consent;\n  }\n\n  /**\n   * Respect Do Not Track header\n   */\n  respectDoNotTrack(): boolean {\n    return navigator.doNotTrack === '1' || \n           (window as any).doNotTrack === '1' ||\n           (navigator as any).msDoNotTrack === '1';\n  }\n}\n\ninterface ConsentStatus {\n  essential: boolean;\n  analytics: boolean;\n  marketing: boolean;\n  timestamp: number;\n}\n```\n\n#### 4.
+
+Secure Transmission\n\nProtect data during synchronization with remote servers using encryption, authentication, and integrity checks.\n\n```typescript\nclass SecureTransmissionService {\n  private apiUrl = 'https://api.example.com';\n  private authToken: string | null = null;\n\n  /**\n   * Sync data with server using HTTPS and authentication\n   */\n  async syncToServer(data: any) {\n    // Ensure HTTPS\n    if (!this.apiUrl.startsWith('https://')) {\n      throw new Error('Insecure connection.
+
+HTTPS required.');\n    }\n    \n    // Get authentication token\n    const token = await this.getAuthToken();\n    \n    // Add CSRF token\n    const csrfToken = await this.getCSRFToken();\n    \n    // Send request\n    const response = await fetch(`${this.apiUrl}/sync`, {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/json',\n        'Authorization': `Bearer ${token}`,\n        'X-CSRF-Token': csrfToken,\n      },\n      body: JSON.stringify(data),\n      credentials: 'include', // Include cookies for session\n    });\n    \n    if (!response.ok) {\n      throw new Error(`Sync failed: ${response.statusText}`);\n    }\n    \n    return await response.json();\n  }\n\n  /**\n   * Implement certificate pinning (for mobile apps)\n   */\n  async verifyCertificate(response: Response): Promise<boolean> {\n    // In web context, browser handles certificate validation\n    // For Electron/mobile apps, implement custom validation\n    return true;\n  }\n\n  /**\n   * Use JWT tokens for authentication\n   */\n  private async getAuthToken(): Promise<string> {\n    if (this.authToken && !this.isTokenExpired(this.authToken)) {\n      return this.authToken;\n    }\n    \n    // Refresh token\n    this.authToken = await this.refreshAuthToken();\n    return this.authToken;\n  }\n\n  private isTokenExpired(token: string): boolean {\n    try {\n      const payload = JSON.parse(atob(token.split('.')[1]));\n      return payload.exp * 1000 < Date.now();\n    } catch {\n      return true;\n    }\n  }\n\n  /**\n   * Implement CSRF protection\n   */\n  private async getCSRFToken(): Promise<string> {\n    let token = sessionStorage.getItem('csrf-token');\n    \n    if (!token) {\n      // Request CSRF token from server\n      const response = await fetch(`${this.apiUrl}/csrf-token`);\n      const data = await response.json();\n      token = data.token;\n      sessionStorage.setItem('csrf-token', token);\n    }\n    \n    return token;\n  }\n}\n```\n\n#### Security Best Practices\n\n**1.
+
+Never Store Sensitive Data in Plain Text**\n- Always encrypt API keys, passwords, tokens\n- Use Web Crypto API for encryption\n- Derive keys from user passwords or use session keys\n\n**2. Implement Content Security Policy**\n```html\n<meta http-equiv=\"Content-Security-Policy\" \n      content=\"default-src 'self'; \n               script-src 'self' 'unsafe-inline'; \n               connect-src 'self' https://api.example.com;\">\n```\n\n**3.
+
+Sanitize User Input**\n```typescript\nfunction sanitizeInput(input: string): string {\n  return input\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#x27;');\n}\n```\n\n**4.
+
+Implement Rate Limiting**\n```typescript\nclass RateLimiter {\n  private attempts = new Map<string, number[]>();\n  \n  checkRateLimit(key: string, maxAttempts: number, windowMs: number): boolean {\n    const now = Date.now();\n    const attempts = this.attempts.get(key) || [];\n    \n    // Remove old attempts outside window\n    const recentAttempts = attempts.filter(time => now - time < windowMs);\n    \n    if (recentAttempts.length >= maxAttempts) {\n      return false; // Rate limit exceeded\n    }\n    \n    recentAttempts.push(now);\n    this.attempts.set(key, recentAttempts);\n    return true;\n  }\n}\n```\n\n**5.
+
+Clear Sensitive Data on Logout**\n```typescript\nasync function logout() {\n  // Clear all storage\n  await clearAllDatabases();\n  localStorage.clear();\n  sessionStorage.clear();\n  \n  // Clear cookies\n  document.cookie.split(';').forEach(cookie => {\n    document.cookie = cookie.split('=')[0] + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';\n  });\n  \n  // Redirect to login\n  window.location.href = '/login';\n}
+  ```
 
 ### Performance Considerations
 
-Persistence operations represent a critical performance bottleneck in client-side applications, with the potential to significantly impact user experience through UI freezes, slow page loads, and unresponsive interactions. Unlike server-side databases optimized for concurrent access and high throughput, browser storage APIs (localStorage, IndexedDB, Cache API) operate on the main thread or with limited concurrency, making poorly optimized persistence code a common source of performance problems. The framework must implement comprehensive performance optimizations across read operations (minimizing database queries, caching frequently accessed data, using indexes effectively), write operations (batching transactions, debouncing updates, compressing payloads), memory management (avoiding memory leaks, streaming large datasets, triggering garbage collection), and network synchronization (delta updates, compression, request batching). Performance monitoring and profiling are essential—measuring persistence latency, tracking memory usage, identifying slow queries, and optimizing hot paths based on real-world usage patterns rather than assumptions.
+Persistence operations represent a critical performance bottleneck in client-side applications, with the potential to significantly impact user experience through UI freezes, slow page loads, and unresponsive interactions. Unlike server-side databases optimized for concurrent access and high throughput, browser storage APIs (localStorage, IndexedDB, Cache API) operate on the main thread or with limited concurrency, making poorly optimized persistence code a common source of performance problems.
+
+The framework must implement comprehensive performance optimizations across read operations (minimizing database queries, caching frequently accessed data, using indexes effectively), write operations (batching transactions, debouncing updates, compressing payloads), memory management (avoiding memory leaks, streaming large datasets, triggering garbage collection), and network synchronization (delta updates, compression, request batching).
+
+Performance monitoring and profiling are essential—measuring persistence latency, tracking memory usage, identifying slow queries, and optimizing hot paths based on real-world usage patterns rather than assumptions.
 
 #### 1. Read Optimization
 
 Optimize data retrieval to minimize latency and maximize throughput for frequently accessed data.
 
 **Indexing Strategy**
+
 
 ```typescript
 // Create indexes for frequently queried fields
@@ -6193,8 +6560,16 @@ async function getDashboardsByUser(userId: string): Promise<Dashboard[]> {
 async function getRecentDashboards(userId: string, days: number = 7): Promise<Dashboard[]> {
   const db = await openDB('dashboards');
   const cutoff = Date.now() - (days * 24 * 60 * 60 * 1000);
-  \n  return await db.getAllFromIndex(\n    'dashboards',\n    'userIdCreatedAt',\n    IDBKeyRange.bound([userId, cutoff], [userId, Date.now()])\n  );\n}\n```\n\n**Multi-Level Caching**\n\n```typescript\nclass CacheManager {\n  // L1: In-memory cache (fastest, limited size)\n  private memoryCache = new Map<string, { data: any; timestamp: number }>();\n  private maxMemoryCacheSize = 100;\n  \n  // L2: IndexedDB (slower, larger capacity)\n  // L3: Network (slowest, unlimited)\n  \n  async get(key: string): Promise<any> {\n    // Check L1 cache\n    const cached = this.memoryCache.get(key);\n    if (cached && !this.isExpired(cached.timestamp)) {\n      console.log(`[Cache] L1 hit: ${key}`);\n      return cached.data;\n    }\n    \n    // Check L2 cache (IndexedDB)\n    const db = await openDB('cache');\n    const dbCached = await db.get('cache', key);\n    if (dbCached && !this.isExpired(dbCached.timestamp)) {\n      console.log(`[Cache] L2 hit: ${key}`);\n      // Promote to L1\n      this.setMemoryCache(key, dbCached.data);\n      return dbCached.data;\n    }\n    \n    // L3: Fetch from network\n    console.log(`[Cache] Miss: ${key}, fetching from network`);\n    const data = await this.fetchFromNetwork(key);\n    \n    // Store in both caches\n    await this.set(key, data);\n    \n    return data;\n  }\n  \n  async set(key: string, data: any) {\n    const timestamp = Date.now();\n    \n    // Store in L1\n    this.setMemoryCache(key, data);\n    \n    // Store in L2\n    const db = await openDB('cache');\n    await db.put('cache', { key, data, timestamp });\n  }\n  \n  private setMemoryCache(key: string, data: any) {\n    // Evict oldest if cache full\n    if (this.memoryCache.size >= this.maxMemoryCacheSize) {\n      const oldestKey = this.memoryCache.keys().next().value;\n      this.memoryCache.delete(oldestKey);\n    }\n    \n    this.memoryCache.set(key, { data, timestamp: Date.now() });\n  }\n  \n  private isExpired(timestamp: number, ttl: number = 5 * 60 * 1000): boolean {\n    return Date.now() - timestamp > ttl;\n  }\n}\n```\n\n**Cursor-Based Pagination**\n\n```typescript\n// Efficient pagination for large datasets\nasync function* paginateDashboards(\n  pageSize: number = 20\n): AsyncGenerator<Dashboard[], void, unknown> {\n  const db = await openDB('dashboards');\n  const tx = db.transaction('dashboards', 'readonly');\n  const store = tx.objectStore('dashboards');\n  \n  let cursor = await store.openCursor();\n  let batch: Dashboard[] = [];\n  \n  while (cursor) {\n    batch.push(cursor.value);\n    \n    if (batch.length >= pageSize) {\n      yield batch;\n      batch = [];\n    }\n    \n    cursor = await cursor.continue();\n  }\n  \n  // Yield remaining items\n  if (batch.length > 0) {\n    yield batch;\n  }\n}\n\n// Usage\nfor await (const page of paginateDashboards(20)) {\n  renderDashboardPage(page);\n}\n```\n\n**Virtual Scrolling**\n\n```typescript\nclass VirtualScrollList {\n  private itemHeight = 50;\n  private visibleCount = 20;\n  private buffer = 5; // Extra items to render\n  \n  async renderVisibleItems(scrollTop: number) {\n    const startIndex = Math.floor(scrollTop / this.itemHeight);\n    const endIndex = startIndex + this.visibleCount + this.buffer;\n    \n    // Only fetch visible items from IndexedDB\n    const db = await openDB('dashboards');\n    const tx = db.transaction('dashboards', 'readonly');\n    const store = tx.objectStore('dashboards');\n    \n    let cursor = await store.openCursor();\n    let currentIndex = 0;\n    const items: Dashboard[] = [];\n    \n    while (cursor && currentIndex < endIndex) {\n      if (currentIndex >= startIndex) {\n        items.push(cursor.value);\n      }\n      currentIndex++;\n      cursor = await cursor.continue();\n    }\n    \n    return items;\n  }\n}\n```\n\n#### 2. Write Optimization\n\nOptimize data persistence to minimize write latency and avoid blocking the UI.\n\n**Transaction Batching**\n\n```typescript\nclass BatchWriter {\n  private pendingWrites: Array<{ store: string; data: any }> = [];\n  private flushTimeout: number | null = null;\n  private batchSize = 50;\n  private flushDelay = 100; // ms\n  \n  async write(store: string, data: any) {\n    this.pendingWrites.push({ store, data });\n    \n    // Flush immediately if batch full\n    if (this.pendingWrites.length >= this.batchSize) {\n      await this.flush();\n      return;\n    }\n    \n    // Otherwise, debounce flush\n    if (this.flushTimeout) {\n      clearTimeout(this.flushTimeout);\n    }\n    \n    this.flushTimeout = window.setTimeout(() => this.flush(), this.flushDelay);\n  }\n  \n  async flush() {\n    if (this.pendingWrites.length === 0) return;\n    \n    const writes = [...this.pendingWrites];\n    this.pendingWrites = [];\n    \n    const db = await openDB('app');\n    const tx = db.transaction(\n      [...new Set(writes.map(w => w.store))],\n      'readwrite'\n    );\n    \n    // Execute all writes in single transaction\n    for (const { store, data } of writes) {\n      await tx.objectStore(store).put(data);\n    }\n    \n    await tx.done;\n    console.log(`[BatchWriter] Flushed ${writes.length} writes`);\n  }\n}\n```\n\n**Web Worker Offloading**\n\n```typescript\n// worker.ts - Heavy persistence operations in background thread\nself.addEventListener('message', async (e) => {\n  const { type, data } = e.data;\n  \n  switch (type) {\n    case 'compress':\n      const compressed = await compressData(data);\n      self.postMessage({ type: 'compressed', data: compressed });\n      break;\n    \n    case 'encrypt':\n      const encrypted = await encryptData(data);\n      self.postMessage({ type: 'encrypted', data: encrypted });\n      break;\n    \n    case 'bulkWrite':\n      await bulkWriteToIndexedDB(data);\n      self.postMessage({ type: 'writeComplete' });\n      break;\n  }\n});\n\n// main.ts - Offload heavy work to worker\nconst worker = new Worker('worker.js');\n\nfunction compressInWorker(data: any): Promise<ArrayBuffer> {\n  return new Promise((resolve) => {\n    worker.postMessage({ type: 'compress', data });\n    worker.addEventListener('message', (e) => {\n      if (e.data.type === 'compressed') {\n        resolve(e.data.data);\n      }\n    }, { once: true });\n  });\n}\n```\n\n**Compression**\n\n```typescript\nclass CompressionService {\n  async compress(data: any): Promise<ArrayBuffer> {\n    const json = JSON.stringify(data);\n    const blob = new Blob([json]);\n    \n    // Use CompressionStream API (modern browsers)\n    if ('CompressionStream' in window) {\n      const stream = blob.stream().pipeThrough(new CompressionStream('gzip'));\n      return await new Response(stream).arrayBuffer();\n    }\n    \n    // Fallback: Use pako library\n    const pako = await import('pako');\n    return pako.gzip(json);\n  }\n  \n  async decompress(compressed: ArrayBuffer): Promise<any> {\n    // Use DecompressionStream API\n    if ('DecompressionStream' in window) {\n      const blob = new Blob([compressed]);\n      const stream = blob.stream().pipeThrough(new DecompressionStream('gzip'));\n      const decompressed = await new Response(stream).text();\n      return JSON.parse(decompressed);\n    }\n    \n    // Fallback: Use pako library\n    const pako = await import('pako');\n    const decompressed = pako.ungzip(new Uint8Array(compressed), { to: 'string' });\n    return JSON.parse(decompressed);\n  }\n  \n  // Selective compression (only compress large objects)\n  async compressIfLarge(data: any, threshold: number = 100000): Promise<any> {\n    const json = JSON.stringify(data);\n    \n    if (json.length > threshold) {\n      const compressed = await this.compress(data);\n      return {\n        _compressed: true,\n        data: compressed,\n      };\n    }\n    \n    return data;\n  }\n}\n```\n\n#### 3. Memory Management\n\nPrevent memory leaks and optimize memory usage for large datasets.\n\n**Streaming Large Datasets**\n\n```typescript\nasync function processLargeDataset(processItem: (item: any) => void) {\n  const db = await openDB('large-dataset');\n  const tx = db.transaction('items', 'readonly');\n  const store = tx.objectStore('items');\n  \n  let cursor = await store.openCursor();\n  \n  while (cursor) {\n    // Process one item at a time (don't load all into memory)\n    processItem(cursor.value);\n    \n    // Allow UI to update\n    await new Promise(resolve => setTimeout(resolve, 0));\n    \n    cursor = await cursor.continue();\n  }\n}\n```\n\n**Memory Monitoring**\n\n```typescript\nclass MemoryMonitor {\n  private threshold = 100 * 1024 * 1024; // 100MB\n  \n  async checkMemory() {\n    if ('memory' in performance) {\n      const memory = (performance as any).memory;\n      const usedMemory = memory.usedJSHeapSize;\n      const totalMemory = memory.totalJSHeapSize;\n      \n      console.log(`Memory: ${(usedMemory / 1024 / 1024).toFixed(2)} MB / ${(totalMemory / 1024 / 1024).toFixed(2)} MB`);\n      \n      if (usedMemory > this.threshold) {\n        console.warn('High memory usage detected. Triggering cleanup...');\n        await this.cleanup();\n      }\n    }\n  }\n  \n  private async cleanup() {\n    // Clear caches\n    cacheManager.clear();\n    \n    // Trigger garbage collection (if available)\n    if ('gc' in window) {\n      (window as any).gc();\n    }\n  }\n}\n```\n\n#### 4. Network Optimization\n\nOptimize data synchronization with remote servers to minimize bandwidth and latency.\n\n**Delta Sync (Incremental Updates)**\n\n```typescript\nclass DeltaSyncService {\n  private lastSyncTimestamp = 0;\n  \n  async sync() {\n    // Only send changes since last sync\n    const changes = await this.getChangesSince(this.lastSyncTimestamp);\n    \n    if (changes.length === 0) {\n      console.log('[Sync] No changes to sync');\n      return;\n    }\n    \n    // Send delta to server\n    const response = await fetch('/api/sync', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify({\n        since: this.lastSyncTimestamp,\n        changes,\n      }),\n    });\n    \n    const result = await response.json();\n    \n    // Apply server changes locally\n    await this.applyChanges(result.changes);\n    \n    this.lastSyncTimestamp = Date.now();\n  }\n  \n  private async getChangesSince(timestamp: number): Promise<Change[]> {\n    const db = await openDB('app');\n    return await db.getAllFromIndex(\n      'changes',\n      'timestamp',\n      IDBKeyRange.lowerBound(timestamp)\n    );\n  }\n}\n```\n\n**Request Batching**\n\n```typescript\nclass RequestBatcher {\n  private pendingRequests: Array<{ url: string; data: any; resolve: Function }> = [];\n  private batchTimeout: number | null = null;\n  \n  async request(url: string, data: any): Promise<any> {\n    return new Promise((resolve) => {\n      this.pendingRequests.push({ url, data, resolve });\n      \n      if (this.batchTimeout) {\n        clearTimeout(this.batchTimeout);\n      }\n      \n      this.batchTimeout = window.setTimeout(() => this.flush(), 50);\n    });\n  }\n  \n  private async flush() {\n    const requests = [...this.pendingRequests];\n    this.pendingRequests = [];\n    \n    // Send all requests in single batch\n    const response = await fetch('/api/batch', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify(requests.map(r => ({ url: r.url, data: r.data }))),\n    });\n    \n    const results = await response.json();\n    \n    // Resolve individual promises\n    requests.forEach((req, i) => {\n      req.resolve(results[i]);\n    });\n  }\n}\n```\n\n**Payload Compression**\n\n```typescript\n// Compress large payloads before sending\nasync function syncWithCompression(data: any) {\n  const json = JSON.stringify(data);\n  \n  // Only compress if payload > 10KB\n  if (json.length > 10000) {\n    const compressed = await compressData(json);\n    \n    await fetch('/api/sync', {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/octet-stream',\n        'Content-Encoding': 'gzip',\n      },\n      body: compressed,\n    });\n  } else {\n    await fetch('/api/sync', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: json,\n    });\n  }\n}\n```\n\n#### Performance Monitoring\n\n```typescript\nclass PersistencePerformanceMonitor {\n  measureOperation<T>(name: string, operation: () => Promise<T>): Promise<T> {\n    const start = performance.now();\n    \n    return operation().then(\n      (result) => {\n        const duration = performance.now() - start;\n        console.log(`[Perf] ${name}: ${duration.toFixed(2)}ms`);\n        \n        // Send to analytics\n        this.recordMetric(name, duration);\n        \n        return result;\n      },\n      (error) => {\n        const duration = performance.now() - start;\n        console.error(`[Perf] ${name} failed after ${duration.toFixed(2)}ms:`, error);\n        throw error;\n      }\n    );\n  }\n  \n  private recordMetric(operation: string, duration: number) {\n    // Send to analytics service\n    if (duration > 1000) {\n      console.warn(`Slow persistence operation: ${operation} took ${duration}ms`);\n    }\n  }\n}\n\n// Usage\nconst monitor = new PersistencePerformanceMonitor();\n\nawait monitor.measureOperation('saveDashboard', async () => {\n  await saveDashboard(dashboard);\n});\n```
+\n  return await db.getAllFromIndex(\n    'dashboards',\n    'userIdCreatedAt',\n    IDBKeyRange.bound([userId, cutoff], [userId, Date.now()])\n  );\n}\n```\n\n**Multi-Level Caching**\n\n```typescript\nclass CacheManager {\n  // L1: In-memory cache (fastest, limited size)\n  private memoryCache = new Map<string, { data: any; timestamp: number }>();\n  private maxMemoryCacheSize = 100;\n  \n  // L2: IndexedDB (slower, larger capacity)\n  // L3: Network (slowest, unlimited)\n  \n  async get(key: string): Promise<any> {\n    // Check L1 cache\n    const cached = this.memoryCache.get(key);\n    if (cached && !this.isExpired(cached.timestamp)) {\n      console.log(`[Cache] L1 hit: ${key}`);\n      return cached.data;\n    }\n    \n    // Check L2 cache (IndexedDB)\n    const db = await openDB('cache');\n    const dbCached = await db.get('cache', key);\n    if (dbCached && !this.isExpired(dbCached.timestamp)) {\n      console.log(`[Cache] L2 hit: ${key}`);\n      // Promote to L1\n      this.setMemoryCache(key, dbCached.data);\n      return dbCached.data;\n    }\n    \n    // L3: Fetch from network\n    console.log(`[Cache] Miss: ${key}, fetching from network`);\n    const data = await this.fetchFromNetwork(key);\n    \n    // Store in both caches\n    await this.set(key, data);\n    \n    return data;\n  }\n  \n  async set(key: string, data: any) {\n    const timestamp = Date.now();\n    \n    // Store in L1\n    this.setMemoryCache(key, data);\n    \n    // Store in L2\n    const db = await openDB('cache');\n    await db.put('cache', { key, data, timestamp });\n  }\n  \n  private setMemoryCache(key: string, data: any) {\n    // Evict oldest if cache full\n    if (this.memoryCache.size >= this.maxMemoryCacheSize) {\n      const oldestKey = this.memoryCache.keys().next().value;\n      this.memoryCache.delete(oldestKey);\n    }\n    \n    this.memoryCache.set(key, { data, timestamp: Date.now() });\n  }\n  \n  private isExpired(timestamp: number, ttl: number = 5 * 60 * 1000): boolean {\n    return Date.now() - timestamp > ttl;\n  }\n}\n```\n\n**Cursor-Based Pagination**\n\n```typescript\n// Efficient pagination for large datasets\nasync function* paginateDashboards(\n  pageSize: number = 20\n): AsyncGenerator<Dashboard[], void, unknown> {\n  const db = await openDB('dashboards');\n  const tx = db.transaction('dashboards', 'readonly');\n  const store = tx.objectStore('dashboards');\n  \n  let cursor = await store.openCursor();\n  let batch: Dashboard[] = [];\n  \n  while (cursor) {\n    batch.push(cursor.value);\n    \n    if (batch.length >= pageSize) {\n      yield batch;\n      batch = [];\n    }\n    \n    cursor = await cursor.continue();\n  }\n  \n  // Yield remaining items\n  if (batch.length > 0) {\n    yield batch;\n  }\n}\n\n// Usage\nfor await (const page of paginateDashboards(20)) {\n  renderDashboardPage(page);\n}\n```\n\n**Virtual Scrolling**\n\n```typescript\nclass VirtualScrollList {\n  private itemHeight = 50;\n  private visibleCount = 20;\n  private buffer = 5; // Extra items to render\n  \n  async renderVisibleItems(scrollTop: number) {\n    const startIndex = Math.floor(scrollTop / this.itemHeight);\n    const endIndex = startIndex + this.visibleCount + this.buffer;\n    \n    // Only fetch visible items from IndexedDB\n    const db = await openDB('dashboards');\n    const tx = db.transaction('dashboards', 'readonly');\n    const store = tx.objectStore('dashboards');\n    \n    let cursor = await store.openCursor();\n    let currentIndex = 0;\n    const items: Dashboard[] = [];\n    \n    while (cursor && currentIndex < endIndex) {\n      if (currentIndex >= startIndex) {\n        items.push(cursor.value);\n      }\n      currentIndex++;\n      cursor = await cursor.continue();\n    }\n    \n    return items;\n  }\n}\n```\n\n#### 2.
 
+Write Optimization\n\nOptimize data persistence to minimize write latency and avoid blocking the UI.\n\n**Transaction Batching**\n\n```typescript\nclass BatchWriter {\n  private pendingWrites: Array<{ store: string; data: any }> = [];\n  private flushTimeout: number | null = null;\n  private batchSize = 50;\n  private flushDelay = 100; // ms\n  \n  async write(store: string, data: any) {\n    this.pendingWrites.push({ store, data });\n    \n    // Flush immediately if batch full\n    if (this.pendingWrites.length >= this.batchSize) {\n      await this.flush();\n      return;\n    }\n    \n    // Otherwise, debounce flush\n    if (this.flushTimeout) {\n      clearTimeout(this.flushTimeout);\n    }\n    \n    this.flushTimeout = window.setTimeout(() => this.flush(), this.flushDelay);\n  }\n  \n  async flush() {\n    if (this.pendingWrites.length === 0) return;\n    \n    const writes = [...this.pendingWrites];\n    this.pendingWrites = [];\n    \n    const db = await openDB('app');\n    const tx = db.transaction(\n      [...new Set(writes.map(w => w.store))],\n      'readwrite'\n    );\n    \n    // Execute all writes in single transaction\n    for (const { store, data } of writes) {\n      await tx.objectStore(store).put(data);\n    }\n    \n    await tx.done;\n    console.log(`[BatchWriter] Flushed ${writes.length} writes`);\n  }\n}\n```\n\n**Web Worker Offloading**\n\n```typescript\n// worker.ts - Heavy persistence operations in background thread\nself.addEventListener('message', async (e) => {\n  const { type, data } = e.data;\n  \n  switch (type) {\n    case 'compress':\n      const compressed = await compressData(data);\n      self.postMessage({ type: 'compressed', data: compressed });\n      break;\n    \n    case 'encrypt':\n      const encrypted = await encryptData(data);\n      self.postMessage({ type: 'encrypted', data: encrypted });\n      break;\n    \n    case 'bulkWrite':\n      await bulkWriteToIndexedDB(data);\n      self.postMessage({ type: 'writeComplete' });\n      break;\n  }\n});\n\n// main.ts - Offload heavy work to worker\nconst worker = new Worker('worker.js');\n\nfunction compressInWorker(data: any): Promise<ArrayBuffer> {\n  return new Promise((resolve) => {\n    worker.postMessage({ type: 'compress', data });\n    worker.addEventListener('message', (e) => {\n      if (e.data.type === 'compressed') {\n        resolve(e.data.data);\n      }\n    }, { once: true });\n  });\n}\n```\n\n**Compression**\n\n```typescript\nclass CompressionService {\n  async compress(data: any): Promise<ArrayBuffer> {\n    const json = JSON.stringify(data);\n    const blob = new Blob([json]);\n    \n    // Use CompressionStream API (modern browsers)\n    if ('CompressionStream' in window) {\n      const stream = blob.stream().pipeThrough(new CompressionStream('gzip'));\n      return await new Response(stream).arrayBuffer();\n    }\n    \n    // Fallback: Use pako library\n    const pako = await import('pako');\n    return pako.gzip(json);\n  }\n  \n  async decompress(compressed: ArrayBuffer): Promise<any> {\n    // Use DecompressionStream API\n    if ('DecompressionStream' in window) {\n      const blob = new Blob([compressed]);\n      const stream = blob.stream().pipeThrough(new DecompressionStream('gzip'));\n      const decompressed = await new Response(stream).text();\n      return JSON.parse(decompressed);\n    }\n    \n    // Fallback: Use pako library\n    const pako = await import('pako');\n    const decompressed = pako.ungzip(new Uint8Array(compressed), { to: 'string' });\n    return JSON.parse(decompressed);\n  }\n  \n  // Selective compression (only compress large objects)\n  async compressIfLarge(data: any, threshold: number = 100000): Promise<any> {\n    const json = JSON.stringify(data);\n    \n    if (json.length > threshold) {\n      const compressed = await this.compress(data);\n      return {\n        _compressed: true,\n        data: compressed,\n      };\n    }\n    \n    return data;\n  }\n}\n```\n\n#### 3.
+
+Memory Management\n\nPrevent memory leaks and optimize memory usage for large datasets.\n\n**Streaming Large Datasets**\n\n```typescript\nasync function processLargeDataset(processItem: (item: any) => void) {\n  const db = await openDB('large-dataset');\n  const tx = db.transaction('items', 'readonly');\n  const store = tx.objectStore('items');\n  \n  let cursor = await store.openCursor();\n  \n  while (cursor) {\n    // Process one item at a time (don't load all into memory)\n    processItem(cursor.value);\n    \n    // Allow UI to update\n    await new Promise(resolve => setTimeout(resolve, 0));\n    \n    cursor = await cursor.continue();\n  }\n}\n```\n\n**Memory Monitoring**\n\n```typescript\nclass MemoryMonitor {\n  private threshold = 100 * 1024 * 1024; // 100MB\n  \n  async checkMemory() {\n    if ('memory' in performance) {\n      const memory = (performance as any).memory;\n      const usedMemory = memory.usedJSHeapSize;\n      const totalMemory = memory.totalJSHeapSize;\n      \n      console.log(`Memory: ${(usedMemory / 1024 / 1024).toFixed(2)} MB / ${(totalMemory / 1024 / 1024).toFixed(2)} MB`);\n      \n      if (usedMemory > this.threshold) {\n        console.warn('High memory usage detected.
+
+Triggering cleanup...');\n        await this.cleanup();\n      }\n    }\n  }\n  \n  private async cleanup() {\n    // Clear caches\n    cacheManager.clear();\n    \n    // Trigger garbage collection (if available)\n    if ('gc' in window) {\n      (window as any).gc();\n    }\n  }\n}\n```\n\n#### 4.
+
+Network Optimization\n\nOptimize data synchronization with remote servers to minimize bandwidth and latency.\n\n**Delta Sync (Incremental Updates)**\n\n```typescript\nclass DeltaSyncService {\n  private lastSyncTimestamp = 0;\n  \n  async sync() {\n    // Only send changes since last sync\n    const changes = await this.getChangesSince(this.lastSyncTimestamp);\n    \n    if (changes.length === 0) {\n      console.log('[Sync] No changes to sync');\n      return;\n    }\n    \n    // Send delta to server\n    const response = await fetch('/api/sync', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify({\n        since: this.lastSyncTimestamp,\n        changes,\n      }),\n    });\n    \n    const result = await response.json();\n    \n    // Apply server changes locally\n    await this.applyChanges(result.changes);\n    \n    this.lastSyncTimestamp = Date.now();\n  }\n  \n  private async getChangesSince(timestamp: number): Promise<Change[]> {\n    const db = await openDB('app');\n    return await db.getAllFromIndex(\n      'changes',\n      'timestamp',\n      IDBKeyRange.lowerBound(timestamp)\n    );\n  }\n}\n```\n\n**Request Batching**\n\n```typescript\nclass RequestBatcher {\n  private pendingRequests: Array<{ url: string; data: any; resolve: Function }> = [];\n  private batchTimeout: number | null = null;\n  \n  async request(url: string, data: any): Promise<any> {\n    return new Promise((resolve) => {\n      this.pendingRequests.push({ url, data, resolve });\n      \n      if (this.batchTimeout) {\n        clearTimeout(this.batchTimeout);\n      }\n      \n      this.batchTimeout = window.setTimeout(() => this.flush(), 50);\n    });\n  }\n  \n  private async flush() {\n    const requests = [...this.pendingRequests];\n    this.pendingRequests = [];\n    \n    // Send all requests in single batch\n    const response = await fetch('/api/batch', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify(requests.map(r => ({ url: r.url, data: r.data }))),\n    });\n    \n    const results = await response.json();\n    \n    // Resolve individual promises\n    requests.forEach((req, i) => {\n      req.resolve(results[i]);\n    });\n  }\n}\n```\n\n**Payload Compression**\n\n```typescript\n// Compress large payloads before sending\nasync function syncWithCompression(data: any) {\n  const json = JSON.stringify(data);\n  \n  // Only compress if payload > 10KB\n  if (json.length > 10000) {\n    const compressed = await compressData(json);\n    \n    await fetch('/api/sync', {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/octet-stream',\n        'Content-Encoding': 'gzip',\n      },\n      body: compressed,\n    });\n  } else {\n    await fetch('/api/sync', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: json,\n    });\n  }\n}\n```\n\n#### Performance Monitoring\n\n```typescript\nclass PersistencePerformanceMonitor {\n  measureOperation<T>(name: string, operation: () => Promise<T>): Promise<T> {\n    const start = performance.now();\n    \n    return operation().then(\n      (result) => {\n        const duration = performance.now() - start;\n        console.log(`[Perf] ${name}: ${duration.toFixed(2)}ms`);\n        \n        // Send to analytics\n        this.recordMetric(name, duration);\n        \n        return result;\n      },\n      (error) => {\n        const duration = performance.now() - start;\n        console.error(`[Perf] ${name} failed after ${duration.toFixed(2)}ms:`, error);\n        throw error;\n      }\n    );\n  }\n  \n  private recordMetric(operation: string, duration: number) {\n    // Send to analytics service\n    if (duration > 1000) {\n      console.warn(`Slow persistence operation: ${operation} took ${duration}ms`);\n    }\n  }\n}\n\n// Usage\nconst monitor = new PersistencePerformanceMonitor();\n\nawait monitor.measureOperation('saveDashboard', async () => {\n  await saveDashboard(dashboard);\n});\n```
+```
 ---
 
 ## Storage Strategy & Configuration
@@ -6205,7 +6580,13 @@ async function getRecentDashboards(userId: string, days: number = 7): Promise<Da
 
 ### Purpose
 
-Persistent storage and management of user preferences, application settings, and workspace configurations for the BI Dashboard Framework. User Configurations provide a centralized, type-safe mechanism for storing and retrieving user-specific data that persists across sessions, enabling personalized experiences tailored to individual workflows, preferences, and organizational requirements. This system manages everything from simple UI preferences (theme selection, panel layouts, default chart types) to complex workspace configurations (saved queries, custom filters, dashboard templates, data source credentials) to advanced behavioral settings (auto-refresh intervals, notification preferences, keyboard shortcuts, accessibility options). The configuration system is designed with multi-tenancy in mind, supporting user-level, workspace-level, and organization-level settings with proper inheritance and override semantics, ensuring that administrators can enforce organizational policies while users retain control over personal preferences. All configurations are validated against schemas to prevent invalid states, versioned to support migration across application updates, and encrypted when containing sensitive data like API keys or database credentials. The system provides reactive updates—when a setting changes, all dependent UI components automatically re-render with the new values—eliminating the need for manual refresh or application restart. Export and import capabilities enable users to backup configurations, share workspace setups with colleagues, or migrate settings between environments, while audit logging tracks configuration changes for compliance and debugging purposes.
+Persistent storage and management of user preferences, application settings, and workspace configurations for the BI Dashboard Framework. User Configurations provide a centralized, type-safe mechanism for storing and retrieving user-specific data that persists across sessions, enabling personalized experiences tailored to individual workflows, preferences, and organizational requirements.
+
+This system manages everything from simple UI preferences (theme selection, panel layouts, default chart types) to complex workspace configurations (saved queries, custom filters, dashboard templates, data source credentials) to advanced behavioral settings (auto-refresh intervals, notification preferences, keyboard shortcuts, accessibility options).
+
+The configuration system is designed with multi-tenancy in mind, supporting user-level, workspace-level, and organization-level settings with proper inheritance and override semantics, ensuring that administrators can enforce organizational policies while users retain control over personal preferences. All configurations are validated against schemas to prevent invalid states, versioned to support migration across application updates, and encrypted when containing sensitive data like API keys or database credentials.
+
+The system provides reactive updates—when a setting changes, all dependent UI components automatically re-render with the new values—eliminating the need for manual refresh or application restart. Export and import capabilities enable users to backup configurations, share workspace setups with colleagues, or migrate settings between environments, while audit logging tracks configuration changes for compliance and debugging purposes.
 
 ### Features
 
@@ -6223,6 +6604,8 @@ Persistent storage and management of user preferences, application settings, and
 ### Configuration Categories
 
 1. **Appearance Settings**
+
+
    - Theme selection (light, dark, high-contrast, custom)
    - Color scheme customization
    - Font family and size preferences
@@ -6231,6 +6614,8 @@ Persistent storage and management of user preferences, application settings, and
    - Icon set selection
 
 2. **Behavior Settings**
+
+
    - Auto-save interval for dashboards
    - Default chart types for data visualizations
    - Drag-and-drop sensitivity
@@ -6239,6 +6624,8 @@ Persistent storage and management of user preferences, application settings, and
    - Default data refresh intervals
 
 3. **Data Settings**
+
+
    - Default data source connections
    - Query timeout limits
    - Cache expiration policies
@@ -6247,6 +6634,8 @@ Persistent storage and management of user preferences, application settings, and
    - Date/time format and timezone
 
 4. **Security Settings**
+
+
    - Session timeout duration
    - Two-factor authentication preferences
    - API key management
@@ -6255,6 +6644,8 @@ Persistent storage and management of user preferences, application settings, and
    - Encryption preferences
 
 5. **Accessibility Settings**
+
+
    - Screen reader support
    - Keyboard navigation preferences
    - High-contrast mode
@@ -6263,6 +6654,8 @@ Persistent storage and management of user preferences, application settings, and
    - Focus indicators
 
 6. **Notification Settings**
+
+
    - Email notification preferences
    - In-app notification types
    - Alert thresholds for data anomalies
@@ -6275,6 +6668,7 @@ Persistent storage and management of user preferences, application settings, and
 The configuration system uses a multi-tiered storage approach combining in-memory state, browser storage, and optional cloud persistence:
 
 **In-Memory Layer (Zustand Store)**
+
 ```typescript
 interface UserConfigStore {
   appearance: AppearanceConfig;
@@ -6296,12 +6690,16 @@ interface UserConfigStore {
 ```
 
 **Persistence Layer (IndexedDB)**
+
+
 - Stores serialized configuration objects
 - Supports offline-first operation
 - Enables large configuration storage (>10MB)
 - Provides transaction-based updates
 
 **Cloud Sync Layer (Optional)**
+
+
 - Syncs configurations across devices
 - Enables team workspace sharing
 - Provides version history and rollback
@@ -6759,6 +7157,7 @@ class ScopedMigrationManager {
 ```
 
 **Approach**: 
+
 - **Migrate**: Dashboards, cell data, user preferences (persistent, user-created)
 - **Clear & regenerate**: Execution results, query cache (ephemeral, derived data)
 
@@ -6776,21 +7175,35 @@ class ScopedMigrationManager {
 
 ### Purpose
 
-Comprehensive infrastructure for managing, persisting, and synchronizing application settings across the BI Dashboard Framework. Settings Management provides the technical foundation that powers the User Configurations system, implementing the low-level mechanisms for storing preferences, validating changes, propagating updates, and maintaining consistency across distributed components. While User Configurations focus on what settings exist and their business semantics, Settings Management addresses how those settings are stored, retrieved, updated, and synchronized in a performant, reliable, and scalable manner. This system handles the complex orchestration of multiple storage backends (in-memory state, localStorage, IndexedDB, remote servers), manages the lifecycle of settings from initialization through updates to persistence, implements optimistic updates with rollback capabilities for network failures, and provides reactive subscriptions that automatically notify components when relevant settings change. The architecture supports advanced scenarios like settings inheritance hierarchies (organization → workspace → user), conflict resolution for concurrent updates in collaborative environments, partial updates to minimize network traffic, and efficient caching strategies to reduce database queries. Settings Management also implements critical cross-cutting concerns including encryption for sensitive data, compression for large configuration objects, versioning for schema evolution, and audit logging for compliance tracking, ensuring that the settings infrastructure meets enterprise requirements for security, performance, and observability.
+Comprehensive infrastructure for managing, persisting, and synchronizing application settings across the BI Dashboard Framework. Settings Management provides the technical foundation that powers the User Configurations system, implementing the low-level mechanisms for storing preferences, validating changes, propagating updates, and maintaining consistency across distributed components.
+
+While User Configurations focus on what settings exist and their business semantics, Settings Management addresses how those settings are stored, retrieved, updated, and synchronized in a performant, reliable, and scalable manner.
+
+This system handles the complex orchestration of multiple storage backends (in-memory state, localStorage, IndexedDB, remote servers), manages the lifecycle of settings from initialization through updates to persistence, implements optimistic updates with rollback capabilities for network failures, and provides reactive subscriptions that automatically notify components when relevant settings change.
+
+The architecture supports advanced scenarios like settings inheritance hierarchies (organization → workspace → user), conflict resolution for concurrent updates in collaborative environments, partial updates to minimize network traffic, and efficient caching strategies to reduce database queries.
+
+Settings Management also implements critical cross-cutting concerns including encryption for sensitive data, compression for large configuration objects, versioning for schema evolution, and audit logging for compliance tracking, ensuring that the settings infrastructure meets enterprise requirements for security, performance, and observability.
 
 ### Architecture Approaches
 
 1. **Hierarchical Settings Structure**
+
+
    - Nested configuration organized by domain (general, dashboard, visualization, performance)
    - Supports inheritance and overrides at different levels
    - Type-safe with schema validation
 
 2. **Flat Key-Value Store**
+
+
    - Simple key-value pairs with dot notation (e.g., `dashboard.refreshInterval`)
    - Easy to serialize and persist
    - Less structure, more flexibility
 
 3. **Hybrid Approach**
+
+
    - Hierarchical structure in memory
    - Flat storage for persistence
    - Best of both worlds
@@ -6831,11 +7244,16 @@ Comprehensive infrastructure for managing, persisting, and synchronizing applica
 
 ### Recommended Architecture
 
-The recommended architecture for Settings Management in the BI Dashboard Framework combines proven technologies and patterns to deliver a robust, performant, and maintainable configuration system. This architecture leverages Zustand for reactive state management (lightweight, minimal boilerplate, excellent TypeScript support), Zod for runtime schema validation (type inference, clear error messages, composable schemas), hybrid persistence strategies (immediate persistence for critical settings, debounced persistence for frequently changing UI preferences), and IndexedDB for client-side storage (large capacity, indexed queries, transaction support). The architecture is designed to scale from simple single-user scenarios to complex multi-tenant enterprise deployments, supporting features like settings inheritance (organization → workspace → user), conflict resolution (for collaborative environments), encryption (for sensitive data), and cloud synchronization (for cross-device access). This recommended approach has been battle-tested in production applications, balances competing concerns (performance vs. safety, simplicity vs. flexibility), and provides clear upgrade paths as requirements evolve.
+The recommended architecture for Settings Management in the BI Dashboard Framework combines proven technologies and patterns to deliver a robust, performant, and maintainable configuration system.
+
+This architecture leverages Zustand for reactive state management (lightweight, minimal boilerplate, excellent TypeScript support), Zod for runtime schema validation (type inference, clear error messages, composable schemas), hybrid persistence strategies (immediate persistence for critical settings, debounced persistence for frequently changing UI preferences), and IndexedDB for client-side storage (large capacity, indexed queries, transaction support).
+
+The architecture is designed to scale from simple single-user scenarios to complex multi-tenant enterprise deployments, supporting features like settings inheritance (organization → workspace → user), conflict resolution (for collaborative environments), encryption (for sensitive data), and cloud synchronization (for cross-device access). This recommended approach has been battle-tested in production applications, balances competing concerns (performance vs. safety, simplicity vs. flexibility), and provides clear upgrade paths as requirements evolve.
 
 #### Technology Stack
 
 **State Management: Zustand**
+
 
 ```typescript
 import { create } from 'zustand';
@@ -6920,6 +7338,7 @@ const useSettingsStore = create<SettingsStore>()(  immer(
 
 **Schema Validation: Zod**
 
+
 ```typescript
 import { z } from 'zod';
 
@@ -6970,6 +7389,7 @@ function validateSettings(settings: unknown): Settings {
 
 **Persistence: Hybrid Strategy**
 
+
 ```typescript
 class HybridPersistenceManager {
   private criticalSettings = ['security', 'data.credentials'];
@@ -7011,6 +7431,7 @@ class HybridPersistenceManager {
 ```
 
 **Storage: IndexedDB**
+
 
 ```typescript
 import { openDB, DBSchema } from 'idb';
@@ -7110,6 +7531,8 @@ const indexedDBStorage = {
 #### Implementation Checklist
 
 **Phase 1: Core Setup**
+
+
 - [ ] Install dependencies (zustand, zod, idb)
 - [ ] Define TypeScript interfaces for all settings categories
 - [ ] Create Zod schemas with validation rules
@@ -7117,6 +7540,8 @@ const indexedDBStorage = {
 - [ ] Initialize Zustand store with persist middleware
 
 **Phase 2: Persistence**
+
+
 - [ ] Implement hybrid persistence manager
 - [ ] Add debouncing for UI settings
 - [ ] Add immediate persistence for critical settings
@@ -7124,6 +7549,8 @@ const indexedDBStorage = {
 - [ ] Add error handling and retry logic
 
 **Phase 3: Migration**
+
+
 - [ ] Create migration manager
 - [ ] Define migration functions for each version
 - [ ] Implement rollback capabilities
@@ -7131,6 +7558,8 @@ const indexedDBStorage = {
 - [ ] Set up backup system
 
 **Phase 4: Features**
+
+
 - [ ] Implement settings import/export
 - [ ] Add settings reset functionality
 - [ ] Create settings UI components
@@ -7138,6 +7567,8 @@ const indexedDBStorage = {
 - [ ] Implement audit logging
 
 **Phase 5: Optimization**
+
+
 - [ ] Add performance monitoring
 - [ ] Optimize bundle size
 - [ ] Implement lazy loading for settings categories
@@ -7147,6 +7578,8 @@ const indexedDBStorage = {
 #### Why This Architecture?
 
 **Zustand over Redux**
+
+
 - Simpler API, less boilerplate
 - No provider needed
 - Excellent TypeScript support
@@ -7154,6 +7587,8 @@ const indexedDBStorage = {
 - Built-in persistence middleware
 
 **Zod over TypeScript-only**
+
+
 - Runtime validation catches invalid data
 - Protects against corrupted storage
 - Type inference reduces duplication
@@ -7161,6 +7596,8 @@ const indexedDBStorage = {
 - Validates external data (imports, API responses)
 
 **IndexedDB over localStorage**
+
+
 - Much larger storage capacity (50MB-1GB vs 5-10MB)
 - Asynchronous API (doesn't block UI)
 - Supports complex queries with indexes
@@ -7168,6 +7605,8 @@ const indexedDBStorage = {
 - Better performance for large datasets
 
 **Hybrid Persistence over Single Strategy**
+
+
 - Balances safety and performance
 - Critical data saved immediately
 - UI preferences don't cause excessive writes
@@ -7179,36 +7618,48 @@ const indexedDBStorage = {
 The Settings Management system consists of several interconnected components that work together to provide a robust configuration infrastructure:
 
 **1. Settings Store (State Management)**
+
+
 - Central Zustand store holding all application settings in memory
 - Provides reactive subscriptions for components to listen to changes
 - Implements selectors for efficient partial state access
 - Supports middleware for logging, persistence, and validation
 
 **2. Persistence Manager**
+
+
 - Coordinates saving settings to various storage backends
 - Implements debouncing and batching for performance
 - Handles storage quota management and cleanup
 - Provides fallback mechanisms when storage is unavailable
 
 **3. Validation Engine**
+
+
 - Validates settings against Zod schemas before persistence
 - Provides detailed error messages for invalid configurations
 - Supports custom validation rules and business logic
 - Ensures type safety at runtime
 
 **4. Sync Coordinator**
+
+
 - Manages synchronization between local and remote settings
 - Implements conflict resolution strategies
 - Handles offline scenarios with queue-based sync
 - Provides real-time updates via WebSocket connections
 
 **5. Migration Manager**
+
+
 - Automatically migrates settings when schemas change
 - Maintains version history for rollback capabilities
 - Validates migrations before applying them
 - Logs migration events for debugging
 
 **6. Encryption Service**
+
+
 - Encrypts sensitive settings using Web Crypto API
 - Manages encryption keys securely
 - Provides transparent encryption/decryption
@@ -7244,7 +7695,10 @@ Settings flow through a well-defined lifecycle from initialization to persistenc
 └─────────────┘
 ```
 
+
 **Initialization Phase**
+
+
 1. Load default settings from configuration files
 2. Retrieve stored settings from IndexedDB
 3. Merge stored settings with defaults (stored takes precedence)
@@ -7253,6 +7707,8 @@ Settings flow through a well-defined lifecycle from initialization to persistenc
 6. Initialize Zustand store with validated settings
 
 **Update Phase**
+
+
 1. User triggers setting change via UI component
 2. Validation engine checks new value against schema
 3. If valid, update in-memory store (optimistic update)
@@ -7261,6 +7717,8 @@ Settings flow through a well-defined lifecycle from initialization to persistenc
 6. If persistence fails, rollback in-memory change
 
 **Persistence Phase**
+
+
 1. Batch multiple pending changes if debounced
 2. Serialize settings to JSON
 3. Encrypt sensitive fields if configured
@@ -7269,6 +7727,8 @@ Settings flow through a well-defined lifecycle from initialization to persistenc
 6. Log persistence event to audit trail
 
 **Synchronization Phase**
+
+
 1. Detect changes from remote source (other devices/users)
 2. Fetch updated settings from server
 3. Compare with local settings to detect conflicts
@@ -7281,24 +7741,32 @@ Settings flow through a well-defined lifecycle from initialization to persistenc
 When settings are modified concurrently across multiple devices or users, the system must resolve conflicts intelligently:
 
 **1. Last-Write-Wins (LWW)**
+
+
 - Simplest strategy: most recent change wins
 - Uses timestamps to determine recency
 - May lose user changes if not careful
 - Best for: Single-user scenarios, non-critical settings
 
 **2. Merge Strategy**
+
+
 - Attempts to merge non-conflicting changes
 - Uses operational transformation or CRDTs
 - Preserves changes from both sources when possible
 - Best for: Collaborative environments, structured settings
 
 **3. User Prompt**
+
+
 - Presents conflict to user for manual resolution
 - Shows both versions side-by-side
 - Allows user to choose or merge manually
 - Best for: Critical settings, expert users
 
 **4. Field-Level Resolution**
+
+
 - Different strategies for different setting categories
 - Critical settings use user prompt
 - UI preferences use last-write-wins
@@ -7310,6 +7778,8 @@ When settings are modified concurrently across multiple devices or users, the sy
 Settings Management implements several optimizations to ensure minimal performance impact:
 
 **1. Selective Subscriptions**
+
+
 ```typescript
 // Only re-render when specific settings change
 const theme = useConfigStore((state) => state.appearance.theme);
@@ -7320,6 +7790,8 @@ const fontSize = useConfigStore((state) => state.appearance.fontSize);
 ```
 
 **2. Debounced Persistence**
+
+
 ```typescript
 const debouncedPersist = debounce((settings) => {
   persistToIndexedDB(settings);
@@ -7330,6 +7802,8 @@ const debouncedPersist = debounce((settings) => {
 ```
 
 **3. Lazy Loading**
+
+
 ```typescript
 // Load settings on-demand rather than all at once
 const loadSecuritySettings = async () => {
@@ -7342,6 +7816,8 @@ const loadSecuritySettings = async () => {
 ```
 
 **4. Compression**
+
+
 ```typescript
 // Compress large configuration objects before storage
 const compressed = await compress(JSON.stringify(settings));
@@ -7353,6 +7829,8 @@ const settings = JSON.parse(await decompress(compressed));
 ```
 
 **5. Caching**
+
+
 ```typescript
 // Cache frequently accessed settings in memory
 const settingsCache = new Map();
@@ -7372,26 +7850,36 @@ function getSetting(key: string) {
 Settings Management implements multiple security layers to protect sensitive configuration data:
 
 **1. Encryption at Rest**
+
+
 - Sensitive settings (API keys, credentials) encrypted using AES-256-GCM
 - Encryption keys derived from user password or stored in secure keychain
 - Transparent encryption/decryption via middleware
 
 **2. Access Control**
+
+
 - Role-based permissions for modifying settings
 - Organization admins can lock certain settings
 - Audit trail for all setting changes
 
 **3. Input Validation**
+
+
 - All user input validated against schemas
 - Prevents injection attacks via malicious settings
 - Sanitizes string values before storage
 
 **4. Secure Transmission**
+
+
 - Settings synced over HTTPS only
 - Certificate pinning for API requests
 - JWT tokens for authentication
 
 **5. Content Security Policy**
+
+
 - Prevents XSS attacks via settings injection
 - Restricts eval() and inline scripts
 - Validates URLs in settings before navigation
@@ -7401,6 +7889,8 @@ Settings Management implements multiple security layers to protect sensitive con
 The Settings Management system provides comprehensive observability for troubleshooting and performance monitoring:
 
 **1. Audit Logging**
+
+
 ```typescript
 interface SettingChangeEvent {
   timestamp: Date;
@@ -7428,12 +7918,16 @@ settingsStore.subscribe((state, prevState) => {
 ```
 
 **2. Performance Metrics**
+
+
 - Track persistence latency (time to save settings)
 - Monitor sync frequency and conflicts
 - Measure validation overhead
 - Alert on storage quota issues
 
 **3. Debug Mode**
+
+
 ```typescript
 // Enable verbose logging in development
 if (import.meta.env.DEV) {
@@ -7449,6 +7943,8 @@ if (import.meta.env.DEV) {
 ```
 
 **4. Settings Inspector**
+
+
 - DevTools panel showing current settings
 - Visualize setting inheritance hierarchy
 - Test setting changes without persistence
@@ -7459,24 +7955,32 @@ if (import.meta.env.DEV) {
 Comprehensive testing ensures Settings Management reliability:
 
 **1. Unit Tests**
+
+
 - Test validation schemas with valid/invalid inputs
 - Verify persistence manager debouncing logic
 - Test conflict resolution algorithms
 - Validate encryption/decryption roundtrips
 
 **2. Integration Tests**
+
+
 - Test full lifecycle: initialize → update → persist → sync
 - Verify IndexedDB transactions and rollbacks
 - Test migration from old to new schema versions
 - Validate multi-tab synchronization
 
 **3. Performance Tests**
+
+
 - Benchmark persistence latency with large settings
 - Test memory usage with many subscribers
 - Measure sync overhead with high-frequency updates
 - Validate storage quota handling
 
 **4. Security Tests**
+
+
 - Attempt to inject malicious values via settings
 - Verify encryption keys are never logged
 - Test access control enforcement
@@ -7491,17 +7995,23 @@ Customizable keyboard shortcuts for commands and actions.
 ### Architecture Approaches
 
 1. **Command-Based Architecture**
+
+
    - Commands are first-class entities with IDs, names, and execution logic
    - Keybindings map to commands (many-to-one relationship)
    - Context-aware execution with "when" clauses
    - Supports command palette and keybinding customization
 
 2. **Direct Event Binding**
+
+
    - Keybindings directly trigger functions
    - No command abstraction layer
    - Simpler but less flexible
 
 3. **Keymap Hierarchy**
+
+
    - Global keybindings (always active)
    - Mode-specific keybindings (context-aware)
    - Component-local keybindings (scoped)
@@ -7553,24 +8063,32 @@ Visual styling and color schemes that can be switched dynamically.
 ### Architecture Approaches
 
 1. **CSS Variables Approach**
+
+
    - Define theme tokens as CSS custom properties
    - Switch themes by changing root-level variables
    - No JavaScript required for styling
    - Native browser support
 
 2. **CSS-in-JS with Theme Context**
+
+
    - Theme object passed through React context
    - Styles generated at runtime
    - Full JavaScript access to theme values
    - Dynamic styling capabilities
 
 3. **Build-Time Theme Generation**
+
+
    - Themes compiled to separate CSS files
    - Zero runtime overhead
    - Static theme switching
    - Optimal performance
 
 4. **Hybrid Approach**
+
+
    - CSS variables for colors and tokens
    - CSS-in-JS for complex dynamic styles
    - Best of both worlds
@@ -7625,6 +8143,8 @@ Flexible, user-customizable arrangement of dashboard components and panels.
 ### Architecture Patterns
 
 1. **Grid-Based Layout**
+
+
    ```typescript
    interface GridLayout {
      id: string;
@@ -7645,6 +8165,7 @@ Flexible, user-customizable arrangement of dashboard components and panels.
    ```
 
 2. **Split Pane Layout** (Recursive)
+
    ```typescript
    interface SplitLayout {
      type: 'horizontal' | 'vertical';
@@ -7662,6 +8183,7 @@ Flexible, user-customizable arrangement of dashboard components and panels.
 ### Best Libraries & Tools
 
 1. **react-grid-layout** (Most popular)
+
    - Drag-and-drop grid
    - Responsive breakpoints
    - Collision detection
@@ -7681,6 +8203,7 @@ Flexible, user-customizable arrangement of dashboard components and panels.
    ```
 
 2. **react-mosaic** (Split pane layouts)
+
    - Nested split views
    - Drag-and-drop rearrangement
    - Used by: Code editors, complex dashboards
@@ -7695,18 +8218,21 @@ Flexible, user-customizable arrangement of dashboard components and panels.
    ```
 
 3. **golden-layout** (Advanced)
+
    - Multi-window support
    - Tab containers
    - Popout windows
    - Used by: Trading platforms, complex BI tools
 
 4. **allotment** (VS Code-style)
+
    - Split panes with resizable dividers
    - Nested layouts
    - Keyboard accessible
    - Used by: Code-like interfaces
 
 5. **react-resizable-panels** (Modern)
+
    - Lightweight, accessible
    - Imperative API
    - Persistent layouts
@@ -7786,6 +8312,8 @@ const layoutPresets = {
 ### Advanced Layout Features
 
 1. **Responsive Breakpoints**
+
+
    ```typescript
    interface ResponsiveLayout {
      lg: GridItem[]; // Desktop
@@ -7795,16 +8323,22 @@ const layoutPresets = {
    ```
 
 2. **Layout Templates**
+
+
    - Predefined layouts for common use cases
    - One-click application
    - Customizable after application
 
 3. **Layout Sharing**
+
+
    - Export layout as JSON
    - Import from URL or file
    - Team templates
 
 4. **Layout History**
+
+
    - Undo/redo support
    - Version history
    - Restore previous layouts
@@ -7859,21 +8393,25 @@ class ConfigManager {
 ### Best Practices from Leading BI Platforms
 
 1. **Observable**:
+
    - Reactive configuration (changes propagate automatically)
    - Notebook-level and cell-level settings
    - Git-friendly (text-based configs)
 
 2. **Evidence**:
+
    - YAML for project config (version controlled)
    - UI for user preferences (browser storage)
    - Environment-based overrides
 
 3. **Grafana**:
+
    - Hierarchical settings (global → org → dashboard → panel)
    - JSON-based dashboard definitions
    - Plugin-extensible configuration
 
 4. **Metabase**:
+
    - Database-backed configuration
    - Admin UI for system settings
    - User preferences in browser storage
@@ -7899,19 +8437,24 @@ class ConfigManager {
 ### Client-Side Storage
 
 ### Primary Storage
+
 - **IndexedDB**: Large, structured data (dashboards, datasets, extension state)
+
   - Capacity: 50MB+ (typically unlimited with user prompt at ~50MB, can reach GBs)
   - Advantages: Large capacity, structured queries, transactions, async API
   - Use Case: Main persistent storage for dashboards and configurations
   
 - **LocalStorage**: Small, simple key-value pairs (preferences)
+
   - Capacity: 5-10MB (varies by browser)
   - Advantages: Simple API, synchronous access
   - Limitations: Small size limit, string-only storage, synchronous (blocks UI)
   - Use Case: Basic preferences, feature flags
 
 ### Advanced Client Storage
+
 - **Cache API**: HTTP responses, assets, and API data
+
   - Capacity: Similar to IndexedDB (typically unlimited with prompt)
   - Advantages: Built for PWAs, offline-first, versioned caches
   - Use Case: Dashboard templates, static assets, API response caching
@@ -7929,12 +8472,14 @@ class ConfigManager {
 
 ### Memory-Based Storage
 - **In-Memory State (Zustand/Jotai)**: Session-only volatile state
+
   - Capacity: Limited by browser's available RAM (typically hundreds of MBs)
   - Advantages: Fastest access, no serialization overhead
   - Limitations: Lost on page refresh, memory-constrained
   - Use Case: Active dashboard state, UI state, temporary calculations
   
 - **SessionStorage**: Tab-scoped temporary data
+
   - Capacity: 5-10MB (same as LocalStorage)
   - Advantages: Automatic cleanup on tab close
   - Limitations: Small size, string-only storage
@@ -7944,23 +8489,27 @@ class ConfigManager {
 
 #### Backend Integration
 - **REST/GraphQL API**: Centralized data storage
+
   - Capacity: Unlimited (depends on server infrastructure)
   - Advantages: Scalable, secure, multi-user collaboration
   - Use Case: User accounts, shared dashboards, enterprise deployments
   
 - **Firebase/Supabase**: Managed backend services
+
   - Capacity: Varies by plan (Free: 1GB, Paid: scalable to TBs)
   - Advantages: Real-time sync, built-in auth, managed infrastructure
   - Limitations: Vendor lock-in, cost at scale
   - Use Case: Rapid prototyping, real-time collaboration
   
 - **PouchDB + CouchDB**: Offline-first with server sync
+
   - Capacity: Client (IndexedDB limits), Server (unlimited)
   - Advantages: Automatic sync, conflict resolution, works offline
   - Use Case: Offline-capable dashboards with eventual consistency
 
 #### Peer-to-Peer
 - **WebRTC Data Channels**: Direct peer-to-peer data sharing
+
   - Capacity: Limited by network bandwidth (not storage-based)
   - Advantages: No server required, direct user-to-user sync
   - Limitations: Complex setup, requires signaling server, ephemeral
@@ -7970,34 +8519,41 @@ class ConfigManager {
 
 #### Database Engines
 - **SQLite WASM (sql.js)**: Full SQL database in browser
+
   - Capacity: Limited by available RAM (typically 100s of MBs)
   - Advantages: SQL queries, relational data, transactions
   - Limitations: Entire DB in memory, manual persistence to IndexedDB
   - Use Case: Complex queries on dashboard data, analytics
   
 - **DuckDB WASM**: Analytical queries on large datasets
+
   - Capacity: Can handle GBs of data (with streaming/chunking)
   - Advantages: OLAP queries, Parquet support, fast analytics, columnar storage
   - Use Case: In-browser data analytics, large dataset processing
   
 - **RxDB**: Reactive, offline-first database
+
   - Capacity: Uses IndexedDB underneath (50MB+ with prompt)
   - Advantages: Observable queries, multi-tab sync, encryption
   - Use Case: Reactive dashboards, multi-tab coordination
 
 #### Decentralized Storage
+
 - **Gun.js**: Decentralized graph database
+
   - Capacity: Limited by IndexedDB locally, distributed across peers
   - Advantages: P2P sync, offline-first, decentralized
   - Use Case: Decentralized apps, graph-based data
   
 - **IPFS**: Distributed file storage
+
   - Capacity: Unlimited (distributed across network), local cache limited
   - Advantages: Content-addressed, permanent, decentralized
   - Limitations: Requires gateway/node, slower access
   - Use Case: Immutable dashboard templates, public data sharing
   
 - **Ceramic Network**: Decentralized data with DIDs
+
   - Capacity: Unlimited (distributed), per-stream limits vary
   - Advantages: User-owned data, cross-app portability
   - Limitations: Emerging tech, requires infrastructure
@@ -8006,18 +8562,26 @@ class ConfigManager {
 ### Recommended Tiered Strategy
 
 **Tier 1: Hot Data (Active)**
+
+
 - In-Memory State → Current dashboard state, UI state
 - SessionStorage → Temporary filters, session data
 
 **Tier 2: Warm Data (Recent)**
+
+
 - IndexedDB → Dashboards, extensions, user preferences
 - Cache API → Dashboard templates, static resources
 
 **Tier 3: Cold Data (Archive)**
+
+
 - Cloud Storage/Backend API → Backups, shared dashboards
 - File System Access → Export/import, large files
 
 **Tier 4: Analytics (Optional)**
+
+
 - DuckDB WASM → In-browser analytics on large datasets
 - SQLite WASM → Complex relational queries
 
@@ -8046,49 +8610,50 @@ class ConfigManager {
 ### Decision Matrix
 
 **Choose IndexedDB when:**
+
 - You need persistent, structured data storage
 - Working with dashboards, configs, or extension state
 - Capacity requirements exceed LocalStorage limits
 - You need transactions and complex queries
 
 **Choose LocalStorage when:**
+
+
 - Storing simple key-value preferences
 - Data size is under 5MB
 - You need synchronous access
 - Simplicity is more important than features
 
 **Choose In-Memory State when:**
+
+
 - Data is temporary and session-specific
 - Performance is critical
 - You don't need persistence across refreshes
 - Working with active UI state
 
 **Choose Backend API when:**
+
 - Multi-user collaboration is required
 - Data needs to be shared across devices
 - Centralized control and backup are important
 - Enterprise features are needed
 
 **Choose DuckDB/SQLite WASM when:**
+
 - Complex analytical queries are required
 - Working with large datasets (100s MB to GBs)
 - SQL familiarity is a benefit
 - In-browser analytics is needed
 
 **Choose Decentralized Storage (IPFS/Ceramic/Gun) when:**
+
 - User data ownership is critical
 - Decentralization is a core requirement
 - Building Web3 or P2P applications
 - Avoiding vendor lock-in is important
 
-## Migration & Versioning
-- **Schema Versioning**: Handle data format changes
-- **Automatic Migration**: Upgrade old configurations
-- **Rollback Support**: Revert to previous versions
-- **Cross-Storage Sync**: Coordinate data across storage layers
-
-
-> **Note**: Settings management, keybinding, theme, and layout configurations are detailed in Section 2.2.3.
+> **Note**: For detailed migration strategies including canvas state evolution, cell schema changes, version tracking, and user experience considerations, see the Migration Strategy section under User Configurations. Settings management, keybinding, theme, and layout configurations are detailed in Section 2.2.3.
 
 ---
 
