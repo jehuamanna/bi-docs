@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Convert Markdown to Professional PDF for CTO Presentation
-# Uses pandoc with custom LaTeX template
+# Uses pandoc with LuaLaTeX
 
 echo "Converting docs.md to professional PDF..."
 
@@ -9,7 +9,7 @@ pandoc docs.md \
   -o docs.pdf \
   --pdf-engine=lualatex \
   --toc \
-  --toc-depth=2 \
+  --toc-depth=5 \
   --number-sections \
   --highlight-style=tango \
   --variable geometry:margin=0.5in \
@@ -29,7 +29,7 @@ if [ $? -eq 0 ]; then
     echo "  - Numbered sections"
     echo "  - Syntax highlighting for code"
     echo "  - Hyperlinked cross-references"
-    echo "  - 1-inch margins, 11pt font"
+    echo "  - 0.5-inch margins, 7.5pt font"
 else
     echo "✗ Error creating PDF"
     exit 1

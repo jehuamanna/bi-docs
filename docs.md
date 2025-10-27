@@ -11,13 +11,13 @@ abstract: |
   - **Developer-First Design**: Prioritizes developer experience with hot reloading, debugging tools, and clear APIs
 ---
 
-# 1. Core System Architecture
+# Core System Architecture
 
 The minimal core provides essential infrastructure for the extensible framework.
 
 ---
 
-#### 1.1 Component Registry
+#### Component Registry
 
 **Purpose**: Central registry for all UI components (built-in and user-defined)
 
@@ -120,7 +120,7 @@ class ComponentRegistry {
 
 *For detailed state management integration, see Section 1.3. For plugin lifecycle, see Section 1.4.*
 
-#### 1.2 Event System
+#### Event System
 
 **Purpose**: Pub/sub event bus for inter-component communication
 
@@ -220,7 +220,7 @@ class TypedEventBus {
 
 *For integration with hooks, see Section 2.2.6. For state synchronization, see Section 1.3.*
 
-#### 1.3 State Management
+#### State Management
 
 **Purpose**: Centralized, reactive state management
 
@@ -340,7 +340,7 @@ const useDashboardStore = create<DashboardState>()(
 
 > **Note**: This section consolidates state management information. Technology recommendations and settings management patterns have been integrated here for completeness.
 
-#### 1.4 Plugin Loader
+#### Plugin Loader
 
 **Purpose**: Dynamic loading and management of extensions
 
@@ -488,15 +488,15 @@ class PluginLoader {
 
 ---
 
-# 2. Extension System
+# Extension System
 
 The framework provides comprehensive extension capabilities through dual languages and multiple extension points.
 
 ---
 
-### 2.1 Extension Languages
+### Extension Languages
 
-#### 2.1.1 Custom DSL
+#### Custom DSL
 
 
 - **Purpose**: Declarative, safe UI composition
@@ -525,7 +525,7 @@ dashboard "Sales Overview" {
 }
 ```
 
-#### 2.1.2 JavaScript Extensions
+#### JavaScript Extensions
 
 
 - **Purpose**: Full programmatic control for advanced use cases
@@ -537,11 +537,11 @@ dashboard "Sales Overview" {
   - Sandboxed execution
 
 
-### 2.2 Extension Points
+### Extension Points
 
 The framework provides multiple extension points for customizing every aspect of the system.
 
-#### 2.2.1 UI Components
+#### UI Components
 
 
 
@@ -603,7 +603,7 @@ extensionAPI.registerComponent({
 
 *For component registry details, see Section 1.1. For React integration, see Section 8.1.*
 
-#### 2.2.2 Commands & Command Palette
+#### Commands & Command Palette
 
 
 
@@ -856,7 +856,7 @@ extensionAPI.registerPipeline({
 
 *For command palette integration, see Section 2.2.2.*
 
-#### 2.2.3 Keybindings
+#### Keybindings
 
 
 
@@ -957,7 +957,7 @@ extensionAPI.registerMacro({
 
 > **Note**: Detailed keybinding architecture consolidated here from multiple sections.
 
-#### 2.2.4 Themes
+#### Themes
 
 
 
@@ -1016,7 +1016,7 @@ extensionAPI.registerTheme({
 
 *For theme architecture, see Section 9.1.3.*
 
-#### 2.2.5 Layouts
+#### Layouts
 
 **Buffer/Window Model**:
 
@@ -1083,7 +1083,7 @@ extensionAPI.registerLayoutTemplate({
 
 *For layout architecture, see Section 9.1.4.*
 
-#### 2.2.6 Hooks & Advice
+#### Hooks & Advice
 
 
 
@@ -1411,7 +1411,7 @@ class AdviceSystem {
 *For plugin architecture, see Section 1.4. For extension patterns, see Section 2.1.*
 
 
-### 2.3 Hot Reloading
+### Hot Reloading
 
 
 
@@ -1520,15 +1520,15 @@ window.addEventListener('error', (event) => {
 
 ---
 
-# 3. Security Model
+# Security Model
 
 
 
 **Overview**: A comprehensive security model protects users from malicious extensions while enabling powerful customization capabilities.
 
-### 3.1 Sandboxing & Permissions
+### Sandboxing & Permissions
 
-#### 6.1 Execution Environment
+#### Execution Environment
 
 **Sandboxing Approaches**:
 
@@ -1591,7 +1591,7 @@ const createSandboxedAPI = (extensionId: string, permissions: string[]) => {
 
 *For DOM access patterns, see Section 4.1. For API design, see Section 6.3.*
 
-#### 6.2 Capability-Based Permissions
+#### Capability-Based Permissions
 
 **Permission Model**:
 
@@ -1668,7 +1668,7 @@ class PermissionManager {
 
 *For permission UI patterns, see Section 2.2. For audit logging, see Section 6.3.*
 
-#### 6.3 API Surface
+#### API Surface
 
 **API Design Principles**:
 
@@ -1725,7 +1725,7 @@ class AuditLogger {
 
 *For API design patterns, see Section 1. For versioning, see Section 6.*
 
-#### 6.4 Code Review & Signing
+#### Code Review & Signing
 
 **Extension Marketplace Security**:
 
@@ -1839,13 +1839,13 @@ function getExtensionTrust(extension: Extension): ExtensionTrust {
 
 ---
 
-# 4. Advanced Features
+# Advanced Features
 
 Modern BI dashboard capabilities including canvas interfaces, SQL integration, real-time collaboration, and performance optimization.
 
 ---
 
-### 4.1 Canvas Architecture
+### Canvas Architecture
 
 
 
@@ -1921,7 +1921,7 @@ class CanvasRenderer {
 
 *For state management, see Section 1.3. For collaboration, see Section 4.3.*
 
-### 4.2 SQL Integration
+### SQL Integration
 
 
 
@@ -2023,7 +2023,7 @@ function DataCell({ sql, params }) {
 
 *For data persistence, see Section 9.3. For component binding, see Section 4.1.*
 
-### 4.3 Real-Time Collaboration
+### Real-Time Collaboration
 
 
 
@@ -2145,7 +2145,7 @@ function CollaborativeCell({ cellId }) {
 
 *For state management, see Section 1.3. For canvas architecture, see Section 4.1.*
 
-### 4.4 Performance Optimization
+### Performance Optimization
 
 
 
@@ -2247,19 +2247,19 @@ async function loadCollaboration() {
 
 ---
 
-# 5. Data Persistence
+# Data Persistence
 
 Configuration and data persistence strategies for the framework.
 
 ---
 
-### 5.1 Storage Strategy & Configuration
+### Storage Strategy & Configuration
 
 
 
 #### User Configurations
 
-#### 5.1 Settings Management
+#### Settings Management
 
 **Concept**: Centralized system for user preferences and application options.
 
@@ -2316,7 +2316,7 @@ Configuration and data persistence strategies for the framework.
 
 **Recommended Architecture**: Hierarchical structure with Zustand, Zod validation, hybrid persistence (critical settings eager, UI preferences debounced), IndexedDB storage.
 
-#### 5.2 Keybinding System
+#### Keybinding System
 
 **Concept**: Customizable keyboard shortcuts for commands and actions.
 
@@ -2374,7 +2374,7 @@ Configuration and data persistence strategies for the framework.
 
 **Recommended Architecture**: Command-based with keymap hierarchy, context-aware execution, chord support, and user customization. Use tinykeys for minimal apps, hotkeys-js for feature-rich needs.
 
-#### 5.3 Theme System
+#### Theme System
 
 **Concept**: Visual styling and color schemes that can be switched dynamically.
 
@@ -2442,7 +2442,7 @@ Configuration and data persistence strategies for the framework.
 
 **Recommended Architecture**: CSS Variables for tokens, Tailwind CSS for utility classes, system preference detection with manual override, persistent user choice in IndexedDB.
 
-#### 5.4 Layout System
+#### Layout System
 
 **Concept**: Flexible, user-customizable arrangement of dashboard components and panels.
 
@@ -2914,13 +2914,13 @@ class ConfigManager {
 
 ---
 
-# 6. Technical Stack
+# Technical Stack
 
 
 
-### 6.1 Technology Choices
+### Technology Choices
 
-#### 8.1 Frontend Framework & UI Libraries
+#### Frontend Framework & UI Libraries
 
 **Core Framework**:
 - **React**: Component-based UI library
@@ -2998,22 +2998,22 @@ class ConfigManager {
    - Error boundaries
    - Progress indicators
 
-#### 8.2 State Management
+#### State Management
 - **Zustand** or **Jotai**: Lightweight, flexible state management
 - **Immer**: Immutable state updates
 - **IndexedDB**: Client-side persistence
 
-#### 8.3 Build System
+#### Build System
 - **Vite**: Fast development server and build tool
 - **ESBuild**: Fast JavaScript bundler
 - **TypeScript**: Type-safe development
 
-#### 8.4 Extension System
+#### Extension System
 - **ES Modules**: Standard module format for extensions
 - **Dynamic Import**: Lazy loading of extensions
 - **Web Workers**: Isolated execution for heavy computations
 
-#### 8.5 Security
+#### Security
 - **SES (Secure ECMAScript)**: Hardened JavaScript environment
 - **Content Security Policy**: Browser-level security
 - **Subresource Integrity**: Verify external resources
@@ -3023,25 +3023,25 @@ class ConfigManager {
 
 ---
 
-# 7. Use Cases & Examples
+# Use Cases & Examples
 
 
 
-### 7.1 BI Dashboard Application
+### BI Dashboard Application
 
-#### 7.1 Dashboard Builder
+#### Dashboard Builder
 - **Drag-and-Drop**: Visual dashboard composition
 - **Data Binding**: Connect components to data sources
 - **Real-Time Updates**: Live data streaming and updates
 - **Responsive Design**: Adaptive layouts for different screen sizes
 
-#### 7.2 Data Visualization
+#### Data Visualization
 - **Chart Library**: Comprehensive set of chart types
 - **Custom Visualizations**: User-defined chart components
 - **Interactive Filters**: Cross-filtering between components
 - **Drill-Down**: Navigate from summary to detail views
 
-#### 7.3 Developer Workflows
+#### Developer Workflows
 - **Version Control**: Dashboard configurations as code
 - **Collaboration**: Share and fork dashboards
 - **Testing**: Unit and integration tests for extensions
@@ -3049,7 +3049,7 @@ class ConfigManager {
 
 ---
 
-# 8. References & Inspiration
+# References & Inspiration
 
 
 
@@ -3125,7 +3125,7 @@ class ConfigManager {
 
 ---
 
-# 9. Architecture Diagram
+# Architecture Diagram
 
 
 
@@ -3262,7 +3262,7 @@ User Action → UI Layer → Core System → Extension Layer
 
 ---
 
-# 10. Implementation Roadmap
+# Implementation Roadmap
 
 
 
