@@ -125,14 +125,15 @@ User Action → UI Layer → Core System → Extension Layer
 
 # Core System Architecture
 
-The minimal core provides essential infrastructure for the extensible framework.
+The Core System Architecture represents Layer 2 of the framework, providing the minimal yet comprehensive foundation for the extensible BI Dashboard ecosystem. This layer implements the "Tiny Core, Maximum Extensibility" philosophy by offering essential services that all other layers depend upon: Component Registry for dynamic UI management, Event System for decoupled communication, State Management for reactive data flow, Plugin Loader for extension lifecycle, Keybinding System for user interactions, Command Registry for action orchestration, Hooks & Advice for aspect-oriented programming, Theme System for visual customization, and Layout Engine for flexible dashboard arrangements. Each component is designed to be lightweight, performant, and extensible, enabling plugins and extensions to build upon a solid, predictable foundation without introducing unnecessary complexity or bloat. This architecture ensures that the framework remains fast and maintainable while supporting unlimited extensibility through well-defined interfaces and patterns.
 
 ---
 
 ## Component Registry
 
 ### Purpose
-Central registry for all UI components (built-in and user-defined)
+
+Central registry for all UI components (built-in and user-defined) in the BI Dashboard Framework. The Component Registry acts as the foundation for the extensible architecture, managing the entire lifecycle of visualization components, dashboard widgets, data displays, input controls, and custom extensions. It enables dynamic component discovery and loading, supports hot module replacement for development, handles version compatibility between components, and provides a unified interface for both core framework components and third-party extensions. This registry is essential for the plugin system, allowing extensions to contribute new chart types, data widgets, and UI elements that seamlessly integrate with the dashboard ecosystem.
 
 ### Core Responsibilities
 - Component registration and discovery
@@ -231,12 +232,12 @@ class ComponentRegistry {
 }
 ```
 
-*For detailed state management integration, see Section 1.3. For plugin lifecycle, see Section 1.4.*
 
 ## Event System
 
 ### Purpose
-Pub/sub event bus for inter-component communication
+
+Pub/sub event bus for inter-component communication in the BI Dashboard Framework. The Event System serves as the nervous system of the application, enabling loosely-coupled communication between components, plugins, and core systems without creating direct dependencies. It facilitates real-time updates across dashboard cells, synchronizes state changes between visualizations, broadcasts user actions to interested listeners, coordinates plugin lifecycle events, and enables reactive data flows throughout the application. This decoupled architecture allows components to communicate efficiently while maintaining modularity—when a data query completes, visualization updates, user interaction occurs, or plugin state changes, relevant components can respond without tight coupling. The system supports both synchronous and asynchronous event handling, provides event history for debugging and time-travel, and offers scoped channels to prevent event namespace pollution in complex dashboards.
 
 ### Core Features
 - Global and scoped event channels
@@ -337,7 +338,8 @@ class TypedEventBus {
 ## State Management
 
 ### Purpose
-Centralized, reactive state management
+
+Centralized, reactive state management for the BI Dashboard Framework. The state management layer serves as the single source of truth for application data, managing dashboard configurations, user preferences, plugin state, visualization data, and UI state. It provides predictable state updates through immutable patterns, enables real-time reactivity across components, and supports advanced features like time-travel debugging, state persistence, and collaborative editing. This layer ensures that all components—from the canvas and cells to plugins and extensions—stay synchronized and can efficiently respond to data changes without prop drilling or excessive re-renders.
 
 ### Core Features
 - Immutable state updates
