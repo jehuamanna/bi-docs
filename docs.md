@@ -1834,10 +1834,83 @@ function getExtensionTrust(extension: Extension): ExtensionTrust {
 
 ### 8. Technology Choices
 
-#### 8.1 Frontend Framework
+#### 8.1 Frontend Framework & UI Libraries
+
+**Core Framework**:
 - **React**: Component-based UI library
 - **React Hooks**: Modern state and lifecycle management
 - **React Context**: Dependency injection and theming
+
+**UI Component Libraries**:
+
+| Library | Type | Pros | Cons | Bundle Size | Use Case |
+|---------|------|------|------|-------------|----------|
+| **shadcn/ui** | Copy-paste components | ✅ Full control<br>✅ Customizable<br>✅ Radix-based<br>✅ TypeScript | ❌ Manual updates<br>❌ No npm package | Varies | Modern React apps, full customization |
+| **Radix UI** | Headless primitives | ✅ Accessible<br>✅ Unstyled<br>✅ Composable<br>✅ TypeScript | ❌ Requires styling<br>❌ More setup | ~5-10KB/component | Accessible, custom designs |
+| **Headless UI** | Unstyled components | ✅ Tailwind-friendly<br>✅ Accessible<br>✅ Simple API | ❌ Limited components<br>❌ Tailwind-focused | ~5KB | Tailwind projects |
+| **Mantine** | Full component library | ✅ 100+ components<br>✅ Hooks library<br>✅ Dark mode<br>✅ TypeScript | ❌ Large bundle<br>❌ Opinionated | ~50KB+ | Rapid development |
+| **Chakra UI** | Component library | ✅ Accessible<br>✅ Themeable<br>✅ Composable<br>✅ Good DX | ❌ Bundle size<br>❌ Performance | ~40KB+ | Accessible apps |
+| **Ant Design** | Enterprise UI | ✅ Comprehensive<br>✅ i18n support<br>✅ Design system | ❌ Very large<br>❌ Opinionated<br>❌ Chinese-focused | ~500KB+ | Enterprise dashboards |
+| **Material UI** | Material Design | ✅ Mature<br>✅ Comprehensive<br>✅ Customizable | ❌ Large bundle<br>❌ Material-only | ~300KB+ | Material Design apps |
+
+**Platform-Specific UI Libraries**:
+
+| Platform | UI Stack | Components Used |
+|----------|----------|-----------------|
+| **Observable** | Custom React + D3 | • Custom React components<br>• D3.js for visualizations<br>• Observable Inputs (form controls)<br>• Custom notebook UI<br>• Inline HTML/SVG |
+| **Count.co** | React + Custom | • Custom React components<br>• Canvas-based UI<br>• SQL editor (Monaco/CodeMirror)<br>• Custom chart library<br>• Drag-and-drop system |
+| **Evidence** | Svelte + Tailwind | • Svelte components<br>• Tailwind CSS for styling<br>• Custom markdown renderer<br>• Built-in chart components<br>• SQL syntax highlighting |
+| **tldraw** | React + Radix | • Custom React components<br>• Radix UI primitives<br>• Custom canvas renderer<br>• Shape toolbars<br>• Context menus |
+| **Omni Docs** | React-based | • Custom documentation components<br>• Markdown renderer<br>• Code syntax highlighting<br>• Navigation components |
+
+**Recommended Stack for BI Dashboards**:
+
+```typescript
+// Modern, performant UI stack
+{
+  framework: 'React 18+',
+  components: 'shadcn/ui + Radix UI', // Accessible, customizable
+  styling: 'Tailwind CSS',             // Utility-first
+  charts: 'Observable Plot + D3.js',   // Data visualization
+  editor: 'Monaco Editor',             // Code/SQL editing
+  forms: 'React Hook Form',            // Form management
+  tables: 'TanStack Table',            // Data tables
+  icons: 'Lucide React',               // Icon system
+  canvas: 'Konva.js or custom',        // Canvas rendering
+}
+```
+
+**Component Categories for BI Dashboards**:
+
+1. **Layout Components**:
+   - Resizable panels (react-resizable-panels)
+   - Grid layouts (react-grid-layout)
+   - Tabs and navigation
+   - Sidebar and header
+
+2. **Data Input**:
+   - Form controls (shadcn/ui forms)
+   - SQL/Code editor (Monaco Editor)
+   - Date pickers (react-day-picker)
+   - Filters and search
+
+3. **Data Display**:
+   - Charts (Observable Plot, Recharts, Victory)
+   - Tables (TanStack Table)
+   - Cards and metrics
+   - Lists and trees
+
+4. **Interaction**:
+   - Command palette (cmdk)
+   - Context menus (Radix UI)
+   - Tooltips and popovers
+   - Modals and dialogs
+
+5. **Feedback**:
+   - Toast notifications (sonner)
+   - Loading states
+   - Error boundaries
+   - Progress indicators
 
 #### 8.2 State Management
 - **Zustand** or **Jotai**: Lightweight, flexible state management
@@ -2517,6 +2590,471 @@ class ConfigManager {
 - **Rollback Support**: Revert to previous versions
 - **Cross-Storage Sync**: Coordinate data across storage layers
 
+#### 9.5 Canvas Architecture
+
+**Overview**: Canvas-based interfaces (inspired by Count.co and tldraw) provide infinite workspace for flexible data exploration and visualization.
+
+**Infinite Canvas Pattern**:
+
+| Aspect | Implementation | Pros | Cons |
+|--------|---------------|------|------|
+| **Viewport Management** | Transform matrix | ✅ Smooth pan/zoom<br>✅ Efficient rendering | ❌ Complex math<br>❌ Coordinate transforms |
+| **Virtualization** | Render visible area only | ✅ Performance<br>✅ Scales to large canvases | ❌ Implementation complexity<br>❌ Edge cases |
+| **Spatial Indexing** | R-tree or Quadtree | ✅ Fast queries<br>✅ Collision detection | ❌ Memory overhead<br>❌ Update complexity |
+| **Layer System** | Separate canvas layers | ✅ Compositing<br>✅ Selective updates | ❌ More canvases<br>❌ Coordination |
+
+**Cell/Shape Positioning Systems**:
+
+| System | Description | Use Case |
+|--------|-------------|----------|
+| **Absolute Positioning** | Fixed x, y coordinates | Manual layout, precise control |
+| **Relative Positioning** | Position relative to parent | Nested components, groups |
+| **Auto-Layout** | Algorithm-based positioning | Automatic organization, graphs |
+| **Grid System** | Snap-to-grid alignment | Structured dashboards |
+| **Flow Layout** | Flexbox/Grid-like | Responsive arrangements |
+
+**Rendering Strategies**:
+
+```typescript
+// Canvas rendering with virtualization
+class CanvasRenderer {
+  private viewport: Viewport;
+  private spatialIndex: RTree;
+  
+  render(ctx: CanvasRenderingContext2D) {
+    // Get visible bounds
+    const bounds = this.viewport.getVisibleBounds();
+    
+    // Query spatial index for visible items
+    const visibleItems = this.spatialIndex.query(bounds);
+    
+    // Render only visible items
+    for (const item of visibleItems) {
+      this.renderItem(ctx, item);
+    }
+  }
+  
+  renderItem(ctx: CanvasRenderingContext2D, item: CanvasItem) {
+    ctx.save();
+    
+    // Apply viewport transform
+    this.viewport.applyTransform(ctx);
+    
+    // Render item
+    item.render(ctx);
+    
+    ctx.restore();
+  }
+}
+```
+
+**Platform Examples**:
+
+| Platform | Canvas Implementation | Key Features |
+|----------|---------------------|--------------|
+| **tldraw** | Custom canvas engine | • Infinite canvas<br>• Shape system<br>• Collaborative cursors<br>• History/undo |
+| **Count.co** | React + Canvas | • Cell-based layout<br>• Free-form positioning<br>• Auto-layout options<br>• SQL-driven cells |
+| **Observable** | HTML/SVG cells | • Linear notebook flow<br>• Custom layouts via HTML<br>• D3.js integration |
+
+**Recommended Stack**:
+- **Canvas Library**: Konva.js, Fabric.js, or custom WebGL
+- **Spatial Index**: rbush (R-tree implementation)
+- **Transform**: gl-matrix or custom matrix math
+- **Gestures**: Hammer.js or custom touch handling
+
+*For state management, see Section 1.3. For collaboration, see Section 9.7.*
+
+#### 9.6 SQL Integration
+
+**Overview**: SQL-driven dashboards (inspired by Count.co) enable powerful data analysis with familiar query syntax.
+
+**Query Execution Architecture**:
+
+| Approach | Implementation | Pros | Cons |
+|----------|---------------|------|------|
+| **Client-Side SQL** | DuckDB WASM, SQLite WASM | ✅ No backend needed<br>✅ Fast queries<br>✅ Offline capable | ❌ Large bundle<br>❌ Memory limits<br>❌ Initial load time |
+| **Server-Side SQL** | PostgreSQL, MySQL | ✅ Unlimited data<br>✅ Mature ecosystem<br>✅ Security | ❌ Network latency<br>❌ Backend required<br>❌ Scaling costs |
+| **Hybrid** | Cache + server | ✅ Best of both<br>✅ Optimized | ❌ Complexity<br>❌ Sync issues |
+
+**DuckDB WASM Architecture**:
+
+```typescript
+// DuckDB WASM integration
+import * as duckdb from '@duckdb/duckdb-wasm';
+
+class SQLEngine {
+  private db: duckdb.AsyncDuckDB;
+  private conn: duckdb.AsyncDuckDBConnection;
+  
+  async initialize() {
+    const bundle = await duckdb.selectBundle({
+      mvp: {
+        mainModule: duckdb_wasm,
+        mainWorker: duckdb_wasm_worker
+      }
+    });
+    
+    const worker = new Worker(bundle.mainWorker!);
+    const logger = new duckdb.ConsoleLogger();
+    this.db = new duckdb.AsyncDuckDB(logger, worker);
+    await this.db.instantiate(bundle.mainModule);
+    this.conn = await this.db.connect();
+  }
+  
+  async query(sql: string, params?: any[]) {
+    // Parameterized query for security
+    const stmt = await this.conn.prepare(sql);
+    const result = await stmt.query(...(params || []));
+    return result.toArray();
+  }
+  
+  async loadData(tableName: string, data: any[]) {
+    // Load data into DuckDB
+    await this.conn.insertArrowTable(
+      tableName,
+      arrowTable(data)
+    );
+  }
+}
+```
+
+**Query Result Caching**:
+
+| Strategy | Implementation | Use Case |
+|----------|---------------|----------|
+| **In-Memory Cache** | Map/LRU cache | Fast repeated queries |
+| **IndexedDB Cache** | Persistent cache | Large result sets |
+| **Query Fingerprint** | Hash-based key | Cache invalidation |
+| **Incremental Updates** | Delta queries | Real-time data |
+
+**Data Binding Patterns**:
+
+```typescript
+// Reactive SQL queries
+import { useQuery } from './sql-hooks';
+
+function DataCell({ sql, params }) {
+  const { data, loading, error, refetch } = useQuery(sql, params);
+  
+  // Automatically re-execute when params change
+  useEffect(() => {
+    refetch();
+  }, [params]);
+  
+  if (loading) return <Spinner />;
+  if (error) return <Error message={error.message} />;
+  
+  return <DataTable data={data} />;
+}
+```
+
+**Platform Examples**:
+
+| Platform | SQL Implementation | Features |
+|----------|-------------------|----------|
+| **Count.co** | DuckDB + PostgreSQL | • SQL cells<br>• Query dependencies<br>• Result caching<br>• Parameterized queries |
+| **Observable** | SQL cells (via connectors) | • Database connectors<br>• SQL template literals<br>• Reactive queries |
+| **Evidence** | DuckDB + connectors | • SQL + Markdown<br>• Component binding<br>• Build-time queries |
+
+**Recommended Stack**:
+- **Client SQL**: DuckDB WASM (analytics), SQLite WASM (simple queries)
+- **Caching**: React Query or SWR with IndexedDB
+- **Parameterization**: Prepared statements, tagged templates
+- **Visualization**: Observable Plot, Vega-Lite
+
+*For data persistence, see Section 9.3. For component binding, see Section 4.1.*
+
+#### 9.7 Real-Time Collaboration
+
+**Overview**: Multi-user collaboration (inspired by Count.co and tldraw) enables teams to work together in real-time.
+
+**CRDT (Conflict-free Replicated Data Type) Libraries**:
+
+| Library | Language | Pros | Cons | Bundle Size | Use Case |
+|---------|----------|------|------|-------------|----------|
+| **Yjs** | JavaScript | ✅ Mature<br>✅ Performant<br>✅ Rich ecosystem<br>✅ CRDT types | ❌ Learning curve<br>❌ Bundle size | ~50KB | Production apps |
+| **Automerge** | JavaScript/Rust | ✅ Pure CRDT<br>✅ Offline-first<br>✅ Time travel | ❌ Larger bundle<br>❌ Performance | ~200KB | Offline-first apps |
+| **Loro** | Rust (WASM) | ✅ High performance<br>✅ Small bundle<br>✅ Rich text | ❌ New/experimental<br>❌ Smaller ecosystem | ~100KB | Performance-critical |
+| **Fluid Framework** | TypeScript | ✅ Microsoft-backed<br>✅ Enterprise features | ❌ Complex<br>❌ Azure dependency | Large | Enterprise |
+
+**Yjs Integration Architecture**:
+
+```typescript
+// Yjs collaborative state
+import * as Y from 'yjs';
+import { WebrtcProvider } from 'y-webrtc';
+import { IndexeddbPersistence } from 'y-indexeddb';
+
+class CollaborationEngine {
+  private doc: Y.Doc;
+  private provider: WebrtcProvider;
+  private persistence: IndexeddbPersistence;
+  
+  constructor(roomId: string) {
+    this.doc = new Y.Doc();
+    
+    // WebRTC provider for P2P sync
+    this.provider = new WebrtcProvider(roomId, this.doc);
+    
+    // IndexedDB for offline persistence
+    this.persistence = new IndexeddbPersistence(roomId, this.doc);
+  }
+  
+  // Shared canvas state
+  getCanvas(): Y.Map<any> {
+    return this.doc.getMap('canvas');
+  }
+  
+  // Shared cells/shapes
+  getCells(): Y.Array<any> {
+    return this.doc.getArray('cells');
+  }
+  
+  // Awareness (presence)
+  getAwareness() {
+    return this.provider.awareness;
+  }
+}
+```
+
+**Presence System**:
+
+| Feature | Implementation | Use Case |
+|---------|---------------|----------|
+| **User Cursors** | Awareness state + SVG | Show where users are pointing |
+| **Active Selection** | Highlighted shapes/cells | Show what users are editing |
+| **User Avatars** | Avatar component | Identify collaborators |
+| **Activity Feed** | Event log | Show recent changes |
+| **Typing Indicators** | Awareness + debounce | Show who's typing |
+
+**Conflict Resolution Strategies**:
+
+| Strategy | Description | Pros | Cons |
+|----------|-------------|------|------|
+| **Last-Write-Wins** | Timestamp-based | ✅ Simple<br>✅ Fast | ❌ Data loss<br>❌ Not fair |
+| **CRDT** | Mathematically convergent | ✅ No conflicts<br>✅ Automatic | ❌ Complex<br>❌ Memory overhead |
+| **Operational Transform** | Transform operations | ✅ Proven<br>✅ Google Docs uses it | ❌ Very complex<br>❌ Hard to implement |
+| **Manual Resolution** | User chooses | ✅ User control<br>✅ Transparent | ❌ Interrupts flow<br>❌ User burden |
+
+**Platform Examples**:
+
+| Platform | Collaboration System | Implementation |
+|----------|---------------------|----------------|
+| **tldraw** | Yjs + WebRTC | • Real-time shape sync<br>• Presence cursors<br>• History preservation<br>• Offline support |
+| **Count.co** | Custom WebSocket | • Real-time cell updates<br>• Collaborative editing<br>• Presence indicators<br>• Comment threads |
+| **Observable** | Limited collaboration | • Notebook sharing<br>• Fork-based workflow<br>• No real-time sync |
+
+**Recommended Architecture**:
+
+```typescript
+// Collaborative canvas cell
+function CollaborativeCell({ cellId }) {
+  const collab = useCollaboration();
+  const cells = collab.getCells();
+  
+  // Subscribe to cell changes
+  const cell = useYArray(cells, cellId);
+  
+  // Update cell
+  const updateCell = (changes) => {
+    collab.doc.transact(() => {
+      const cellData = cells.get(cellId);
+      Object.assign(cellData, changes);
+    });
+  };
+  
+  // Show presence
+  const awareness = collab.getAwareness();
+  const users = useAwareness(awareness);
+  
+  return (
+    <Cell data={cell} onChange={updateCell}>
+      <PresenceCursors users={users} />
+    </Cell>
+  );
+}
+```
+
+**Recommended Stack**:
+- **CRDT**: Yjs (most mature and performant)
+- **Transport**: WebRTC (P2P) or WebSocket (server-based)
+- **Persistence**: IndexedDB (offline) + server backup
+- **Presence**: Yjs Awareness API
+- **Cursors**: Custom SVG overlay
+
+*For state management, see Section 1.3. For canvas architecture, see Section 9.5.*
+
+#### 9.8 Performance Optimization
+
+**Overview**: Canvas-based and data-intensive applications require specific performance optimizations.
+
+**Canvas Rendering Optimizations**:
+
+| Technique | Description | Performance Gain | Complexity |
+|-----------|-------------|------------------|------------|
+| **Virtual Scrolling** | Render visible items only | 10-100x | Medium |
+| **Layer Separation** | Multiple canvas layers | 2-5x | Low |
+| **WebGL Rendering** | GPU-accelerated | 10-50x | High |
+| **Offscreen Canvas** | Background rendering | 2-3x | Medium |
+| **Request Animation Frame** | Batch updates | 2-5x | Low |
+| **Dirty Rectangle** | Partial redraws | 5-10x | Medium |
+
+**State Management Optimizations**:
+
+```typescript
+// Structural sharing with Immer
+import { produce } from 'immer';
+
+const updateCanvas = produce((draft, action) => {
+  // Immer creates efficient immutable updates
+  const cell = draft.cells.find(c => c.id === action.cellId);
+  if (cell) {
+    cell.position = action.position;
+  }
+});
+
+// Memoization for expensive computations
+import { useMemo } from 'react';
+
+function DataVisualization({ data, config }) {
+  const processedData = useMemo(() => {
+    // Expensive data transformation
+    return processLargeDataset(data, config);
+  }, [data, config]);
+  
+  return <Chart data={processedData} />;
+}
+
+// Lazy computation with computed values
+import { computed } from '@preact/signals-react';
+
+const visibleCells = computed(() => {
+  const viewport = canvasState.viewport.value;
+  return canvasState.cells.value.filter(cell =>
+    isInViewport(cell, viewport)
+  );
+});
+```
+
+**Data Loading Strategies**:
+
+| Strategy | Implementation | Use Case |
+|----------|---------------|----------|
+| **Lazy Loading** | Load on demand | Large datasets |
+| **Pagination** | Load in chunks | Infinite scroll |
+| **Streaming** | Progressive loading | Real-time data |
+| **Prefetching** | Load ahead | Predictable navigation |
+| **Caching** | Store results | Repeated queries |
+
+**Bundle Optimization**:
+
+```typescript
+// Code splitting for large features
+const AdvancedChart = lazy(() => import('./AdvancedChart'));
+
+// Tree shaking - import only what you need
+import { map, filter } from 'lodash-es';
+
+// Dynamic imports for optional features
+async function loadCollaboration() {
+  if (user.hasPremium) {
+    const { CollaborationEngine } = await import('./collaboration');
+    return new CollaborationEngine();
+  }
+}
+```
+
+**Platform Benchmarks**:
+
+| Platform | Initial Load | Canvas Render | Query Execution |
+|----------|-------------|---------------|-----------------|
+| **tldraw** | ~200KB | 60 FPS (1000 shapes) | N/A |
+| **Count.co** | ~500KB | 60 FPS (100 cells) | <100ms (DuckDB) |
+| **Observable** | ~300KB | 60 FPS (cells) | Varies |
+
+**Recommended Optimizations**:
+1. **Rendering**: Virtual scrolling + layer separation
+2. **State**: Immer for immutability + signals for reactivity
+3. **Data**: DuckDB WASM + IndexedDB caching
+4. **Bundle**: Code splitting + tree shaking
+5. **Network**: Service worker + prefetching
+
+*For canvas rendering, see Section 9.5. For state management, see Section 1.3.*
+
+---
+
+## References & Inspiration
+
+### Open Source Projects
+
+**Observable Ecosystem**:
+- [Observable Runtime](https://github.com/observablehq/runtime) - Reactive notebook runtime with dependency resolution
+- [Observable Plot](https://github.com/observablehq/plot) - Declarative visualization grammar
+- [Observable Inputs](https://github.com/observablehq/inputs) - Interactive form controls and widgets
+- [Observable Framework](https://github.com/observablehq/framework) - Static site generator for data apps
+
+**tldraw Ecosystem**:
+- [tldraw](https://github.com/tldraw/tldraw) - Infinite canvas SDK with collaborative features
+- [Signia](https://github.com/tldraw/signia) - Fine-grained reactive state management
+- [tldraw-yjs](https://github.com/tldraw/tldraw-yjs) - Yjs integration for collaboration
+
+**Data & SQL**:
+- [DuckDB WASM](https://github.com/duckdb/duckdb-wasm) - In-browser analytical SQL database
+- [SQLite WASM](https://github.com/sql-js/sql.js) - SQLite compiled to WebAssembly
+- [Arquero](https://github.com/uwdata/arquero) - Query processing and transformation library
+
+**Collaboration**:
+- [Yjs](https://github.com/yjs/yjs) - CRDT framework for building collaborative applications
+- [Automerge](https://github.com/automerge/automerge) - JSON-like data structure for collaboration
+- [Loro](https://github.com/loro-dev/loro) - High-performance CRDT library
+
+**State Management**:
+- [Zustand](https://github.com/pmndrs/zustand) - Lightweight state management
+- [Jotai](https://github.com/pmndrs/jotai) - Primitive and flexible state management
+- [Valtio](https://github.com/pmndrs/valtio) - Proxy-based state management
+- [Signals](https://github.com/preactjs/signals) - Fine-grained reactivity
+
+**Canvas & Rendering**:
+- [Konva.js](https://github.com/konvajs/konva) - 2D canvas framework
+- [Fabric.js](https://github.com/fabricjs/fabric.js) - Canvas library with SVG support
+- [PixiJS](https://github.com/pixijs/pixijs) - WebGL rendering engine
+- [rbush](https://github.com/mourner/rbush) - R-tree spatial indexing
+
+### Platform Documentation
+
+- [Observable Documentation](https://observablehq.com/documentation) - Notebook concepts and API
+- [Count.co Documentation](https://count.co/docs) - Canvas-based BI platform
+- [tldraw Developer Docs](https://tldraw.dev) - Canvas SDK and API reference
+- [Omni Docs](https://omnidocs.com) - Documentation platform architecture
+
+### Technical Articles & Resources
+
+**Observable**:
+- [How Observable Runs](https://observablehq.com/@observablehq/how-observable-runs) - Runtime architecture
+- [Observable's Not JavaScript](https://observablehq.com/@observablehq/observables-not-javascript) - Reactive semantics
+- [Introduction to Data](https://observablehq.com/@observablehq/introduction-to-data) - Data loading patterns
+
+**tldraw**:
+- [Building a Collaborative Canvas](https://tldraw.dev/blog/building-a-collaborative-canvas) - Collaboration architecture
+- [How tldraw Works](https://tldraw.dev/docs/introduction) - Shape system and state management
+- [Performance Optimization](https://tldraw.dev/docs/performance) - Rendering optimizations
+
+**DuckDB WASM**:
+- [DuckDB WASM Performance](https://duckdb.org/2021/10/29/duckdb-wasm.html) - Benchmarks and architecture
+- [In-Browser Analytics](https://duckdb.org/docs/api/wasm/overview) - WASM integration guide
+
+**Collaboration**:
+- [Yjs Documentation](https://docs.yjs.dev/) - CRDT concepts and API
+- [CRDT Explained](https://crdt.tech/) - Conflict-free replicated data types
+- [Real-time Collaboration Patterns](https://www.figma.com/blog/how-figmas-multiplayer-technology-works/) - Figma's approach
+
+### Design Patterns & Architecture
+
+- [Reactive Programming](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754) - Introduction to reactive thinking
+- [Flux Architecture](https://facebook.github.io/flux/) - Unidirectional data flow
+- [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html) - Event-driven architecture
+- [CQRS Pattern](https://martinfowler.com/bliki/CQRS.html) - Command Query Responsibility Segregation
+
 ---
 
 ## Architecture Diagram
@@ -2700,21 +3238,34 @@ User Action → UI Layer → Core System → Extension Layer
    - Permission system
    - Code signing infrastructure
 
-### Phase 4: BI Dashboard Features
-1. **Dashboard Builder**
-   - Visual editor
-   - Component library
-   - Data binding
+### Phase 4: Canvas & Notebook Features
+1. **Canvas System**
+   - Infinite canvas implementation
+   - Viewport management (pan/zoom)
+   - Cell/shape positioning
+   - Spatial indexing (R-tree)
+   - Virtual scrolling
 
-2. **Visualization Components**
-   - Chart library integration
+2. **SQL Integration**
+   - DuckDB WASM integration
+   - Query execution engine
+   - Result caching (IndexedDB)
+   - Reactive query bindings
+   - Parameterized queries
+
+3. **Visualization Components**
+   - Observable Plot integration
    - Custom chart types
+   - D3.js support
    - Interactive features
+   - SQL-driven visualizations
 
-3. **Data Layer**
-   - Data source connectors
-   - Query builder
-   - Real-time updates
+4. **Collaboration System**
+   - Yjs CRDT integration
+   - WebRTC/WebSocket transport
+   - Presence system (cursors, avatars)
+   - Real-time sync
+   - Conflict resolution
 
 ### Phase 5: Polish & Production
 1. **State Persistence**
