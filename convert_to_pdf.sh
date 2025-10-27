@@ -7,14 +7,14 @@ echo "Converting docs.md to professional PDF..."
 
 pandoc docs.md \
   -o docs.pdf \
-  --pdf-engine=xelatex \
+  --pdf-engine=lualatex \
   --toc \
   --toc-depth=2 \
   --number-sections \
   --highlight-style=tango \
-  --variable geometry:margin=0.6in \
-  --variable fontsize=9pt \
-  --variable linestretch=1.05 \
+  --variable geometry:margin=0.5in \
+  --variable fontsize=7.5pt \
+  --variable linestretch=1.0 \
   --metadata title="Extensible BI Dashboard Framework - Technical Documentation" \
   --metadata author="Technical Architecture Team" \
   --metadata date="$(date '+%B %d, %Y')"
