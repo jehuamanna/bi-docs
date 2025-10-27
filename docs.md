@@ -1,33 +1,14 @@
 ---
 title: "Extensible BI Dashboard Framework: Technical Documentation"
 author: "Technical Architecture Team"
----
+abstract: |
+  **Extensible BI Dashboard Framework** is a browser-based, highly extensible framework designed for building dynamic Business Intelligence (BI) dashboards. The system features a minimal core with maximum extensibility, allowing developers to create, customize, and extend UI components on-the-fly using both a custom DSL and JavaScript.
 
-# Project Overview
+  **Core Philosophy:**
 
-**Extensible BI Dashboard Framework** is a browser-based, highly extensible framework designed for building dynamic Business Intelligence (BI) dashboards. The system features a minimal core with maximum extensibility, allowing developers to create, customize, and extend UI components on-the-fly using both a custom DSL and JavaScript.
-
-## Core Philosophy
-
-- **Tiny Core, Maximum Extensibility**: Minimal core functionality with comprehensive plugin architecture
-- **Plugin-Based Architecture**: Adopts proven patterns for extensibility and modularity
-- **Developer-First Design**: Prioritizes developer experience with hot reloading, debugging tools, and clear APIs
-
----
-
-## Table of Contents
-
-1. [Core System Architecture](#1-core-system-architecture)
-2. [Extension System](#2-extension-system)
-3. [Security Model](#3-security-model)
-4. [Advanced Features](#4-advanced-features)
-5. [Data Persistence](#5-data-persistence)
-6. [Technical Stack](#6-technical-stack)
-7. [Use Cases & Examples](#7-use-cases--examples)
-8. [References & Inspiration](#8-references--inspiration)
-9. [Architecture Diagram](#9-architecture-diagram)
-10. [Implementation Roadmap](#10-implementation-roadmap)
-
+  - **Tiny Core, Maximum Extensibility**: Minimal core functionality with comprehensive plugin architecture
+  - **Plugin-Based Architecture**: Adopts proven patterns for extensibility and modularity
+  - **Developer-First Design**: Prioritizes developer experience with hot reloading, debugging tools, and clear APIs
 ---
 
 # 1. Core System Architecture
