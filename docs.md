@@ -1,10 +1,13 @@
-# Extensible BI Dashboard Framework: Technical Documentation
+---
+title: "Extensible BI Dashboard Framework: Technical Documentation"
+author: "Technical Architecture Team"
+---
 
-## Project Overview
+# Project Overview
 
 **Extensible BI Dashboard Framework** is a browser-based, highly extensible framework designed for building dynamic Business Intelligence (BI) dashboards. The system features a minimal core with maximum extensibility, allowing developers to create, customize, and extend UI components on-the-fly using both a custom DSL and JavaScript.
 
-### Core Philosophy
+## Core Philosophy
 
 - **Tiny Core, Maximum Extensibility**: Minimal core functionality with comprehensive plugin architecture
 - **Plugin-Based Architecture**: Adopts proven patterns for extensibility and modularity
@@ -27,7 +30,7 @@
 
 ---
 
-## 1. Core System Architecture
+# 1. Core System Architecture
 
 The minimal core provides essential infrastructure for the extensible framework.
 
@@ -504,7 +507,7 @@ class PluginLoader {
 
 ---
 
-## 2. Extension System
+# 2. Extension System
 
 The framework provides comprehensive extension capabilities through dual languages and multiple extension points.
 
@@ -1536,7 +1539,7 @@ window.addEventListener('error', (event) => {
 
 ---
 
-## 3. Security Model
+# 3. Security Model
 
 
 
@@ -1855,7 +1858,7 @@ function getExtensionTrust(extension: Extension): ExtensionTrust {
 
 ---
 
-## 4. Advanced Features
+# 4. Advanced Features
 
 Modern BI dashboard capabilities including canvas interfaces, SQL integration, real-time collaboration, and performance optimization.
 
@@ -2263,7 +2266,7 @@ async function loadCollaboration() {
 
 ---
 
-## 5. Data Persistence
+# 5. Data Persistence
 
 Configuration and data persistence strategies for the framework.
 
@@ -2930,7 +2933,7 @@ class ConfigManager {
 
 ---
 
-## 6. Technical Stack
+# 6. Technical Stack
 
 
 
@@ -3039,7 +3042,7 @@ class ConfigManager {
 
 ---
 
-## 7. Use Cases & Examples
+# 7. Use Cases & Examples
 
 
 
@@ -3065,7 +3068,7 @@ class ConfigManager {
 
 ---
 
-## 8. References & Inspiration
+# 8. References & Inspiration
 
 
 
@@ -3141,7 +3144,7 @@ class ConfigManager {
 
 ---
 
-## 9. Architecture Diagram
+# 9. Architecture Diagram
 
 
 
@@ -3278,7 +3281,7 @@ User Action → UI Layer → Core System → Extension Layer
 
 ---
 
-## 10. Implementation Roadmap
+# 10. Implementation Roadmap
 
 
 
