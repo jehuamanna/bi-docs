@@ -267,6 +267,7 @@ class TypedEventBus {
 | **MobX** | Observable | Very reactive; Automatic tracking; Powerful | Large bundle; Magic behavior; Learning curve | ~16KB | Complex reactive apps |
 | **Recoil** | Atomic | React-first; Async support; Selectors | Experimental; React-only; Less mature | ~14KB | React apps, async state |
 | **XState** | State machines | Predictable; Visualizable; Complex flows | Learning curve; Verbose; Overkill for simple | ~10KB | Complex state machines |
+| **Signia** | Signals | Fine-grained reactivity; track() API; Fast; Framework-agnostic | New library; Smaller ecosystem; tldraw-specific | ~5KB | Canvas apps, fine-grained updates |
 
 **State Management Features**:
 
@@ -284,7 +285,7 @@ class TypedEventBus {
 | **Observable** | Reactive cells | • Each cell is state; • Automatic dependency tracking; • Dataflow graph execution; • No central store |
 | **Evidence** | Svelte stores | • Writable stores for state; • Derived stores for computed; • Context for component state |
 | **Count.co** | Canvas state | • Canvas-level state management; • Cell state with SQL results; • Collaborative state sync; • Local + server state |
-| **tldraw** | Zustand store | • Centralized Zustand store; • Shape state management; • History state (undo/redo); • Computed selectors |
+| **tldraw** | Signia (signals) | • Fine-grained reactive signals; • Shape state management; • History state (undo/redo); • track() for reactive components |
 | **Omni Docs** | Plugin state | • Plugin-based state management; • Custom state API; • Runtime state registration |
 
 **Recommended Architecture**:
