@@ -47,29 +47,29 @@ The minimal core provides essential infrastructure for the extensible framework.
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
-| **Service Locator** | Central registry with get/set | ✅ Simple<br>✅ Centralized<br>✅ Easy lookup | ❌ Global state<br>❌ Hidden dependencies<br>❌ Testing harder | Simple apps, quick prototypes |
-| **Dependency Injection** | Components receive dependencies | ✅ Explicit dependencies<br>✅ Testable<br>✅ Decoupled | ❌ More boilerplate<br>❌ Complex setup<br>❌ Learning curve | Large apps, testability important |
-| **Module Federation** | Webpack 5 feature for runtime loading | ✅ True code splitting<br>✅ Independent deployment<br>✅ Version isolation | ❌ Webpack-specific<br>❌ Complex config<br>❌ Build complexity | Micro-frontends, large teams |
-| **Dynamic Import** | ES modules with import() | ✅ Native support<br>✅ Code splitting<br>✅ Simple | ❌ Limited metadata<br>❌ No version control<br>❌ Manual registry | Modern apps, simple plugins |
+| **Service Locator** | Central registry with get/set | Simple; Centralized; Easy lookup | Global state; Hidden dependencies; Testing harder | Simple apps, quick prototypes |
+| **Dependency Injection** | Components receive dependencies | Explicit dependencies; Testable; Decoupled | More boilerplate; Complex setup; Learning curve | Large apps, testability important |
+| **Module Federation** | Webpack 5 feature for runtime loading | True code splitting; Independent deployment; Version isolation | Webpack-specific; Complex config; Build complexity | Micro-frontends, large teams |
+| **Dynamic Import** | ES modules with import() | Native support; Code splitting; Simple | Limited metadata; No version control; Manual registry | Modern apps, simple plugins |
 
 **Library Comparison**:
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
-| **InversifyJS** | DI container | ✅ Full DI support<br>✅ Decorators<br>✅ TypeScript<br>✅ Mature | ❌ Large bundle<br>❌ Reflect metadata<br>❌ Complex API | ~15KB | Enterprise apps, complex DI |
-| **TSyringe** | DI container | ✅ Lightweight DI<br>✅ Decorators<br>✅ Simple API<br>✅ TypeScript | ❌ Requires decorators<br>❌ Less features | ~3KB | TypeScript apps, moderate DI |
-| **Awilix** | DI container | ✅ No decorators needed<br>✅ Flexible<br>✅ Good docs | ❌ Less type-safe<br>❌ Manual setup | ~5KB | Node.js-style, flexible DI |
-| **Custom Registry** | DIY Map/Object | ✅ Full control<br>✅ Minimal size<br>✅ Simple | ❌ Manual implementation<br>❌ No DI features | <1KB | Simple needs, full control |
+| **InversifyJS** | DI container | Full DI support; Decorators; TypeScript; Mature | Large bundle; Reflect metadata; Complex API | ~15KB | Enterprise apps, complex DI |
+| **TSyringe** | DI container | Lightweight DI; Decorators; Simple API; TypeScript | Requires decorators; Less features | ~3KB | TypeScript apps, moderate DI |
+| **Awilix** | DI container | No decorators needed; Flexible; Good docs | Less type-safe; Manual setup | ~5KB | Node.js-style, flexible DI |
+| **Custom Registry** | DIY Map/Object | Full control; Minimal size; Simple | Manual implementation; No DI features | <1KB | Simple needs, full control |
 
 **BI Dashboard Examples**:
 
 | Platform | Registry Pattern | Extension Method |
 |----------|-----------------|----------------|
-| **Observable** | Module-based registry | • Notebook cells as components<br>• Dynamic import for modules<br>• Runtime dependency resolution<br>• Version pinning per notebook |
-| **Evidence** | File-based convention | • Components auto-discovered from /components<br>• Svelte component registry<br>• Build-time registration<br>• No runtime DI |
-| **Count.co** | Component library | • Pre-built visualization components<br>• SQL-driven component binding<br>• Canvas-based layout registry<br>• Drag-and-drop component system |
-| **tldraw** | Shape registry | • Shape definitions as components<br>• Tool registry pattern<br>• Custom shape API<br>• Runtime shape registration |
-| **Omni Docs** | Plugin registry | • Plugin-based documentation system<br>• Markdown-based content<br>• Custom plugin API<br>• Runtime plugin registration |
+| **Observable** | Module-based registry | • Notebook cells as components; • Dynamic import for modules; • Runtime dependency resolution; • Version pinning per notebook |
+| **Evidence** | File-based convention | • Components auto-discovered from /components; • Svelte component registry; • Build-time registration; • No runtime DI |
+| **Count.co** | Component library | • Pre-built visualization components; • SQL-driven component binding; • Canvas-based layout registry; • Drag-and-drop component system |
+| **tldraw** | Shape registry | • Shape definitions as components; • Tool registry pattern; • Custom shape API; • Runtime shape registration |
+| **Omni Docs** | Plugin registry | • Plugin-based documentation system; • Markdown-based content; • Custom plugin API; • Runtime plugin registration |
 
 **Recommended Architecture**:
 
@@ -150,39 +150,39 @@ class ComponentRegistry {
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
-| **Event Emitter** | Simple pub/sub | ✅ Simple<br>✅ Familiar<br>✅ Small | ❌ No type safety<br>❌ Memory leaks risk<br>❌ No scoping | Simple events, small apps |
-| **Event Bus** | Centralized event hub | ✅ Decoupled<br>✅ Global access<br>✅ Easy debugging | ❌ Global state<br>❌ Hidden dependencies<br>❌ Testing harder | Cross-component communication |
-| **Observable Streams** | RxJS-style | ✅ Powerful operators<br>✅ Composable<br>✅ Async-friendly | ❌ Learning curve<br>❌ Large bundle<br>❌ Overkill for simple cases | Complex async flows |
-| **Custom Events** | DOM CustomEvent | ✅ Native API<br>✅ No dependencies<br>✅ Bubbling support | ❌ DOM-only<br>❌ Limited features<br>❌ Verbose | DOM-centric apps |
+| **Event Emitter** | Simple pub/sub | Simple; Familiar; Small | No type safety; Memory leaks risk; No scoping | Simple events, small apps |
+| **Event Bus** | Centralized event hub | Decoupled; Global access; Easy debugging | Global state; Hidden dependencies; Testing harder | Cross-component communication |
+| **Observable Streams** | RxJS-style | Powerful operators; Composable; Async-friendly | Learning curve; Large bundle; Overkill for simple cases | Complex async flows |
+| **Custom Events** | DOM CustomEvent | Native API; No dependencies; Bubbling support | DOM-only; Limited features; Verbose | DOM-centric apps |
 
 **Library Comparison**:
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
-| **mitt** | Event emitter | ✅ Tiny (200B)<br>✅ TypeScript<br>✅ Simple API | ❌ Basic features<br>❌ No scoping<br>❌ No async | 200B | Minimal apps, simple events |
-| **eventemitter3** | Event emitter | ✅ Fast<br>✅ Mature<br>✅ Well-tested | ❌ No TypeScript<br>❌ Larger bundle | ~2KB | Performance-critical |
-| **RxJS** | Reactive streams | ✅ Very powerful<br>✅ Operators<br>✅ Async handling | ❌ Large (40KB+)<br>❌ Steep curve<br>❌ Complex | ~40KB | Complex async, data streams |
-| **Nano Events** | Event emitter | ✅ Very small<br>✅ Simple<br>✅ TypeScript | ❌ Minimal features | 200B | Size-constrained |
-| **EventEmitter2** | Enhanced emitter | ✅ Wildcards<br>✅ Namespaces<br>✅ Feature-rich | ❌ Larger<br>❌ More complex | ~5KB | Complex event patterns |
+| **mitt** | Event emitter | Tiny (200B); TypeScript; Simple API | Basic features; No scoping; No async | 200B | Minimal apps, simple events |
+| **eventemitter3** | Event emitter | Fast; Mature; Well-tested | No TypeScript; Larger bundle | ~2KB | Performance-critical |
+| **RxJS** | Reactive streams | Very powerful; Operators; Async handling | Large (40KB+); Steep curve; Complex | ~40KB | Complex async, data streams |
+| **Nano Events** | Event emitter | Very small; Simple; TypeScript | Minimal features | 200B | Size-constrained |
+| **EventEmitter2** | Enhanced emitter | Wildcards; Namespaces; Feature-rich | Larger; More complex | ~5KB | Complex event patterns |
 
 **Event System Patterns**:
 
 | Feature | Implementation | Pros | Cons |
 |---------|---------------|------|------|
-| **Event Namespacing** | `user:login`, `data:update` | ✅ Organization<br>✅ Wildcards | ❌ String-based<br>❌ No type safety |
-| **Typed Events** | TypeScript discriminated unions | ✅ Type-safe<br>✅ Autocomplete | ❌ More boilerplate<br>❌ TS-only |
-| **Event Replay** | Store event history | ✅ Debugging<br>✅ Time-travel | ❌ Memory usage<br>❌ Complexity |
-| **Scoped Channels** | Separate buses per scope | ✅ Isolation<br>✅ Less noise | ❌ More instances<br>❌ Coordination |
+| **Event Namespacing** | `user:login`, `data:update` | Organization; Wildcards | String-based; No type safety |
+| **Typed Events** | TypeScript discriminated unions | Type-safe; Autocomplete | More boilerplate; TS-only |
+| **Event Replay** | Store event history | Debugging; Time-travel | Memory usage; Complexity |
+| **Scoped Channels** | Separate buses per scope | Isolation; Less noise | More instances; Coordination |
 
 **BI Dashboard Examples**:
 
 | Platform | Event Pattern | Implementation |
 |----------|-------------|----------------|
-| **Observable** | Reactive cells | • Cell dependencies as events<br>• Automatic re-execution<br>• Dataflow graph<br>• No explicit pub/sub |
-| **Evidence** | Component events | • Svelte component events<br>• Custom events for data updates<br>• Build-time event binding |
-| **Count.co** | Canvas events | • Cell update events<br>• Query execution events<br>• Collaboration events (real-time)<br>• Canvas state changes |
-| **tldraw** | Shape events | • Shape change events<br>• Selection events<br>• Canvas interaction events<br>• History events (undo/redo) |
-| **Omni Docs** | Plugin events | • Plugin-based event system<br>• Custom event API<br>• Runtime event registration |
+| **Observable** | Reactive cells | • Cell dependencies as events; • Automatic re-execution; • Dataflow graph; • No explicit pub/sub |
+| **Evidence** | Component events | • Svelte component events; • Custom events for data updates; • Build-time event binding |
+| **Count.co** | Canvas events | • Cell update events; • Query execution events; • Collaboration events (real-time); • Canvas state changes |
+| **tldraw** | Shape events | • Shape change events; • Selection events; • Canvas interaction events; • History events (undo/redo) |
+| **Omni Docs** | Plugin events | • Plugin-based event system; • Custom event API; • Runtime event registration |
 
 **Recommended Architecture**:
 
@@ -251,41 +251,41 @@ class TypedEventBus {
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
-| **Flux/Redux** | Unidirectional data flow | ✅ Predictable<br>✅ Time-travel<br>✅ DevTools | ❌ Boilerplate<br>❌ Learning curve<br>❌ Verbose | Large apps, complex state |
-| **Atomic State** | Fine-grained atoms | ✅ Minimal re-renders<br>✅ Composable<br>✅ Simple | ❌ Many atoms<br>❌ Coordination<br>❌ Less structure | React apps, performance-critical |
-| **Proxy-Based** | Mutable API with tracking | ✅ Simple API<br>✅ Auto-tracking<br>✅ Intuitive | ❌ Proxy overhead<br>❌ Debugging harder | Rapid development |
-| **Observable** | RxJS/MobX style | ✅ Reactive<br>✅ Powerful<br>✅ Composable | ❌ Learning curve<br>❌ Large bundle | Complex reactive flows |
+| **Flux/Redux** | Unidirectional data flow | Predictable; Time-travel; DevTools | Boilerplate; Learning curve; Verbose | Large apps, complex state |
+| **Atomic State** | Fine-grained atoms | Minimal re-renders; Composable; Simple | Many atoms; Coordination; Less structure | React apps, performance-critical |
+| **Proxy-Based** | Mutable API with tracking | Simple API; Auto-tracking; Intuitive | Proxy overhead; Debugging harder | Rapid development |
+| **Observable** | RxJS/MobX style | Reactive; Powerful; Composable | Learning curve; Large bundle | Complex reactive flows |
 
 **Library Comparison**:
 
 | Library | Pattern | Pros | Cons | Bundle Size | Use Case |
 |---------|---------|------|------|-------------|----------|
-| **Zustand** | Flux-like | ✅ Simple API<br>✅ No providers<br>✅ Middleware<br>✅ Small bundle | ❌ Manual optimization<br>❌ Less structure | ~1KB | General-purpose, React |
-| **Jotai** | Atomic | ✅ Minimal re-renders<br>✅ Bottom-up<br>✅ TypeScript<br>✅ Suspense | ❌ Many atoms<br>❌ Boilerplate<br>❌ Debugging | ~3KB | Performance-critical React |
-| **Valtio** | Proxy | ✅ Mutable API<br>✅ Auto-tracking<br>✅ Simple<br>✅ Snapshots | ❌ Proxy limitations<br>❌ Less predictable | ~3KB | Rapid development, simple state |
-| **Redux Toolkit** | Redux | ✅ Less boilerplate<br>✅ DevTools<br>✅ Mature<br>✅ Ecosystem | ❌ Still verbose<br>❌ Learning curve<br>❌ Larger | ~10KB | Enterprise, complex workflows |
-| **MobX** | Observable | ✅ Very reactive<br>✅ Automatic tracking<br>✅ Powerful | ❌ Large bundle<br>❌ Magic behavior<br>❌ Learning curve | ~16KB | Complex reactive apps |
-| **Recoil** | Atomic | ✅ React-first<br>✅ Async support<br>✅ Selectors | ❌ Experimental<br>❌ React-only<br>❌ Less mature | ~14KB | React apps, async state |
-| **XState** | State machines | ✅ Predictable<br>✅ Visualizable<br>✅ Complex flows | ❌ Learning curve<br>❌ Verbose<br>❌ Overkill for simple | ~10KB | Complex state machines |
+| **Zustand** | Flux-like | Simple API; No providers; Middleware; Small bundle | Manual optimization; Less structure | ~1KB | General-purpose, React |
+| **Jotai** | Atomic | Minimal re-renders; Bottom-up; TypeScript; Suspense | Many atoms; Boilerplate; Debugging | ~3KB | Performance-critical React |
+| **Valtio** | Proxy | Mutable API; Auto-tracking; Simple; Snapshots | Proxy limitations; Less predictable | ~3KB | Rapid development, simple state |
+| **Redux Toolkit** | Redux | Less boilerplate; DevTools; Mature; Ecosystem | Still verbose; Learning curve; Larger | ~10KB | Enterprise, complex workflows |
+| **MobX** | Observable | Very reactive; Automatic tracking; Powerful | Large bundle; Magic behavior; Learning curve | ~16KB | Complex reactive apps |
+| **Recoil** | Atomic | React-first; Async support; Selectors | Experimental; React-only; Less mature | ~14KB | React apps, async state |
+| **XState** | State machines | Predictable; Visualizable; Complex flows | Learning curve; Verbose; Overkill for simple | ~10KB | Complex state machines |
 
 **State Management Features**:
 
 | Feature | Implementation | Pros | Cons |
 |---------|---------------|------|------|
-| **Time-Travel** | Store action history | ✅ Debugging<br>✅ Undo/redo | ❌ Memory usage<br>❌ Complexity |
-| **Persistence** | LocalStorage/IndexedDB sync | ✅ Survives refresh<br>✅ User experience | ❌ Serialization<br>❌ Migration |
-| **Computed State** | Derived values/selectors | ✅ DRY principle<br>✅ Performance | ❌ Memoization needed<br>❌ Complexity |
-| **Middleware** | Intercept actions | ✅ Logging<br>✅ Analytics<br>✅ Side effects | ❌ Indirection<br>❌ Debugging |
+| **Time-Travel** | Store action history | Debugging; Undo/redo | Memory usage; Complexity |
+| **Persistence** | LocalStorage/IndexedDB sync | Survives refresh; User experience | Serialization; Migration |
+| **Computed State** | Derived values/selectors | DRY principle; Performance | Memoization needed; Complexity |
+| **Middleware** | Intercept actions | Logging; Analytics; Side effects | Indirection; Debugging |
 
 **BI Dashboard Examples**:
 
 | Platform | State Pattern | Implementation |
 |----------|-----------------|----------------|
-| **Observable** | Reactive cells | • Each cell is state<br>• Automatic dependency tracking<br>• Dataflow graph execution<br>• No central store |
-| **Evidence** | Svelte stores | • Writable stores for state<br>• Derived stores for computed<br>• Context for component state |
-| **Count.co** | Canvas state | • Canvas-level state management<br>• Cell state with SQL results<br>• Collaborative state sync<br>• Local + server state |
-| **tldraw** | Zustand store | • Centralized Zustand store<br>• Shape state management<br>• History state (undo/redo)<br>• Computed selectors |
-| **Omni Docs** | Plugin state | • Plugin-based state management<br>• Custom state API<br>• Runtime state registration |
+| **Observable** | Reactive cells | • Each cell is state; • Automatic dependency tracking; • Dataflow graph execution; • No central store |
+| **Evidence** | Svelte stores | • Writable stores for state; • Derived stores for computed; • Context for component state |
+| **Count.co** | Canvas state | • Canvas-level state management; • Cell state with SQL results; • Collaborative state sync; • Local + server state |
+| **tldraw** | Zustand store | • Centralized Zustand store; • Shape state management; • History state (undo/redo); • Computed selectors |
+| **Omni Docs** | Plugin state | • Plugin-based state management; • Custom state API; • Runtime state registration |
 
 **Recommended Architecture**:
 
@@ -370,21 +370,21 @@ const useDashboardStore = create<DashboardState>()(
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
-| **Dynamic Import** | ES modules import() | ✅ Native<br>✅ Code splitting<br>✅ Simple | ❌ Limited metadata<br>❌ No sandboxing | Modern apps, simple plugins |
-| **Module Federation** | Webpack 5 feature | ✅ Independent deployment<br>✅ Version isolation<br>✅ Shared deps | ❌ Webpack-specific<br>❌ Complex setup | Micro-frontends |
-| **SystemJS** | Universal module loader | ✅ Format-agnostic<br>✅ Runtime loading<br>✅ Import maps | ❌ Extra runtime<br>❌ Less common | Legacy support needed |
-| **iframe Sandboxing** | Isolated execution | ✅ True isolation<br>✅ Security<br>✅ Separate context | ❌ Communication overhead<br>❌ Performance<br>❌ Complex | Untrusted plugins |
-| **Web Workers** | Background threads | ✅ Non-blocking<br>✅ Isolated<br>✅ Parallel | ❌ No DOM access<br>❌ Message passing<br>❌ Limited | CPU-intensive plugins |
+| **Dynamic Import** | ES modules import() | Native; Code splitting; Simple | Limited metadata; No sandboxing | Modern apps, simple plugins |
+| **Module Federation** | Webpack 5 feature | Independent deployment; Version isolation; Shared deps | Webpack-specific; Complex setup | Micro-frontends |
+| **SystemJS** | Universal module loader | Format-agnostic; Runtime loading; Import maps | Extra runtime; Less common | Legacy support needed |
+| **iframe Sandboxing** | Isolated execution | True isolation; Security; Separate context | Communication overhead; Performance; Complex | Untrusted plugins |
+| **Web Workers** | Background threads | Non-blocking; Isolated; Parallel | No DOM access; Message passing; Limited | CPU-intensive plugins |
 
 **Library Comparison**:
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
-| **single-spa** | Micro-frontend framework | ✅ Framework-agnostic<br>✅ Lifecycle<br>✅ Mature | ❌ Complex setup<br>❌ Learning curve | ~5KB | Micro-frontends, large apps |
-| **qiankun** | Micro-frontend (Alibaba) | ✅ Sandboxing<br>✅ CSS isolation<br>✅ Full-featured | ❌ Complex<br>❌ Chinese docs | ~15KB | Enterprise micro-frontends |
-| **import-maps** | Native import maps | ✅ Native<br>✅ No build<br>✅ Simple | ❌ Browser support<br>❌ Limited features | 0KB | Modern browsers only |
-| **SystemJS** | Module loader | ✅ Format-agnostic<br>✅ Import maps<br>✅ Mature | ❌ Extra runtime<br>❌ Less common | ~10KB | Legacy support |
-| **Custom Loader** | DIY | ✅ Full control<br>✅ Tailored<br>✅ Minimal | ❌ Development time<br>❌ Testing | Varies | Specific requirements |
+| **single-spa** | Micro-frontend framework | Framework-agnostic; Lifecycle; Mature | Complex setup; Learning curve | ~5KB | Micro-frontends, large apps |
+| **qiankun** | Micro-frontend (Alibaba) | Sandboxing; CSS isolation; Full-featured | Complex; Chinese docs | ~15KB | Enterprise micro-frontends |
+| **import-maps** | Native import maps | Native; No build; Simple | Browser support; Limited features | 0KB | Modern browsers only |
+| **SystemJS** | Module loader | Format-agnostic; Import maps; Mature | Extra runtime; Less common | ~10KB | Legacy support |
+| **Custom Loader** | DIY | Full control; Tailored; Minimal | Development time; Testing | Varies | Specific requirements |
 
 **Plugin Lifecycle Patterns**:
 
@@ -401,11 +401,11 @@ const useDashboardStore = create<DashboardState>()(
 
 | Platform | Plugin System | Implementation |
 |----------|--------------|----------------|
-| **Observable** | Runtime imports | • Dynamic import() for modules<br>• npm: prefix for packages<br>• Version pinning<br>• No formal plugin API |
-| **Evidence** | Component discovery | • File-based plugin system<br>• Auto-discovery from directories<br>• Build-time integration<br>• Svelte components |
-| **Count.co** | Canvas plugins | • Visualization plugins<br>• Data connector plugins<br>• SQL function extensions<br>• Custom cell types |
-| **tldraw** | Shape plugins | • Custom shape definitions<br>• Tool plugins<br>• UI override plugins<br>• Runtime registration |
-| **Omni Docs** | Plugin system | • Markdown plugins<br>• Custom renderers<br>• Build-time and runtime plugins<br>• Plugin manifest |
+| **Observable** | Runtime imports | • Dynamic import() for modules; • npm: prefix for packages; • Version pinning; • No formal plugin API |
+| **Evidence** | Component discovery | • File-based plugin system; • Auto-discovery from directories; • Build-time integration; • Svelte components |
+| **Count.co** | Canvas plugins | • Visualization plugins; • Data connector plugins; • SQL function extensions; • Custom cell types |
+| **tldraw** | Shape plugins | • Custom shape definitions; • Tool plugins; • UI override plugins; • Runtime registration |
+| **Omni Docs** | Plugin system | • Markdown plugins; • Custom renderers; • Build-time and runtime plugins; • Plugin manifest |
 
 **Recommended Architecture**:
 
@@ -571,19 +571,19 @@ The framework provides multiple extension points for customizing every aspect of
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
-| **React Component** | Standard React component | ✅ Familiar<br>✅ Full ecosystem<br>✅ Easy integration | ❌ React-only<br>❌ Bundle size | React-based dashboards |
-| **Web Component** | Custom elements | ✅ Framework-agnostic<br>✅ Encapsulation<br>✅ Reusable | ❌ Less ecosystem<br>❌ Complexity | Multi-framework support |
-| **Plugin API** | Declarative config | ✅ Simple<br>✅ Safe<br>✅ Validated | ❌ Less flexible<br>❌ Limited features | Simple extensions |
-| **Render Function** | Function returning JSX/HTML | ✅ Flexible<br>✅ Lightweight<br>✅ Composable | ❌ No lifecycle<br>❌ Manual cleanup | Simple UI elements |
+| **React Component** | Standard React component | Familiar; Full ecosystem; Easy integration | React-only; Bundle size | React-based dashboards |
+| **Web Component** | Custom elements | Framework-agnostic; Encapsulation; Reusable | Less ecosystem; Complexity | Multi-framework support |
+| **Plugin API** | Declarative config | Simple; Safe; Validated | Less flexible; Limited features | Simple extensions |
+| **Render Function** | Function returning JSX/HTML | Flexible; Lightweight; Composable | No lifecycle; Manual cleanup | Simple UI elements |
 
 **BI Dashboard Examples**:
 
 | Platform | Component System | Extension Method |
 |----------|-----------------|------------------|
-| **Observable** | Reactive cells | • Custom cells with JavaScript<br>• Import external libraries<br>• Inline HTML/SVG<br>• D3.js visualizations |
-| **Evidence** | Svelte components | • Custom Svelte components in /components<br>• Markdown with component tags<br>• SQL + component binding |
-| **Count.co** | Canvas components | • Custom visualization cells<br>• SQL-driven components<br>• React-based extensions<br>• Drag-and-drop integration |
-| **tldraw** | Shape components | • Custom shape definitions<br>• SVG-based rendering<br>• Tool components<br>• React shape API |
+| **Observable** | Reactive cells | • Custom cells with JavaScript; • Import external libraries; • Inline HTML/SVG; • D3.js visualizations |
+| **Evidence** | Svelte components | • Custom Svelte components in /components; • Markdown with component tags; • SQL + component binding |
+| **Count.co** | Canvas components | • Custom visualization cells; • SQL-driven components; • React-based extensions; • Drag-and-drop integration |
+| **tldraw** | Shape components | • Custom shape definitions; • SVG-based rendering; • Tool components; • React shape API |
 
 **Recommended Architecture**:
 
@@ -684,31 +684,31 @@ A command palette is a **searchable command interface** that provides:
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
-| **kbar** | React component | ✅ Beautiful UI<br>✅ Nested actions<br>✅ TypeScript<br>✅ Animations<br>✅ Active development | ❌ React-only<br>❌ Opinionated styling<br>❌ Limited customization | ~15KB | Modern React apps, design-focused |
-| **cmdk** | React primitive | ✅ Headless/unstyled<br>✅ Flexible<br>✅ Accessible<br>✅ Small bundle<br>✅ By Vercel | ❌ React-only<br>❌ Requires styling<br>❌ More setup needed | ~8KB | Custom designs, full control |
-| **ninja-keys** | Web component | ✅ Framework-agnostic<br>✅ Web components<br>✅ Zero dependencies<br>✅ Easy integration | ❌ Less flexible<br>❌ Styling limitations<br>❌ Smaller ecosystem | ~12KB | Multi-framework, simple needs |
-| **command-score** | Algorithm only | ✅ Just scoring logic<br>✅ Framework-agnostic<br>✅ Tiny size<br>✅ Fast | ❌ No UI<br>❌ Build everything yourself<br>❌ More work | ~2KB | Custom implementations |
-| **Fuse.js** | Fuzzy search | ✅ Powerful search<br>✅ Configurable<br>✅ Framework-agnostic<br>✅ Mature | ❌ No UI<br>❌ Larger bundle<br>❌ Overkill for simple cases | ~20KB | Complex search requirements |
-| **Custom Build** | DIY | ✅ Full control<br>✅ Minimal bundle<br>✅ Tailored features<br>✅ No dependencies | ❌ Development time<br>❌ Maintenance burden<br>❌ Reinventing wheel | Varies | Unique requirements, learning |
+| **kbar** | React component | Beautiful UI; Nested actions; TypeScript; Animations; Active development | React-only; Opinionated styling; Limited customization | ~15KB | Modern React apps, design-focused |
+| **cmdk** | React primitive | Headless/unstyled; Flexible; Accessible; Small bundle; By Vercel | React-only; Requires styling; More setup needed | ~8KB | Custom designs, full control |
+| **ninja-keys** | Web component | Framework-agnostic; Web components; Zero dependencies; Easy integration | Less flexible; Styling limitations; Smaller ecosystem | ~12KB | Multi-framework, simple needs |
+| **command-score** | Algorithm only | Just scoring logic; Framework-agnostic; Tiny size; Fast | No UI; Build everything yourself; More work | ~2KB | Custom implementations |
+| **Fuse.js** | Fuzzy search | Powerful search; Configurable; Framework-agnostic; Mature | No UI; Larger bundle; Overkill for simple cases | ~20KB | Complex search requirements |
+| **Custom Build** | DIY | Full control; Minimal bundle; Tailored features; No dependencies | Development time; Maintenance burden; Reinventing wheel | Varies | Unique requirements, learning |
 
 **Fuzzy Search Algorithm Comparison**:
 
 | Algorithm | Approach | Pros | Cons | Best For |
 |-----------|----------|------|------|----------|
-| **Substring Match** | Simple `includes()` | ✅ Fast<br>✅ Simple<br>✅ Predictable | ❌ No typo tolerance<br>❌ No ranking<br>❌ Order-dependent | Simple lists, exact matching |
-| **Levenshtein Distance** | Edit distance | ✅ Typo-tolerant<br>✅ Well-understood<br>✅ Good ranking | ❌ Slower (O(n²))<br>❌ No position weighting | Spell-check, small datasets |
-| **Fuzzy Matching** (fzy, fzf-style) | Character sequence | ✅ Fast<br>✅ Position-aware<br>✅ Intuitive results<br>✅ Handles abbreviations | ❌ More complex<br>❌ Tuning needed | Command palettes, file search |
-| **N-gram Based** | Token matching | ✅ Language-aware<br>✅ Good for text<br>✅ Handles word order | ❌ Slower<br>❌ More memory<br>❌ Complex setup | Full-text search, documents |
+| **Substring Match** | Simple `includes()` | Fast; Simple; Predictable | No typo tolerance; No ranking; Order-dependent | Simple lists, exact matching |
+| **Levenshtein Distance** | Edit distance | Typo-tolerant; Well-understood; Good ranking | Slower (O(n²)); No position weighting | Spell-check, small datasets |
+| **Fuzzy Matching** (fzy, fzf-style) | Character sequence | Fast; Position-aware; Intuitive results; Handles abbreviations | More complex; Tuning needed | Command palettes, file search |
+| **N-gram Based** | Token matching | Language-aware; Good for text; Handles word order | Slower; More memory; Complex setup | Full-text search, documents |
 
 **BI Dashboard Examples**:
 
 | Platform | Implementation | Features | Activation |
 |----------|---------------|----------|------------|
-| **Observable** | Custom React component | • Fuzzy search across notebooks<br>• Recent notebooks<br>• Command suggestions<br>• Cell navigation<br>• Keyboard shortcuts reference | Cmd/Ctrl+K |
-| **Evidence** | Custom implementation | • Page navigation<br>• Component search<br>• Query execution<br>• Documentation search<br>• Settings access | Cmd/Ctrl+K |
-| **Count.co** | Custom React | • Canvas search<br>• Cell navigation<br>• Query execution<br>• Data source selection<br>• Quick actions | Cmd/Ctrl+K |
-| **tldraw** | Custom implementation | • Shape search<br>• Tool selection<br>• Canvas actions<br>• Quick commands<br>• Keyboard shortcuts | Cmd/Ctrl+K |
-| **Linear** (inspiration) | cmdk-based | • Issue search<br>• Project navigation<br>• Quick actions<br>• Nested commands<br>• Beautiful animations | Cmd/Ctrl+K |
+| **Observable** | Custom React component | • Fuzzy search across notebooks; • Recent notebooks; • Command suggestions; • Cell navigation; • Keyboard shortcuts reference | Cmd/Ctrl+K |
+| **Evidence** | Custom implementation | • Page navigation; • Component search; • Query execution; • Documentation search; • Settings access | Cmd/Ctrl+K |
+| **Count.co** | Custom React | • Canvas search; • Cell navigation; • Query execution; • Data source selection; • Quick actions | Cmd/Ctrl+K |
+| **tldraw** | Custom implementation | • Shape search; • Tool selection; • Canvas actions; • Quick commands; • Keyboard shortcuts | Cmd/Ctrl+K |
+| **Linear** (inspiration) | cmdk-based | • Issue search; • Project navigation; • Quick actions; • Nested commands; • Beautiful animations | Cmd/Ctrl+K |
 
 **Recommended Architecture for BI Dashboards**:
 
@@ -835,11 +835,11 @@ const modes = {
 
 | Platform | Command System | Extension Method |
 |----------|---------------|------------------|
-| **Observable** | Cell execution | • Cells as commands<br>• Function exports<br>• Import and call |
-| **Evidence** | Build commands | • npm scripts<br>• CLI commands<br>• No runtime commands |
-| **Count.co** | Canvas commands | • Cell execution commands<br>• Query commands<br>• Canvas actions |
-| **tldraw** | Tool commands | • Shape commands<br>• Canvas commands<br>• Tool actions |
-| **VS Code** | Commands API | • commands.registerCommand<br>• Command palette<br>• Keybinding integration |
+| **Observable** | Cell execution | • Cells as commands; • Function exports; • Import and call |
+| **Evidence** | Build commands | • npm scripts; • CLI commands; • No runtime commands |
+| **Count.co** | Canvas commands | • Cell execution commands; • Query commands; • Canvas actions |
+| **tldraw** | Tool commands | • Shape commands; • Canvas commands; • Tool actions |
+| **VS Code** | Commands API | • commands.registerCommand; • Command palette; • Keybinding integration |
 
 **Recommended API**:
 
@@ -931,19 +931,19 @@ The keybinding system follows a **command-based architecture** where:
 
 | Approach | Implementation | Pros | Cons |
 |----------|---------------|------|------|
-| **Declarative** | JSON/YAML config | ✅ Simple<br>✅ Validated<br>✅ Safe | ❌ Limited logic<br>❌ No dynamic binding |
-| **Programmatic** | API calls | ✅ Flexible<br>✅ Dynamic<br>✅ Conditional | ❌ More complex<br>❌ Error-prone |
-| **Hybrid** | Config + API | ✅ Best of both<br>✅ Validated + flexible | ❌ Two systems | 
+| **Declarative** | JSON/YAML config | Simple; Validated; Safe | Limited logic; No dynamic binding |
+| **Programmatic** | API calls | Flexible; Dynamic; Conditional | More complex; Error-prone |
+| **Hybrid** | Config + API | Best of both; Validated + flexible | Two systems | 
 
 **BI Dashboard Examples**:
 
 | Platform | Keybinding System | Extension Method |
 |----------|------------------|------------------|
-| **Observable** | Built-in shortcuts | • Limited customization<br>• Cell-level shortcuts<br>• Cmd+K command palette |
-| **Evidence** | Not extensible | • Fixed keybindings<br>• No custom shortcuts |
-| **Count.co** | Canvas shortcuts | • Cell navigation keys<br>• Query execution shortcuts<br>• Custom keybindings |
-| **tldraw** | Tool shortcuts | • Shape creation keys<br>• Canvas navigation<br>• Tool-specific bindings |
-| **VS Code** | Keybindings API | • keybindings.json<br>• when clauses<br>• Full customization |
+| **Observable** | Built-in shortcuts | • Limited customization; • Cell-level shortcuts; • Cmd+K command palette |
+| **Evidence** | Not extensible | • Fixed keybindings; • No custom shortcuts |
+| **Count.co** | Canvas shortcuts | • Cell navigation keys; • Query execution shortcuts; • Custom keybindings |
+| **tldraw** | Tool shortcuts | • Shape creation keys; • Canvas navigation; • Tool-specific bindings |
+| **VS Code** | Keybindings API | • keybindings.json; • when clauses; • Full customization |
 
 **Recommended API**:
 
@@ -987,19 +987,19 @@ extensionAPI.registerMacro({
 
 | Approach | Implementation | Pros | Cons |
 |----------|---------------|------|------|
-| **CSS Variables** | Override root variables | ✅ Simple<br>✅ Performant<br>✅ Dynamic | ❌ Limited scope<br>❌ No logic |
-| **Theme Object** | JavaScript config | ✅ Type-safe<br>✅ Validated<br>✅ Programmatic | ❌ Runtime overhead<br>❌ More complex |
-| **CSS File** | Separate stylesheet | ✅ Familiar<br>✅ Standard<br>✅ Cacheable | ❌ No dynamic<br>❌ Load overhead |
-| **Hybrid** | Variables + Object | ✅ Flexible<br>✅ Best of both | ❌ Complexity |
+| **CSS Variables** | Override root variables | Simple; Performant; Dynamic | Limited scope; No logic |
+| **Theme Object** | JavaScript config | Type-safe; Validated; Programmatic | Runtime overhead; More complex |
+| **CSS File** | Separate stylesheet | Familiar; Standard; Cacheable | No dynamic; Load overhead |
+| **Hybrid** | Variables + Object | Flexible; Best of both | Complexity |
 
 **BI Dashboard Examples**:
 
 | Platform | Theme System | Extension Method |
 |----------|-------------|------------------|
-| **Observable** | CSS variables | • Custom CSS in cells<br>• Theme cells<br>• CSS imports |
-| **Evidence** | Tailwind config | • tailwind.config.js<br>• Custom CSS<br>• Component styling |
-| **Count.co** | Theme settings | • Color customization<br>• Canvas themes<br>• CSS variables |
-| **tldraw** | Theme system | • CSS variables<br>• Custom themes<br>• Dark/light mode<br>• Color overrides |
+| **Observable** | CSS variables | • Custom CSS in cells; • Theme cells; • CSS imports |
+| **Evidence** | Tailwind config | • tailwind.config.js; • Custom CSS; • Component styling |
+| **Count.co** | Theme settings | • Color customization; • Canvas themes; • CSS variables |
+| **tldraw** | Theme system | • CSS variables; • Custom themes; • Dark/light mode; • Color overrides |
 
 **Recommended API**:
 
@@ -1064,10 +1064,10 @@ extensionAPI.registerTheme({
 
 | Platform | Layout System | Extension Method |
 |----------|--------------|------------------|
-| **Observable** | Notebook flow | • Linear cell layout<br>• Custom layouts via HTML<br>• Grid layouts in cells |
-| **Evidence** | Page templates | • Markdown-based<br>• Component slots<br>• Fixed layouts |
-| **Count.co** | Canvas layout | • Free-form canvas<br>• Cell positioning<br>• Auto-layout options<br>• Responsive grids |
-| **tldraw** | Canvas system | • Infinite canvas<br>• Shape positioning<br>• Grouping and frames<br>• Custom layouts |
+| **Observable** | Notebook flow | • Linear cell layout; • Custom layouts via HTML; • Grid layouts in cells |
+| **Evidence** | Page templates | • Markdown-based; • Component slots; • Fixed layouts |
+| **Count.co** | Canvas layout | • Free-form canvas; • Cell positioning; • Auto-layout options; • Responsive grids |
+| **tldraw** | Canvas system | • Infinite canvas; • Shape positioning; • Grouping and frames; • Custom layouts |
 
 **Recommended API**:
 
@@ -1189,42 +1189,42 @@ The hooks and advice system provides a **plugin architecture** that enables:
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
-| **mitt** | Event emitter | ✅ Tiny (200B)<br>✅ Simple API<br>✅ TypeScript support<br>✅ No dependencies | ❌ No priority ordering<br>❌ No async handling<br>❌ Basic features only | 200B | Lightweight hooks, simple events |
-| **eventemitter3** | Event emitter | ✅ Fast performance<br>✅ Mature<br>✅ Node.js compatible<br>✅ Well-tested | ❌ Larger bundle<br>❌ No TypeScript out of box<br>❌ No priority support | ~2KB | Production apps, performance-critical |
-| **nanoevents** | Event emitter | ✅ Very small (200B)<br>✅ Simple<br>✅ TypeScript support | ❌ Minimal features<br>❌ No wildcards<br>❌ No priority | 200B | Minimal footprint, basic needs |
-| **hookified** | Hook system | ✅ Built for plugins<br>✅ Priority support<br>✅ Async hooks<br>✅ Typed | ❌ Less popular<br>❌ Smaller ecosystem | ~3KB | Plugin systems, complex hooks |
-| **Tapable** | Hook system | ✅ Webpack's hook system<br>✅ Very powerful<br>✅ Multiple hook types<br>✅ Battle-tested | ❌ Complex API<br>❌ Large bundle<br>❌ Steep learning curve | ~10KB | Complex plugin systems, Webpack-like |
-| **Custom Build** | DIY | ✅ Tailored features<br>✅ Minimal size<br>✅ Full control | ❌ Development time<br>❌ Testing needed<br>❌ Maintenance | Varies | Specific requirements |
+| **mitt** | Event emitter | Tiny (200B); Simple API; TypeScript support; No dependencies | No priority ordering; No async handling; Basic features only | 200B | Lightweight hooks, simple events |
+| **eventemitter3** | Event emitter | Fast performance; Mature; Node.js compatible; Well-tested | Larger bundle; No TypeScript out of box; No priority support | ~2KB | Production apps, performance-critical |
+| **nanoevents** | Event emitter | Very small (200B); Simple; TypeScript support | Minimal features; No wildcards; No priority | 200B | Minimal footprint, basic needs |
+| **hookified** | Hook system | Built for plugins; Priority support; Async hooks; Typed | Less popular; Smaller ecosystem | ~3KB | Plugin systems, complex hooks |
+| **Tapable** | Hook system | Webpack's hook system; Very powerful; Multiple hook types; Battle-tested | Complex API; Large bundle; Steep learning curve | ~10KB | Complex plugin systems, Webpack-like |
+| **Custom Build** | DIY | Tailored features; Minimal size; Full control | Development time; Testing needed; Maintenance | Varies | Specific requirements |
 
 **Hook System Implementation Patterns**:
 
 | Pattern | Description | Pros | Cons |
 |---------|-------------|------|------|
-| **Simple Event Emitter** | Basic pub/sub | ✅ Simple<br>✅ Familiar<br>✅ Small | ❌ No ordering<br>❌ No async control |
-| **Priority Queue** | Ordered execution by priority | ✅ Predictable order<br>✅ Dependency handling | ❌ More complex<br>❌ Priority conflicts |
-| **Async Waterfall** | Sequential async execution | ✅ Data transformation<br>✅ Pipeline pattern | ❌ Slower<br>❌ Error propagation |
-| **Async Parallel** | Concurrent execution | ✅ Fast<br>✅ Independent handlers | ❌ No ordering<br>❌ Race conditions |
-| **Async Series** | Sequential with results | ✅ Ordered<br>✅ Result aggregation | ❌ Slower<br>❌ Blocking |
+| **Simple Event Emitter** | Basic pub/sub | Simple; Familiar; Small | No ordering; No async control |
+| **Priority Queue** | Ordered execution by priority | Predictable order; Dependency handling | More complex; Priority conflicts |
+| **Async Waterfall** | Sequential async execution | Data transformation; Pipeline pattern | Slower; Error propagation |
+| **Async Parallel** | Concurrent execution | Fast; Independent handlers | No ordering; Race conditions |
+| **Async Series** | Sequential with results | Ordered; Result aggregation | Slower; Blocking |
 
 **Advice Pattern Comparison**:
 
 | Pattern | Implementation | Pros | Cons | Best For |
 |---------|---------------|------|------|----------|
-| **Proxy-Based** | ES6 Proxy | ✅ Transparent<br>✅ No code changes<br>✅ Powerful | ❌ Performance overhead<br>❌ Debugging harder<br>❌ Browser support | Dynamic interception |
-| **Decorator-Based** | Function wrapping | ✅ Explicit<br>✅ Composable<br>✅ TypeScript support | ❌ Requires wrapping<br>❌ Boilerplate | Explicit augmentation |
-| **Middleware Chain** | Express-style | ✅ Familiar pattern<br>✅ Composable<br>✅ Async-friendly | ❌ More setup<br>❌ Context passing | Request/response flows |
-| **AOP Framework** | AspectJ-style | ✅ Powerful<br>✅ Declarative<br>✅ Cross-cutting | ❌ Complex<br>❌ Large bundle<br>❌ Learning curve | Enterprise apps |
+| **Proxy-Based** | ES6 Proxy | Transparent; No code changes; Powerful | Performance overhead; Debugging harder; Browser support | Dynamic interception |
+| **Decorator-Based** | Function wrapping | Explicit; Composable; TypeScript support | Requires wrapping; Boilerplate | Explicit augmentation |
+| **Middleware Chain** | Express-style | Familiar pattern; Composable; Async-friendly | More setup; Context passing | Request/response flows |
+| **AOP Framework** | AspectJ-style | Powerful; Declarative; Cross-cutting | Complex; Large bundle; Learning curve | Enterprise apps |
 
 **BI Dashboard Examples**:
 
 | Platform | Hook System | Advice System | Implementation Details |
 |----------|-------------|---------------|------------------------|
-| **Observable** | Custom event system | Runtime notebook hooks | • Cell execution hooks<br>• Import hooks<br>• Reactive dependency tracking<br>• Custom hook for data loading |
-| **Evidence** | Component lifecycle | Build-time hooks | • Page build hooks<br>• Component mount/unmount<br>• Data query hooks<br>• Markdown processing hooks |
-| **Count.co** | Canvas lifecycle | Canvas hooks | • Cell execution hooks<br>• Query lifecycle hooks<br>• Canvas render hooks<br>• Collaboration hooks |
-| **tldraw** | Shape lifecycle | Shape hooks | • Shape creation/update hooks<br>• Canvas interaction hooks<br>• History hooks (undo/redo)<br>• Selection hooks |
-| **VS Code** | Extension API | Command/menu contribution | • Activation events<br>• Language server hooks<br>• Workspace events<br>• Decoration providers |
-| **Webpack** | Tapable hooks | Compilation hooks | • Compiler hooks<br>• Compilation hooks<br>• Module hooks<br>• Asset optimization |
+| **Observable** | Custom event system | Runtime notebook hooks | • Cell execution hooks; • Import hooks; • Reactive dependency tracking; • Custom hook for data loading |
+| **Evidence** | Component lifecycle | Build-time hooks | • Page build hooks; • Component mount/unmount; • Data query hooks; • Markdown processing hooks |
+| **Count.co** | Canvas lifecycle | Canvas hooks | • Cell execution hooks; • Query lifecycle hooks; • Canvas render hooks; • Collaboration hooks |
+| **tldraw** | Shape lifecycle | Shape hooks | • Shape creation/update hooks; • Canvas interaction hooks; • History hooks (undo/redo); • Selection hooks |
+| **VS Code** | Extension API | Command/menu contribution | • Activation events; • Language server hooks; • Workspace events; • Decoration providers |
+| **Webpack** | Tapable hooks | Compilation hooks | • Compiler hooks; • Compilation hooks; • Module hooks; • Asset optimization |
 
 **Recommended Architecture for BI Dashboards**:
 
@@ -1442,38 +1442,38 @@ class AdviceSystem {
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
-| **Full Reload** | Refresh entire page | ✅ Simple<br>✅ Reliable<br>✅ No state issues | ❌ Slow<br>❌ Loses state<br>❌ Poor DX | Production, simple apps |
-| **Module HMR** | Replace individual modules | ✅ Fast<br>✅ Preserves state<br>✅ Good DX | ❌ Complex<br>❌ State management<br>❌ Edge cases | Development, modern apps |
-| **Component HMR** | Replace React components | ✅ Very fast<br>✅ Preserves local state<br>✅ Best DX | ❌ React-specific<br>❌ Requires setup | React development |
-| **Live Reload** | Watch files, auto-refresh | ✅ Simple<br>✅ Universal<br>✅ Reliable | ❌ Loses state<br>❌ Slower<br>❌ Full reload | Simple development |
+| **Full Reload** | Refresh entire page | Simple; Reliable; No state issues | Slow; Loses state; Poor DX | Production, simple apps |
+| **Module HMR** | Replace individual modules | Fast; Preserves state; Good DX | Complex; State management; Edge cases | Development, modern apps |
+| **Component HMR** | Replace React components | Very fast; Preserves local state; Best DX | React-specific; Requires setup | React development |
+| **Live Reload** | Watch files, auto-refresh | Simple; Universal; Reliable | Loses state; Slower; Full reload | Simple development |
 
 **HMR Library Comparison**:
 
 | Tool | Type | Pros | Cons | Use Case |
 |------|------|------|------|----------|
-| **Vite HMR** | Build tool | ✅ Very fast<br>✅ ESM-based<br>✅ Simple API<br>✅ React Fast Refresh | ❌ Vite-specific<br>❌ Modern browsers only | Modern React/Vue apps |
-| **Webpack HMR** | Build tool | ✅ Mature<br>✅ Powerful<br>✅ Ecosystem<br>✅ Configurable | ❌ Complex<br>❌ Slower<br>❌ Large config | Enterprise apps |
-| **Parcel HMR** | Build tool | ✅ Zero config<br>✅ Fast<br>✅ Automatic | ❌ Less control<br>❌ Smaller ecosystem | Quick prototypes |
-| **React Fast Refresh** | React HMR | ✅ Preserves state<br>✅ Error recovery<br>✅ Best DX | ❌ React-only<br>❌ Requires setup | React development |
-| **Custom HMR** | DIY | ✅ Full control<br>✅ Tailored | ❌ Complex<br>❌ Maintenance | Unique requirements |
+| **Vite HMR** | Build tool | Very fast; ESM-based; Simple API; React Fast Refresh | Vite-specific; Modern browsers only | Modern React/Vue apps |
+| **Webpack HMR** | Build tool | Mature; Powerful; Ecosystem; Configurable | Complex; Slower; Large config | Enterprise apps |
+| **Parcel HMR** | Build tool | Zero config; Fast; Automatic | Less control; Smaller ecosystem | Quick prototypes |
+| **React Fast Refresh** | React HMR | Preserves state; Error recovery; Best DX | React-only; Requires setup | React development |
+| **Custom HMR** | DIY | Full control; Tailored | Complex; Maintenance | Unique requirements |
 
 **State Preservation Strategies**:
 
 | Strategy | Implementation | Pros | Cons |
 |----------|---------------|------|------|
-| **Local State** | Component state preserved | ✅ Automatic<br>✅ Simple | ❌ Only local state<br>❌ Limited |
-| **Global State** | Store persisted | ✅ Full state<br>✅ Reliable | ❌ Manual setup<br>❌ Serialization |
-| **Snapshot** | Save/restore state | ✅ Complete<br>✅ Flexible | ❌ Complex<br>❌ Performance |
-| **Hybrid** | Critical state persisted | ✅ Balanced<br>✅ Optimized | ❌ More logic | 
+| **Local State** | Component state preserved | Automatic; Simple | Only local state; Limited |
+| **Global State** | Store persisted | Full state; Reliable | Manual setup; Serialization |
+| **Snapshot** | Save/restore state | Complete; Flexible | Complex; Performance |
+| **Hybrid** | Critical state persisted | Balanced; Optimized | More logic | 
 
 **BI Dashboard Examples**:
 
 | Platform | HMR System | Implementation |
 |----------|-----------|----------------|
-| **Observable** | Live evaluation | • Cell re-execution on change<br>• Reactive dependency tracking<br>• Instant feedback<br>• State in cells |
-| **Evidence** | Vite HMR | • Vite dev server<br>• Svelte HMR<br>• Fast refresh<br>• Component state preserved |
-| **Count.co** | Vite HMR | • React Fast Refresh<br>• Canvas state preservation<br>• Cell hot reload<br>• Query result caching |
-| **tldraw** | Vite HMR | • Shape state preservation<br>• Canvas hot reload<br>• Tool hot swap<br>• History preservation |
+| **Observable** | Live evaluation | • Cell re-execution on change; • Reactive dependency tracking; • Instant feedback; • State in cells |
+| **Evidence** | Vite HMR | • Vite dev server; • Svelte HMR; • Fast refresh; • Component state preserved |
+| **Count.co** | Vite HMR | • React Fast Refresh; • Canvas state preservation; • Cell hot reload; • Query result caching |
+| **tldraw** | Vite HMR | • Shape state preservation; • Canvas hot reload; • Tool hot swap; • History preservation |
 
 **Error Recovery Patterns**:
 
@@ -1549,30 +1549,30 @@ window.addEventListener('error', (event) => {
 
 | Approach | Description | Pros | Cons | Best For |
 |----------|-------------|------|------|----------|
-| **SES (Secure ECMAScript)** | Hardened JavaScript subset | ✅ Strong isolation<br>✅ No global access<br>✅ Deterministic | ❌ Limited APIs<br>❌ Learning curve<br>❌ Compatibility | High-security needs |
-| **iframe Sandbox** | Isolated iframe context | ✅ True isolation<br>✅ Separate origin<br>✅ CSP support | ❌ Communication overhead<br>❌ Performance<br>❌ Complex | Untrusted code |
-| **Web Workers** | Background thread | ✅ No DOM access<br>✅ Isolated<br>✅ Parallel | ❌ No UI<br>❌ Message passing<br>❌ Limited | CPU-intensive tasks |
-| **Proxy-Based** | Intercept API calls | ✅ Flexible<br>✅ Fine-grained<br>✅ Auditable | ❌ Performance overhead<br>❌ Complex<br>❌ Bypassable | API control |
-| **VM Isolation** | Separate JavaScript VM | ✅ Complete isolation<br>✅ Resource limits | ❌ Large overhead<br>❌ Complex<br>❌ Limited browser support | Maximum security |
+| **SES (Secure ECMAScript)** | Hardened JavaScript subset | Strong isolation; No global access; Deterministic | Limited APIs; Learning curve; Compatibility | High-security needs |
+| **iframe Sandbox** | Isolated iframe context | True isolation; Separate origin; CSP support | Communication overhead; Performance; Complex | Untrusted code |
+| **Web Workers** | Background thread | No DOM access; Isolated; Parallel | No UI; Message passing; Limited | CPU-intensive tasks |
+| **Proxy-Based** | Intercept API calls | Flexible; Fine-grained; Auditable | Performance overhead; Complex; Bypassable | API control |
+| **VM Isolation** | Separate JavaScript VM | Complete isolation; Resource limits | Large overhead; Complex; Limited browser support | Maximum security |
 
 **Sandboxing Library Comparison**:
 
 | Library | Type | Pros | Cons | Use Case |
 |---------|------|------|------|----------|
-| **SES (Agoric)** | Hardened JS | ✅ Strong security<br>✅ Deterministic<br>✅ Well-designed | ❌ Limited ecosystem<br>❌ Learning curve | High-security extensions |
-| **Realms API** | TC39 proposal | ✅ Native<br>✅ Isolated globals<br>✅ Standard | ❌ Not widely supported<br>❌ Experimental | Future-proof |
-| **vm2** | Node.js VM | ✅ Powerful<br>✅ Mature | ❌ Node-only<br>❌ Not browser | Server-side only |
-| **Sandboxed iframe** | Native browser | ✅ Built-in<br>✅ Strong isolation<br>✅ CSP | ❌ Communication overhead<br>❌ Complex | Untrusted content |
-| **Custom Proxy** | DIY | ✅ Full control<br>✅ Tailored | ❌ Development time<br>❌ Security risks | Specific needs |
+| **SES (Agoric)** | Hardened JS | Strong security; Deterministic; Well-designed | Limited ecosystem; Learning curve | High-security extensions |
+| **Realms API** | TC39 proposal | Native; Isolated globals; Standard | Not widely supported; Experimental | Future-proof |
+| **vm2** | Node.js VM | Powerful; Mature | Node-only; Not browser | Server-side only |
+| **Sandboxed iframe** | Native browser | Built-in; Strong isolation; CSP | Communication overhead; Complex | Untrusted content |
+| **Custom Proxy** | DIY | Full control; Tailored | Development time; Security risks | Specific needs |
 
 **BI Dashboard Examples**:
 
 | Platform | Security Model | Implementation |
 |----------|---------------|----------------|
-| **Observable** | Runtime sandboxing | • Restricted global scope<br>• No direct DOM access<br>• Controlled imports<br>• Rate limiting |
-| **Evidence** | Build-time validation | • Component validation<br>• SQL parameterization<br>• No runtime eval<br>• Static analysis |
-| **Count.co** | SQL sandboxing | • Parameterized queries<br>• Query validation<br>• Permission-based access<br>• Audit logging |
-| **tldraw** | Client-side validation | • Shape validation<br>• Canvas bounds checking<br>• User permissions<br>• Collaboration security |
+| **Observable** | Runtime sandboxing | • Restricted global scope; • No direct DOM access; • Controlled imports; • Rate limiting |
+| **Evidence** | Build-time validation | • Component validation; • SQL parameterization; • No runtime eval; • Static analysis |
+| **Count.co** | SQL sandboxing | • Parameterized queries; • Query validation; • Permission-based access; • Audit logging |
+| **tldraw** | Client-side validation | • Shape validation; • Canvas bounds checking; • User permissions; • Collaboration security |
 
 **DOM Access Control**:
 
@@ -1644,10 +1644,10 @@ Extensions declare required capabilities in manifest:
 
 | Pattern | Description | Pros | Cons |
 |---------|-------------|------|------|
-| **Install-Time** | User approves on install | ✅ Clear<br>✅ One-time | ❌ Users ignore<br>❌ All-or-nothing |
-| **Runtime** | Request when needed | ✅ Contextual<br>✅ Granular | ❌ Interrupts flow<br>❌ Frequent prompts |
-| **Tiered** | Basic vs advanced permissions | ✅ Balanced<br>✅ Progressive | ❌ More complex |
-| **Automatic** | Based on extension type | ✅ No prompts<br>✅ Simple | ❌ Less control<br>❌ Security risk |
+| **Install-Time** | User approves on install | Clear; One-time | Users ignore; All-or-nothing |
+| **Runtime** | Request when needed | Contextual; Granular | Interrupts flow; Frequent prompts |
+| **Tiered** | Basic vs advanced permissions | Balanced; Progressive | More complex |
+| **Automatic** | Based on extension type | No prompts; Simple | Less control; Security risk |
 
 **Runtime Permission Validation**:
 
@@ -1697,10 +1697,10 @@ class PermissionManager {
 
 | Strategy | Description | Pros | Cons |
 |----------|-------------|------|------|
-| **Semantic Versioning** | Major.Minor.Patch | ✅ Clear<br>✅ Standard<br>✅ Predictable | ❌ Breaking changes<br>❌ Migration needed |
-| **API Levels** | Level 1, 2, 3 | ✅ Simple<br>✅ Clear deprecation | ❌ Less granular |
-| **Feature Flags** | Opt-in features | ✅ Gradual rollout<br>✅ A/B testing | ❌ Complexity<br>❌ State explosion |
-| **Parallel APIs** | v1, v2 coexist | ✅ No breaking changes<br>✅ Smooth migration | ❌ Maintenance burden<br>❌ Code duplication |
+| **Semantic Versioning** | Major.Minor.Patch | Clear; Standard; Predictable | Breaking changes; Migration needed |
+| **API Levels** | Level 1, 2, 3 | Simple; Clear deprecation | Less granular |
+| **Feature Flags** | Opt-in features | Gradual rollout; A/B testing | Complexity; State explosion |
+| **Parallel APIs** | v1, v2 coexist | No breaking changes; Smooth migration | Maintenance burden; Code duplication |
 
 **Audit Logging**:
 
@@ -1870,10 +1870,10 @@ Modern BI dashboard capabilities including canvas interfaces, SQL integration, r
 
 | Aspect | Implementation | Pros | Cons |
 |--------|---------------|------|------|
-| **Viewport Management** | Transform matrix | ✅ Smooth pan/zoom<br>✅ Efficient rendering | ❌ Complex math<br>❌ Coordinate transforms |
-| **Virtualization** | Render visible area only | ✅ Performance<br>✅ Scales to large canvases | ❌ Implementation complexity<br>❌ Edge cases |
-| **Spatial Indexing** | R-tree or Quadtree | ✅ Fast queries<br>✅ Collision detection | ❌ Memory overhead<br>❌ Update complexity |
-| **Layer System** | Separate canvas layers | ✅ Compositing<br>✅ Selective updates | ❌ More canvases<br>❌ Coordination |
+| **Viewport Management** | Transform matrix | Smooth pan/zoom; Efficient rendering | Complex math; Coordinate transforms |
+| **Virtualization** | Render visible area only | Performance; Scales to large canvases | Implementation complexity; Edge cases |
+| **Spatial Indexing** | R-tree or Quadtree | Fast queries; Collision detection | Memory overhead; Update complexity |
+| **Layer System** | Separate canvas layers | Compositing; Selective updates | More canvases; Coordination |
 
 **Cell/Shape Positioning Systems**:
 
@@ -1924,9 +1924,9 @@ class CanvasRenderer {
 
 | Platform | Canvas Implementation | Key Features |
 |----------|---------------------|--------------|
-| **tldraw** | Custom canvas engine | • Infinite canvas<br>• Shape system<br>• Collaborative cursors<br>• History/undo |
-| **Count.co** | React + Canvas | • Cell-based layout<br>• Free-form positioning<br>• Auto-layout options<br>• SQL-driven cells |
-| **Observable** | HTML/SVG cells | • Linear notebook flow<br>• Custom layouts via HTML<br>• D3.js integration |
+| **tldraw** | Custom canvas engine | • Infinite canvas; • Shape system; • Collaborative cursors; • History/undo |
+| **Count.co** | React + Canvas | • Cell-based layout; • Free-form positioning; • Auto-layout options; • SQL-driven cells |
+| **Observable** | HTML/SVG cells | • Linear notebook flow; • Custom layouts via HTML; • D3.js integration |
 
 **Recommended Stack**:
 - **Canvas Library**: Konva.js, Fabric.js, or custom WebGL
@@ -1946,9 +1946,9 @@ class CanvasRenderer {
 
 | Approach | Implementation | Pros | Cons |
 |----------|---------------|------|------|
-| **Client-Side SQL** | DuckDB WASM, SQLite WASM | ✅ No backend needed<br>✅ Fast queries<br>✅ Offline capable | ❌ Large bundle<br>❌ Memory limits<br>❌ Initial load time |
-| **Server-Side SQL** | PostgreSQL, MySQL | ✅ Unlimited data<br>✅ Mature ecosystem<br>✅ Security | ❌ Network latency<br>❌ Backend required<br>❌ Scaling costs |
-| **Hybrid** | Cache + server | ✅ Best of both<br>✅ Optimized | ❌ Complexity<br>❌ Sync issues |
+| **Client-Side SQL** | DuckDB WASM, SQLite WASM | No backend needed; Fast queries; Offline capable | Large bundle; Memory limits; Initial load time |
+| **Server-Side SQL** | PostgreSQL, MySQL | Unlimited data; Mature ecosystem; Security | Network latency; Backend required; Scaling costs |
+| **Hybrid** | Cache + server | Best of both; Optimized | Complexity; Sync issues |
 
 **DuckDB WASM Architecture**:
 
@@ -2026,9 +2026,9 @@ function DataCell({ sql, params }) {
 
 | Platform | SQL Implementation | Features |
 |----------|-------------------|----------|
-| **Count.co** | DuckDB + PostgreSQL | • SQL cells<br>• Query dependencies<br>• Result caching<br>• Parameterized queries |
-| **Observable** | SQL cells (via connectors) | • Database connectors<br>• SQL template literals<br>• Reactive queries |
-| **Evidence** | DuckDB + connectors | • SQL + Markdown<br>• Component binding<br>• Build-time queries |
+| **Count.co** | DuckDB + PostgreSQL | • SQL cells; • Query dependencies; • Result caching; • Parameterized queries |
+| **Observable** | SQL cells (via connectors) | • Database connectors; • SQL template literals; • Reactive queries |
+| **Evidence** | DuckDB + connectors | • SQL + Markdown; • Component binding; • Build-time queries |
 
 **Recommended Stack**:
 - **Client SQL**: DuckDB WASM (analytics), SQLite WASM (simple queries)
@@ -2048,10 +2048,10 @@ function DataCell({ sql, params }) {
 
 | Library | Language | Pros | Cons | Bundle Size | Use Case |
 |---------|----------|------|------|-------------|----------|
-| **Yjs** | JavaScript | ✅ Mature<br>✅ Performant<br>✅ Rich ecosystem<br>✅ CRDT types | ❌ Learning curve<br>❌ Bundle size | ~50KB | Production apps |
-| **Automerge** | JavaScript/Rust | ✅ Pure CRDT<br>✅ Offline-first<br>✅ Time travel | ❌ Larger bundle<br>❌ Performance | ~200KB | Offline-first apps |
-| **Loro** | Rust (WASM) | ✅ High performance<br>✅ Small bundle<br>✅ Rich text | ❌ New/experimental<br>❌ Smaller ecosystem | ~100KB | Performance-critical |
-| **Fluid Framework** | TypeScript | ✅ Microsoft-backed<br>✅ Enterprise features | ❌ Complex<br>❌ Azure dependency | Large | Enterprise |
+| **Yjs** | JavaScript | Mature; Performant; Rich ecosystem; CRDT types | Learning curve; Bundle size | ~50KB | Production apps |
+| **Automerge** | JavaScript/Rust | Pure CRDT; Offline-first; Time travel | Larger bundle; Performance | ~200KB | Offline-first apps |
+| **Loro** | Rust (WASM) | High performance; Small bundle; Rich text | New/experimental; Smaller ecosystem | ~100KB | Performance-critical |
+| **Fluid Framework** | TypeScript | Microsoft-backed; Enterprise features | Complex; Azure dependency | Large | Enterprise |
 
 **Yjs Integration Architecture**:
 
@@ -2107,18 +2107,18 @@ class CollaborationEngine {
 
 | Strategy | Description | Pros | Cons |
 |----------|-------------|------|------|
-| **Last-Write-Wins** | Timestamp-based | ✅ Simple<br>✅ Fast | ❌ Data loss<br>❌ Not fair |
-| **CRDT** | Mathematically convergent | ✅ No conflicts<br>✅ Automatic | ❌ Complex<br>❌ Memory overhead |
-| **Operational Transform** | Transform operations | ✅ Proven<br>✅ Google Docs uses it | ❌ Very complex<br>❌ Hard to implement |
-| **Manual Resolution** | User chooses | ✅ User control<br>✅ Transparent | ❌ Interrupts flow<br>❌ User burden |
+| **Last-Write-Wins** | Timestamp-based | Simple; Fast | Data loss; Not fair |
+| **CRDT** | Mathematically convergent | No conflicts; Automatic | Complex; Memory overhead |
+| **Operational Transform** | Transform operations | Proven; Google Docs uses it | Very complex; Hard to implement |
+| **Manual Resolution** | User chooses | User control; Transparent | Interrupts flow; User burden |
 
 **Platform Examples**:
 
 | Platform | Collaboration System | Implementation |
 |----------|---------------------|----------------|
-| **tldraw** | Yjs + WebRTC | • Real-time shape sync<br>• Presence cursors<br>• History preservation<br>• Offline support |
-| **Count.co** | Custom WebSocket | • Real-time cell updates<br>• Collaborative editing<br>• Presence indicators<br>• Comment threads |
-| **Observable** | Limited collaboration | • Notebook sharing<br>• Fork-based workflow<br>• No real-time sync |
+| **tldraw** | Yjs + WebRTC | • Real-time shape sync; • Presence cursors; • History preservation; • Offline support |
+| **Count.co** | Custom WebSocket | • Real-time cell updates; • Collaborative editing; • Presence indicators; • Comment threads |
+| **Observable** | Limited collaboration | • Notebook sharing; • Fork-based workflow; • No real-time sync |
 
 **Recommended Architecture**:
 
@@ -2299,35 +2299,35 @@ Configuration and data persistence strategies for the framework.
 
 | Approach | Pros | Cons | Best For |
 |----------|------|------|----------|
-| **Hierarchical** | ✅ Clear organization<br>✅ Type safety<br>✅ Easy validation<br>✅ Supports overrides | ❌ More complex to implement<br>❌ Harder to query dynamically<br>❌ Deeper nesting complexity | Large applications with many settings categories |
-| **Flat Key-Value** | ✅ Simple implementation<br>✅ Easy persistence<br>✅ Dynamic queries<br>✅ Minimal overhead | ❌ No structure enforcement<br>❌ Harder to validate<br>❌ No type safety<br>❌ Namespace collisions | Small to medium apps, simple preferences |
-| **Hybrid** | ✅ Structured in code<br>✅ Simple persistence<br>✅ Type-safe + flexible<br>✅ Best performance | ❌ Transformation overhead<br>❌ Two representations to maintain<br>❌ More complex architecture | Production BI dashboards requiring both structure and flexibility |
+| **Hierarchical** | Clear organization; Type safety; Easy validation; Supports overrides | More complex to implement; Harder to query dynamically; Deeper nesting complexity | Large applications with many settings categories |
+| **Flat Key-Value** | Simple implementation; Easy persistence; Dynamic queries; Minimal overhead | No structure enforcement; Harder to validate; No type safety; Namespace collisions | Small to medium apps, simple preferences |
+| **Hybrid** | Structured in code; Simple persistence; Type-safe + flexible; Best performance | Transformation overhead; Two representations to maintain; More complex architecture | Production BI dashboards requiring both structure and flexibility |
 
 **State Management Library Comparison**:
 
 | Library | Architecture | Pros | Cons | Use Case |
 |---------|-------------|------|------|----------|
-| **Zustand** | Flux-like store | ✅ Simple API<br>✅ No providers<br>✅ Middleware ecosystem<br>✅ Small bundle | ❌ Manual optimization needed<br>❌ Global state only | General-purpose settings management |
-| **Jotai** | Atomic state | ✅ Fine-grained reactivity<br>✅ Minimal re-renders<br>✅ Composable atoms<br>✅ Bottom-up | ❌ Learning curve<br>❌ More boilerplate<br>❌ Debugging complexity | Complex, interconnected settings |
-| **Valtio** | Proxy-based | ✅ Mutable API<br>✅ Automatic tracking<br>✅ Minimal boilerplate<br>✅ Intuitive | ❌ Proxy limitations<br>❌ Debugging harder<br>❌ Less ecosystem | Rapid development, simple state |
-| **Redux Toolkit** | Redux pattern | ✅ Mature ecosystem<br>✅ DevTools<br>✅ Predictable<br>✅ Time-travel | ❌ Verbose<br>❌ Boilerplate<br>❌ Learning curve<br>❌ Larger bundle | Enterprise apps, complex workflows |
+| **Zustand** | Flux-like store | Simple API; No providers; Middleware ecosystem; Small bundle | Manual optimization needed; Global state only | General-purpose settings management |
+| **Jotai** | Atomic state | Fine-grained reactivity; Minimal re-renders; Composable atoms; Bottom-up | Learning curve; More boilerplate; Debugging complexity | Complex, interconnected settings |
+| **Valtio** | Proxy-based | Mutable API; Automatic tracking; Minimal boilerplate; Intuitive | Proxy limitations; Debugging harder; Less ecosystem | Rapid development, simple state |
+| **Redux Toolkit** | Redux pattern | Mature ecosystem; DevTools; Predictable; Time-travel | Verbose; Boilerplate; Learning curve; Larger bundle | Enterprise apps, complex workflows |
 
 **Schema Validation Approaches**:
 
 | Approach | Pros | Cons |
 |----------|------|------|
-| **Runtime Validation (Zod, Yup)** | ✅ Catches invalid data<br>✅ User input protection<br>✅ Type inference<br>✅ Clear error messages | ❌ Runtime overhead<br>❌ Bundle size increase<br>❌ Validation logic duplication |
-| **TypeScript Only** | ✅ Zero runtime cost<br>✅ Compile-time safety<br>✅ No bundle impact<br>✅ IDE support | ❌ No runtime protection<br>❌ Can't validate external data<br>❌ Type erasure at runtime |
-| **Hybrid (TS + Runtime)** | ✅ Best safety<br>✅ Validates external data<br>✅ Type-safe in code<br>✅ Comprehensive | ❌ Maintenance overhead<br>❌ Schema duplication<br>❌ Larger bundle |
+| **Runtime Validation (Zod, Yup)** | Catches invalid data; User input protection; Type inference; Clear error messages | Runtime overhead; Bundle size increase; Validation logic duplication |
+| **TypeScript Only** | Zero runtime cost; Compile-time safety; No bundle impact; IDE support | No runtime protection; Can't validate external data; Type erasure at runtime |
+| **Hybrid (TS + Runtime)** | Best safety; Validates external data; Type-safe in code; Comprehensive | Maintenance overhead; Schema duplication; Larger bundle |
 
 **Persistence Strategy Comparison**:
 
 | Strategy | Pros | Cons | Recommended For |
 |----------|------|------|-----------------|
-| **Eager Persistence** (Save on every change) | ✅ No data loss<br>✅ Always in sync<br>✅ Simple logic | ❌ Performance overhead<br>❌ Excessive writes<br>❌ Storage wear | Critical settings, small config |
-| **Debounced Persistence** (Save after delay) | ✅ Reduced writes<br>✅ Better performance<br>✅ Batched updates | ❌ Potential data loss<br>❌ Complexity<br>❌ Timing issues | Frequently changing settings |
-| **Manual Persistence** (Save on action) | ✅ User control<br>✅ Minimal writes<br>✅ Predictable | ❌ User must remember<br>❌ Data loss risk<br>❌ Poor UX | Power user tools, explicit saves |
-| **Hybrid** (Critical eager, others debounced) | ✅ Balanced approach<br>✅ Optimized performance<br>✅ Data safety | ❌ Complex logic<br>❌ More code<br>❌ Configuration needed | Production BI dashboards |
+| **Eager Persistence** (Save on every change) | No data loss; Always in sync; Simple logic | Performance overhead; Excessive writes; Storage wear | Critical settings, small config |
+| **Debounced Persistence** (Save after delay) | Reduced writes; Better performance; Batched updates | Potential data loss; Complexity; Timing issues | Frequently changing settings |
+| **Manual Persistence** (Save on action) | User control; Minimal writes; Predictable | User must remember; Data loss risk; Poor UX | Power user tools, explicit saves |
+| **Hybrid** (Critical eager, others debounced) | Balanced approach; Optimized performance; Data safety | Complex logic; More code; Configuration needed | Production BI dashboards |
 
 **Recommended Architecture**: Hierarchical structure with Zustand, Zod validation, hybrid persistence (critical settings eager, UI preferences debounced), IndexedDB storage.
 
@@ -2358,34 +2358,34 @@ Configuration and data persistence strategies for the framework.
 
 | Approach | Pros | Cons | Best For |
 |----------|------|------|----------|
-| **Command-Based** | ✅ Decoupled commands from keys<br>✅ Easy customization<br>✅ Command palette support<br>✅ Context-aware execution<br>✅ Discoverable | ❌ More complex architecture<br>❌ Additional abstraction layer<br>❌ Higher memory overhead<br>❌ Steeper learning curve | Complex applications with many commands, power users |
-| **Direct Binding** | ✅ Simple implementation<br>✅ Minimal overhead<br>✅ Easy to understand<br>✅ Fast execution | ❌ Hard to customize<br>❌ No command palette<br>❌ Tight coupling<br>❌ Difficult to document | Simple apps, fixed keybindings, prototypes |
-| **Keymap Hierarchy** | ✅ Context-aware<br>✅ Scoped bindings<br>✅ Priority resolution<br>✅ Flexible | ❌ Complexity in resolution<br>❌ Potential conflicts<br>❌ Debugging difficulty<br>❌ State management | Multi-mode applications, context-sensitive UIs |
+| **Command-Based** | Decoupled commands from keys; Easy customization; Command palette support; Context-aware execution; Discoverable | More complex architecture; Additional abstraction layer; Higher memory overhead; Steeper learning curve | Complex applications with many commands, power users |
+| **Direct Binding** | Simple implementation; Minimal overhead; Easy to understand; Fast execution | Hard to customize; No command palette; Tight coupling; Difficult to document | Simple apps, fixed keybindings, prototypes |
+| **Keymap Hierarchy** | Context-aware; Scoped bindings; Priority resolution; Flexible | Complexity in resolution; Potential conflicts; Debugging difficulty; State management | Multi-mode applications, context-sensitive UIs |
 
 **Keybinding Library Comparison**:
 
 | Library | Size | Pros | Cons | Use Case |
 |---------|------|------|------|----------|
-| **tinykeys** | 400B | ✅ Minimal size<br>✅ Zero dependencies<br>✅ Chord support<br>✅ Modern API | ❌ Limited features<br>❌ No scope support<br>❌ Manual context handling | Size-constrained apps, simple keybindings |
-| **hotkeys-js** | ~3KB | ✅ Scope support<br>✅ Key filtering<br>✅ Feature-rich<br>✅ Mature | ❌ Larger bundle<br>❌ Older API style<br>❌ Less TypeScript support | General-purpose, scope-aware bindings |
-| **Mousetrap** | ~2KB | ✅ Popular<br>✅ Well-documented<br>✅ Chord sequences<br>✅ Mature | ❌ Not actively maintained<br>❌ No TypeScript<br>❌ Older patterns | Legacy apps, proven stability |
-| **react-hotkeys-hook** | ~2KB | ✅ React hooks<br>✅ Component-scoped<br>✅ TypeScript support<br>✅ Modern | ❌ React-only<br>❌ Re-render considerations<br>❌ Hook limitations | React applications, component-local bindings |
-| **Custom Solution** | Varies | ✅ Full control<br>✅ Tailored features<br>✅ No dependencies<br>✅ Optimized | ❌ Development time<br>❌ Maintenance burden<br>❌ Testing overhead<br>❌ Edge cases | Unique requirements, full control needed |
+| **tinykeys** | 400B | Minimal size; Zero dependencies; Chord support; Modern API | Limited features; No scope support; Manual context handling | Size-constrained apps, simple keybindings |
+| **hotkeys-js** | ~3KB | Scope support; Key filtering; Feature-rich; Mature | Larger bundle; Older API style; Less TypeScript support | General-purpose, scope-aware bindings |
+| **Mousetrap** | ~2KB | Popular; Well-documented; Chord sequences; Mature | Not actively maintained; No TypeScript; Older patterns | Legacy apps, proven stability |
+| **react-hotkeys-hook** | ~2KB | React hooks; Component-scoped; TypeScript support; Modern | React-only; Re-render considerations; Hook limitations | React applications, component-local bindings |
+| **Custom Solution** | Varies | Full control; Tailored features; No dependencies; Optimized | Development time; Maintenance burden; Testing overhead; Edge cases | Unique requirements, full control needed |
 
 **Key Conflict Resolution Strategies**:
 
 | Strategy | Pros | Cons |
 |----------|------|------|
-| **Priority-Based** (Global → Mode → Local) | ✅ Clear hierarchy<br>✅ Predictable<br>✅ Easy to reason about | ❌ May override important globals<br>❌ Inflexible<br>❌ Can't express complex rules |
-| **Context-Aware** (When clauses) | ✅ Flexible<br>✅ Expressive<br>✅ Handles complex cases<br>✅ Fine-grained control | ❌ Complex to implement<br>❌ Harder to debug<br>❌ Performance overhead |
-| **User-Defined Priority** | ✅ User control<br>✅ Flexible<br>✅ Handles edge cases | ❌ Complex UI<br>❌ User confusion<br>❌ Maintenance burden |
+| **Priority-Based** (Global → Mode → Local) | Clear hierarchy; Predictable; Easy to reason about | May override important globals; Inflexible; Can't express complex rules |
+| **Context-Aware** (When clauses) | Flexible; Expressive; Handles complex cases; Fine-grained control | Complex to implement; Harder to debug; Performance overhead |
+| **User-Defined Priority** | User control; Flexible; Handles edge cases | Complex UI; User confusion; Maintenance burden |
 
 **Chord Sequence Considerations**:
 
 | Aspect | Pros | Cons |
 |--------|------|------|
-| **Multi-Key Sequences** (e.g., Ctrl+K Ctrl+S) | ✅ More key combinations<br>✅ Familiar to power users<br>✅ Namespace expansion | ❌ Discoverability issues<br>❌ Timing complexity<br>❌ Harder for beginners |
-| **Single Keys Only** | ✅ Simple<br>✅ Fast<br>✅ Easy to learn | ❌ Limited combinations<br>❌ Conflicts more likely<br>❌ Less powerful |
+| **Multi-Key Sequences** (e.g., Ctrl+K Ctrl+S) | More key combinations; Familiar to power users; Namespace expansion | Discoverability issues; Timing complexity; Harder for beginners |
+| **Single Keys Only** | Simple; Fast; Easy to learn | Limited combinations; Conflicts more likely; Less powerful |
 
 **Recommended Architecture**: Command-based with keymap hierarchy, context-aware execution, chord support, and user customization. Use tinykeys for minimal apps, hotkeys-js for feature-rich needs.
 
@@ -2422,38 +2422,38 @@ Configuration and data persistence strategies for the framework.
 
 | Approach | Pros | Cons | Best For |
 |----------|------|------|----------|
-| **CSS Variables** | ✅ Zero runtime cost<br>✅ Native browser support<br>✅ Simple implementation<br>✅ No JavaScript needed<br>✅ Excellent performance | ❌ Limited browser support (old browsers)<br>❌ No complex logic<br>❌ String values only<br>❌ Less type safety | Modern browsers, performance-critical apps |
-| **CSS-in-JS (Runtime)** | ✅ Full JavaScript access<br>✅ Dynamic styling<br>✅ Type-safe<br>✅ Component-scoped<br>✅ Conditional styles | ❌ Runtime overhead<br>❌ Larger bundle<br>❌ FOUC potential<br>❌ Performance impact<br>❌ Hydration issues | Complex theming, dynamic styles |
-| **Build-Time** | ✅ Zero runtime cost<br>✅ Optimal performance<br>✅ Static analysis<br>✅ Type-safe<br>✅ Small bundle | ❌ No runtime switching<br>❌ Build complexity<br>❌ Less flexible<br>❌ Requires rebuild | Static themes, maximum performance |
-| **Hybrid** | ✅ Balanced performance<br>✅ Flexible<br>✅ Type-safe<br>✅ Best of both | ❌ More complex<br>❌ Two systems to maintain<br>❌ Learning curve | Production BI dashboards |
+| **CSS Variables** | Zero runtime cost; Native browser support; Simple implementation; No JavaScript needed; Excellent performance | Limited browser support (old browsers); No complex logic; String values only; Less type safety | Modern browsers, performance-critical apps |
+| **CSS-in-JS (Runtime)** | Full JavaScript access; Dynamic styling; Type-safe; Component-scoped; Conditional styles | Runtime overhead; Larger bundle; FOUC potential; Performance impact; Hydration issues | Complex theming, dynamic styles |
+| **Build-Time** | Zero runtime cost; Optimal performance; Static analysis; Type-safe; Small bundle | No runtime switching; Build complexity; Less flexible; Requires rebuild | Static themes, maximum performance |
+| **Hybrid** | Balanced performance; Flexible; Type-safe; Best of both | More complex; Two systems to maintain; Learning curve | Production BI dashboards |
 
 **Styling Library Comparison**:
 
 | Library | Approach | Pros | Cons | Use Case |
 |---------|----------|------|------|----------|
-| **Tailwind CSS** | Utility-first | ✅ Rapid development<br>✅ Small production bundle<br>✅ Dark mode built-in<br>✅ Consistent design | ❌ Verbose HTML<br>❌ Learning curve<br>❌ Customization limits<br>❌ Not semantic | Fast development, consistent UI |
-| **Styled-Components** | Runtime CSS-in-JS | ✅ Component-scoped<br>✅ Dynamic theming<br>✅ Popular ecosystem<br>✅ TypeScript support | ❌ Runtime overhead<br>❌ Bundle size<br>❌ SSR complexity<br>❌ Performance cost | Dynamic theming, component libraries |
-| **Stitches** | Near-zero runtime | ✅ Minimal runtime<br>✅ Variants API<br>✅ Type-safe<br>✅ Good performance | ❌ Smaller ecosystem<br>❌ Learning curve<br>❌ Less mature | Performance + flexibility balance |
-| **vanilla-extract** | Build-time | ✅ Zero runtime<br>✅ Type-safe<br>✅ Best performance<br>✅ CSS Modules-like | ❌ Build complexity<br>❌ No runtime theming<br>❌ Smaller ecosystem | Maximum performance, static themes |
-| **Emotion** | Runtime CSS-in-JS | ✅ Flexible<br>✅ Framework-agnostic<br>✅ Good performance<br>✅ Popular | ❌ Runtime cost<br>❌ Bundle size<br>❌ Complexity | Framework-agnostic, flexible theming |
-| **CSS Modules** | Build-time | ✅ Simple<br>✅ Scoped styles<br>✅ Zero runtime<br>✅ Familiar CSS | ❌ No dynamic theming<br>❌ Verbose<br>❌ Limited features | Simple apps, traditional CSS |
+| **Tailwind CSS** | Utility-first | Rapid development; Small production bundle; Dark mode built-in; Consistent design | Verbose HTML; Learning curve; Customization limits; Not semantic | Fast development, consistent UI |
+| **Styled-Components** | Runtime CSS-in-JS | Component-scoped; Dynamic theming; Popular ecosystem; TypeScript support | Runtime overhead; Bundle size; SSR complexity; Performance cost | Dynamic theming, component libraries |
+| **Stitches** | Near-zero runtime | Minimal runtime; Variants API; Type-safe; Good performance | Smaller ecosystem; Learning curve; Less mature | Performance + flexibility balance |
+| **vanilla-extract** | Build-time | Zero runtime; Type-safe; Best performance; CSS Modules-like | Build complexity; No runtime theming; Smaller ecosystem | Maximum performance, static themes |
+| **Emotion** | Runtime CSS-in-JS | Flexible; Framework-agnostic; Good performance; Popular | Runtime cost; Bundle size; Complexity | Framework-agnostic, flexible theming |
+| **CSS Modules** | Build-time | Simple; Scoped styles; Zero runtime; Familiar CSS | No dynamic theming; Verbose; Limited features | Simple apps, traditional CSS |
 
 **Theme Switching Strategies**:
 
 | Strategy | Pros | Cons |
 |----------|------|------|
-| **Class-Based** (`<html class="dark">`) | ✅ Simple<br>✅ CSS-only<br>✅ Fast<br>✅ No FOUC | ❌ Limited to predefined themes<br>❌ No gradual transitions |
-| **Attribute-Based** (`<html data-theme="dark">`) | ✅ Semantic<br>✅ Multiple themes<br>✅ CSS-only<br>✅ Accessible | ❌ Slightly more verbose<br>❌ Browser support |
-| **Context-Based** (React Context) | ✅ JavaScript access<br>✅ Dynamic values<br>✅ Type-safe | ❌ Runtime overhead<br>❌ Re-render cost<br>❌ Complexity |
-| **CSS Variable Injection** | ✅ Dynamic<br>✅ Performant<br>✅ Flexible | ❌ JavaScript required<br>❌ FOUC potential |
+| **Class-Based** (`<html class="dark">`) | Simple; CSS-only; Fast; No FOUC | Limited to predefined themes; No gradual transitions |
+| **Attribute-Based** (`<html data-theme="dark">`) | Semantic; Multiple themes; CSS-only; Accessible | Slightly more verbose; Browser support |
+| **Context-Based** (React Context) | JavaScript access; Dynamic values; Type-safe | Runtime overhead; Re-render cost; Complexity |
+| **CSS Variable Injection** | Dynamic; Performant; Flexible | JavaScript required; FOUC potential |
 
 **System Preference Integration**:
 
 | Aspect | Pros | Cons |
 |--------|------|------|
-| **Auto-Detect** (`prefers-color-scheme`) | ✅ Respects user preference<br>✅ Better UX<br>✅ Accessibility<br>✅ Native API | ❌ User can't override easily<br>❌ May not match app context |
-| **Manual Selection** | ✅ User control<br>✅ Predictable<br>✅ Simple | ❌ Ignores system preference<br>❌ Extra UI needed |
-| **Hybrid** (Auto + Manual Override) | ✅ Best UX<br>✅ Respects preference<br>✅ User control | ❌ More complex<br>❌ State management needed |
+| **Auto-Detect** (`prefers-color-scheme`) | Respects user preference; Better UX; Accessibility; Native API | User can't override easily; May not match app context |
+| **Manual Selection** | User control; Predictable; Simple | Ignores system preference; Extra UI needed |
+| **Hybrid** (Auto + Manual Override) | Best UX; Respects preference; User control | More complex; State management needed |
 
 **Recommended Architecture**: CSS Variables for tokens, Tailwind CSS for utility classes, system preference detection with manual override, persistent user choice in IndexedDB.
 
@@ -2862,23 +2862,23 @@ class ConfigManager {
 
 | Storage Type | Pros | Cons | Best For |
 |-------------|------|------|----------|
-| **IndexedDB** | ✅ Large capacity (GBs)<br>✅ Structured queries<br>✅ Transactions<br>✅ Async (non-blocking)<br>✅ Wide browser support | ❌ Complex API<br>❌ No cross-origin access<br>❌ User can clear data<br>❌ Quota management needed | Primary persistent storage for dashboards, configs, extension data |
-| **LocalStorage** | ✅ Simple API<br>✅ Synchronous access<br>✅ Wide browser support<br>✅ Easy to use | ❌ Small capacity (5-10MB)<br>❌ String-only storage<br>❌ Synchronous (blocks UI)<br>❌ No transactions | Small preferences, feature flags, simple settings |
-| **Cache API** | ✅ Built for offline-first<br>✅ Version control<br>✅ Large capacity<br>✅ Perfect for assets | ❌ Not for structured data<br>❌ More complex than LocalStorage<br>❌ Requires service worker knowledge | Static assets, API responses, dashboard templates |
-| **OPFS** | ✅ High performance<br>✅ Large capacity (GBs)<br>✅ Works with Workers<br>✅ File-based operations | ❌ Limited browser support<br>❌ Newer API (less mature)<br>❌ More complex API<br>❌ Not for small data | Large datasets, file operations, high-performance needs |
-| **File System Access** | ✅ Unlimited capacity<br>✅ Native file integration<br>✅ User control<br>✅ Cross-app sharing | ❌ Requires user permission<br>❌ Limited browser support<br>❌ Security restrictions<br>❌ Not automatic | Import/export, user-managed backups, large files |
-| **In-Memory State** | ✅ Fastest access<br>✅ No serialization<br>✅ Simple to use<br>✅ No quota limits | ❌ Lost on refresh<br>❌ RAM-limited<br>❌ Not persistent<br>❌ Memory leaks possible | Active UI state, temporary calculations, session data |
-| **SessionStorage** | ✅ Auto cleanup on close<br>✅ Simple API<br>✅ Tab-isolated<br>✅ Synchronous | ❌ Small capacity (5-10MB)<br>❌ Lost on tab close<br>❌ String-only<br>❌ Blocks UI | Temporary filters, wizard state, tab-specific data |
-| **REST/GraphQL API** | ✅ Unlimited capacity<br>✅ Multi-user sync<br>✅ Centralized control<br>✅ Backup/recovery | ❌ Network dependency<br>❌ Latency issues<br>❌ Server costs<br>❌ Complex infrastructure | Enterprise deployments, collaboration, shared dashboards |
-| **Firebase/Supabase** | ✅ Real-time sync<br>✅ Built-in auth<br>✅ Managed infrastructure<br>✅ Quick setup | ❌ Vendor lock-in<br>❌ Cost at scale<br>❌ Network dependency<br>❌ Limited customization | Rapid prototyping, real-time features, small-medium apps |
-| **PouchDB + CouchDB** | ✅ Offline-first<br>✅ Auto sync<br>✅ Conflict resolution<br>✅ Works offline | ❌ Learning curve<br>❌ Specific data model<br>❌ Sync complexity<br>❌ Performance overhead | Offline apps, eventual consistency, distributed data |
-| **WebRTC** | ✅ No server needed<br>✅ Direct P2P<br>✅ Low latency<br>✅ Private | ❌ Complex setup<br>❌ Requires signaling<br>❌ Not persistent<br>❌ Connection issues | Real-time collaboration, peer sharing, live editing |
-| **SQLite WASM** | ✅ Full SQL support<br>✅ Relational queries<br>✅ Transactions<br>✅ Familiar API | ❌ RAM-limited (100s MB)<br>❌ Manual persistence<br>❌ Larger bundle size<br>❌ Serialization overhead | Complex queries, relational data, SQL familiarity |
-| **DuckDB WASM** | ✅ Handles GBs of data<br>✅ OLAP queries<br>✅ Parquet support<br>✅ Fast analytics | ❌ Large bundle (~10MB)<br>❌ Learning curve<br>❌ Newer technology<br>❌ Limited docs | Analytics workloads, large datasets, BI queries |
-| **RxDB** | ✅ Reactive queries<br>✅ Multi-tab sync<br>✅ Encryption<br>✅ Offline-first | ❌ Complex setup<br>❌ Large bundle<br>❌ Learning curve<br>❌ Performance overhead | Reactive apps, multi-tab coordination, encrypted data |
-| **Gun.js** | ✅ Decentralized<br>✅ P2P sync<br>✅ Offline-first<br>✅ Graph database | ❌ Different paradigm<br>❌ Learning curve<br>❌ Limited tooling<br>❌ Sync complexity | Decentralized apps, graph data, P2P networks |
-| **IPFS** | ✅ Permanent storage<br>✅ Content-addressed<br>✅ Decentralized<br>✅ Immutable | ❌ Slower access<br>❌ Requires gateway<br>❌ Complex setup<br>❌ Not for mutable data | Public data sharing, immutable content, archival |
-| **Ceramic Network** | ✅ User-owned data<br>✅ Cross-app portability<br>✅ Decentralized identity<br>✅ Verifiable | ❌ Emerging tech<br>❌ Complex setup<br>❌ Limited adoption<br>❌ Infrastructure needs | User-owned configs, cross-app data, Web3 apps |
+| **IndexedDB** | Large capacity (GBs); Structured queries; Transactions; Async (non-blocking); Wide browser support | Complex API; No cross-origin access; User can clear data; Quota management needed | Primary persistent storage for dashboards, configs, extension data |
+| **LocalStorage** | Simple API; Synchronous access; Wide browser support; Easy to use | Small capacity (5-10MB); String-only storage; Synchronous (blocks UI); No transactions | Small preferences, feature flags, simple settings |
+| **Cache API** | Built for offline-first; Version control; Large capacity; Perfect for assets | Not for structured data; More complex than LocalStorage; Requires service worker knowledge | Static assets, API responses, dashboard templates |
+| **OPFS** | High performance; Large capacity (GBs); Works with Workers; File-based operations | Limited browser support; Newer API (less mature); More complex API; Not for small data | Large datasets, file operations, high-performance needs |
+| **File System Access** | Unlimited capacity; Native file integration; User control; Cross-app sharing | Requires user permission; Limited browser support; Security restrictions; Not automatic | Import/export, user-managed backups, large files |
+| **In-Memory State** | Fastest access; No serialization; Simple to use; No quota limits | Lost on refresh; RAM-limited; Not persistent; Memory leaks possible | Active UI state, temporary calculations, session data |
+| **SessionStorage** | Auto cleanup on close; Simple API; Tab-isolated; Synchronous | Small capacity (5-10MB); Lost on tab close; String-only; Blocks UI | Temporary filters, wizard state, tab-specific data |
+| **REST/GraphQL API** | Unlimited capacity; Multi-user sync; Centralized control; Backup/recovery | Network dependency; Latency issues; Server costs; Complex infrastructure | Enterprise deployments, collaboration, shared dashboards |
+| **Firebase/Supabase** | Real-time sync; Built-in auth; Managed infrastructure; Quick setup | Vendor lock-in; Cost at scale; Network dependency; Limited customization | Rapid prototyping, real-time features, small-medium apps |
+| **PouchDB + CouchDB** | Offline-first; Auto sync; Conflict resolution; Works offline | Learning curve; Specific data model; Sync complexity; Performance overhead | Offline apps, eventual consistency, distributed data |
+| **WebRTC** | No server needed; Direct P2P; Low latency; Private | Complex setup; Requires signaling; Not persistent; Connection issues | Real-time collaboration, peer sharing, live editing |
+| **SQLite WASM** | Full SQL support; Relational queries; Transactions; Familiar API | RAM-limited (100s MB); Manual persistence; Larger bundle size; Serialization overhead | Complex queries, relational data, SQL familiarity |
+| **DuckDB WASM** | Handles GBs of data; OLAP queries; Parquet support; Fast analytics | Large bundle (~10MB); Learning curve; Newer technology; Limited docs | Analytics workloads, large datasets, BI queries |
+| **RxDB** | Reactive queries; Multi-tab sync; Encryption; Offline-first | Complex setup; Large bundle; Learning curve; Performance overhead | Reactive apps, multi-tab coordination, encrypted data |
+| **Gun.js** | Decentralized; P2P sync; Offline-first; Graph database | Different paradigm; Learning curve; Limited tooling; Sync complexity | Decentralized apps, graph data, P2P networks |
+| **IPFS** | Permanent storage; Content-addressed; Decentralized; Immutable | Slower access; Requires gateway; Complex setup; Not for mutable data | Public data sharing, immutable content, archival |
+| **Ceramic Network** | User-owned data; Cross-app portability; Decentralized identity; Verifiable | Emerging tech; Complex setup; Limited adoption; Infrastructure needs | User-owned configs, cross-app data, Web3 apps |
 
 ##### Decision Matrix
 
@@ -2946,23 +2946,23 @@ class ConfigManager {
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
-| **shadcn/ui** | Copy-paste components | ✅ Full control<br>✅ Customizable<br>✅ Radix-based<br>✅ TypeScript | ❌ Manual updates<br>❌ No npm package | Varies | Modern React apps, full customization |
-| **Radix UI** | Headless primitives | ✅ Accessible<br>✅ Unstyled<br>✅ Composable<br>✅ TypeScript | ❌ Requires styling<br>❌ More setup | ~5-10KB/component | Accessible, custom designs |
-| **Headless UI** | Unstyled components | ✅ Tailwind-friendly<br>✅ Accessible<br>✅ Simple API | ❌ Limited components<br>❌ Tailwind-focused | ~5KB | Tailwind projects |
-| **Mantine** | Full component library | ✅ 100+ components<br>✅ Hooks library<br>✅ Dark mode<br>✅ TypeScript | ❌ Large bundle<br>❌ Opinionated | ~50KB+ | Rapid development |
-| **Chakra UI** | Component library | ✅ Accessible<br>✅ Themeable<br>✅ Composable<br>✅ Good DX | ❌ Bundle size<br>❌ Performance | ~40KB+ | Accessible apps |
-| **Ant Design** | Enterprise UI | ✅ Comprehensive<br>✅ i18n support<br>✅ Design system | ❌ Very large<br>❌ Opinionated<br>❌ Chinese-focused | ~500KB+ | Enterprise dashboards |
-| **Material UI** | Material Design | ✅ Mature<br>✅ Comprehensive<br>✅ Customizable | ❌ Large bundle<br>❌ Material-only | ~300KB+ | Material Design apps |
+| **shadcn/ui** | Copy-paste components | Full control; Customizable; Radix-based; TypeScript | Manual updates; No npm package | Varies | Modern React apps, full customization |
+| **Radix UI** | Headless primitives | Accessible; Unstyled; Composable; TypeScript | Requires styling; More setup | ~5-10KB/component | Accessible, custom designs |
+| **Headless UI** | Unstyled components | Tailwind-friendly; Accessible; Simple API | Limited components; Tailwind-focused | ~5KB | Tailwind projects |
+| **Mantine** | Full component library | 100+ components; Hooks library; Dark mode; TypeScript | Large bundle; Opinionated | ~50KB+ | Rapid development |
+| **Chakra UI** | Component library | Accessible; Themeable; Composable; Good DX | Bundle size; Performance | ~40KB+ | Accessible apps |
+| **Ant Design** | Enterprise UI | Comprehensive; i18n support; Design system | Very large; Opinionated; Chinese-focused | ~500KB+ | Enterprise dashboards |
+| **Material UI** | Material Design | Mature; Comprehensive; Customizable | Large bundle; Material-only | ~300KB+ | Material Design apps |
 
 **Platform-Specific UI Libraries**:
 
 | Platform | UI Stack | Components Used |
 |----------|----------|-----------------|
-| **Observable** | Custom React + D3 | • Custom React components<br>• D3.js for visualizations<br>• Observable Inputs (form controls)<br>• Custom notebook UI<br>• Inline HTML/SVG |
-| **Count.co** | React + Custom | • Custom React components<br>• Canvas-based UI<br>• SQL editor (Monaco/CodeMirror)<br>• Custom chart library<br>• Drag-and-drop system |
-| **Evidence** | Svelte + Tailwind | • Svelte components<br>• Tailwind CSS for styling<br>• Custom markdown renderer<br>• Built-in chart components<br>• SQL syntax highlighting |
-| **tldraw** | React + Radix | • Custom React components<br>• Radix UI primitives<br>• Custom canvas renderer<br>• Shape toolbars<br>• Context menus |
-| **Omni Docs** | React-based | • Custom documentation components<br>• Markdown renderer<br>• Code syntax highlighting<br>• Navigation components |
+| **Observable** | Custom React + D3 | • Custom React components; • D3.js for visualizations; • Observable Inputs (form controls); • Custom notebook UI; • Inline HTML/SVG |
+| **Count.co** | React + Custom | • Custom React components; • Canvas-based UI; • SQL editor (Monaco/CodeMirror); • Custom chart library; • Drag-and-drop system |
+| **Evidence** | Svelte + Tailwind | • Svelte components; • Tailwind CSS for styling; • Custom markdown renderer; • Built-in chart components; • SQL syntax highlighting |
+| **tldraw** | React + Radix | • Custom React components; • Radix UI primitives; • Custom canvas renderer; • Shape toolbars; • Context menus |
+| **Omni Docs** | React-based | • Custom documentation components; • Markdown renderer; • Code syntax highlighting; • Navigation components |
 
 **Recommended Stack for BI Dashboards**:
 
