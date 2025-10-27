@@ -452,15 +452,13 @@ const useDashboardStore = create<DashboardState>()(
 );
 ```
 
-*For persistence strategies, see Section 5. For performance optimization, see Section 6.*
-
-
 > **Note**: This section consolidates state management information. Technology recommendations and settings management patterns have been integrated here for completeness.
 
 ## Plugin Loader
 
 ### Purpose
-Dynamic loading and management of extensions
+
+Dynamic loading and management of extensions in the BI Dashboard Framework. The Plugin Loader serves as the extensibility engine of the application, enabling the framework to evolve beyond its core capabilities by dynamically loading, managing, and executing third-party extensions at runtime. It orchestrates the complete plugin lifecycle—from discovery and loading to activation, hot-swapping, and graceful shutdown—while maintaining system stability and security. This component enables developers to extend dashboard functionality with custom visualizations, data connectors, transformation pipelines, UI components, and business logic without modifying the core codebase. The loader supports hot module replacement for seamless development workflows, manages complex plugin dependency graphs to ensure correct load order, provides sandboxed execution contexts to isolate plugin code from the core system, and enforces permission-based access control to protect sensitive APIs. By treating plugins as first-class citizens with well-defined lifecycle hooks (init, activate, deactivate, destroy), the loader ensures predictable behavior, proper resource cleanup, and the ability to enable/disable extensions on-the-fly without requiring application restarts. This architecture transforms the BI Dashboard from a static application into a living platform that can be customized and extended to meet diverse business requirements while maintaining performance, security, and developer experience.
 
 ### Core Features
 - Hot module replacement (HMR)
@@ -601,32 +599,32 @@ class PluginLoader {
 }
 ```
 
-*For security and sandboxing, see Section 7. For hot module replacement, see Section 6.*
 
 
 ---
 
 # Extension System
 
-The framework provides comprehensive extension capabilities through dual languages and multiple extension points.
+The Extension System represents Layer 3 of the framework architecture, providing the mechanisms and interfaces through which developers extend, customize, and enhance the BI Dashboard beyond its core capabilities. This layer embodies the framework's "Maximum Extensibility" philosophy by offering multiple pathways for extension: a custom Domain-Specific Language (DSL) for declarative, safe UI composition; full JavaScript/TypeScript support for programmatic control; and a rich set of extension points covering UI components, commands, keybindings, data transformations, themes, and layouts. The system is designed to accommodate developers of all skill levels—from business analysts using the DSL to create simple dashboards, to advanced developers building complex visualizations with React and external libraries. Each extension type is sandboxed for security, versioned for compatibility, and hot-reloadable for rapid development. Extensions can register new chart types, contribute commands to the palette, define custom keybindings, hook into application lifecycle events, override default behaviors through the advice system, and even extend other extensions through a composable plugin architecture. This multi-layered approach ensures that the framework remains accessible to non-technical users while providing the depth and flexibility that power users demand, all while maintaining security boundaries, performance characteristics, and a consistent developer experience across different extension methods.
 
 ---
 
 ## Extension Languages
 
-## Custom DSL
+### Custom DSL
 
-### Purpose
-Declarative, safe UI composition
+#### Purpose
 
-### Features
+Declarative, safe UI composition for the BI Dashboard Framework. The Custom DSL provides a high-level, domain-specific language tailored specifically for creating dashboard layouts, visualizations, and data-driven interfaces without requiring deep programming knowledge. This language serves as the primary extension method for business analysts, data scientists, and non-technical users who need to build sophisticated dashboards quickly and safely. The DSL abstracts away the complexity of React components, state management, and event handling, presenting instead a clean, readable syntax that focuses on what to display rather than how to implement it. By design, the DSL is intentionally constrained to safe operations—preventing arbitrary code execution, file system access, or network requests—making it ideal for multi-tenant environments and scenarios where untrusted users need to create custom dashboards. The language compiles directly to optimized React components, ensuring that DSL-defined dashboards perform identically to hand-coded JavaScript equivalents while maintaining type safety through static analysis. This approach democratizes dashboard creation, enabling rapid prototyping and iteration through hot-reloading, while the compiler catches errors at build time rather than runtime. The DSL supports common BI patterns out-of-the-box—grid layouts, chart configurations, data queries, filters, and interactions—reducing boilerplate and allowing users to express complex dashboard logic in just a few lines of declarative code.
+
+#### Features
 - Simple, readable syntax for common patterns
 - Type-safe by design
 - Limited to safe operations
 - Compiles to React components
 - Hot-reloadable
 
-### Example DSL Syntax (conceptual)
+#### Example DSL Syntax (conceptual)
 ```
 dashboard "Sales Overview" {
   layout: grid(2, 2)
@@ -647,7 +645,8 @@ dashboard "Sales Overview" {
 ## JavaScript Extensions
 
 ### Purpose
-Full programmatic control for advanced use cases
+
+Full programmatic control for advanced use cases in the BI Dashboard Framework. JavaScript Extensions provide unrestricted access to the framework's extension API, enabling advanced developers to build sophisticated features that go beyond the capabilities of the declarative DSL. This extension method is designed for scenarios requiring complex business logic, custom algorithms, integration with external services, advanced data transformations, or novel visualization techniques that cannot be expressed through the DSL's constrained syntax. JavaScript extensions have full access to the React ecosystem, allowing developers to leverage popular libraries like D3.js for custom visualizations, date-fns for temporal calculations, or lodash for data manipulation. Unlike the DSL, JavaScript extensions can implement stateful components with complex lifecycle management, perform asynchronous operations like API calls and database queries, subscribe to real-time data streams, and interact with browser APIs for features like clipboard access or file downloads. While this power comes with increased responsibility—JavaScript extensions run in a sandboxed environment with permission-based access control to prevent malicious code from compromising the application—developers retain the flexibility to build virtually any feature imaginable. The framework provides a comprehensive extension API that exposes core services (component registry, event bus, state store, command palette) while maintaining security boundaries, ensuring that even powerful JavaScript extensions cannot break the application or access unauthorized resources. This dual-language approach—safe DSL for common cases, powerful JavaScript for advanced scenarios—strikes the optimal balance between accessibility and capability.
 
 ### Features
 - Access to extension API
@@ -657,11 +656,13 @@ Full programmatic control for advanced use cases
 - Sandboxed execution
 
 
-## Extension Points
+### Extension Points
 
-The framework provides multiple extension points for customizing every aspect of the system.
+The framework provides multiple extension points for customizing every aspect of the system, enabling developers to inject custom behavior, UI elements, and functionality at strategic integration points throughout the application lifecycle. These extension points represent the framework's commitment to the "Maximum Extensibility" philosophy, offering well-defined interfaces where plugins can hook into core systems without modifying the underlying codebase. Extension points span the entire application stack: **UI Components** for custom visualizations and widgets, **Commands** for registering actions in the command palette, **Keybindings** for keyboard shortcuts, **Hooks** for intercepting and augmenting function calls, **Advice** for wrapping existing methods with additional behavior, **Themes** for visual customization, **Layouts** for dashboard arrangement patterns, **Data Transformations** for processing query results, **Event Listeners** for reacting to application state changes, and **Lifecycle Hooks** for plugin initialization and cleanup. Each extension point is designed with composability in mind—multiple extensions can contribute to the same point without conflicts, thanks to priority systems, namespacing, and conflict resolution strategies. The framework guarantees that extensions registered at these points receive stable, versioned APIs that won't break between releases, and provides comprehensive TypeScript definitions for type-safe extension development. This architecture allows the core framework to remain minimal while supporting unlimited extensibility, as new capabilities can be added through extensions rather than core modifications, ensuring the system scales gracefully as requirements evolve.
 
-## UI Components
+### UI Components
+
+UI Components represent the most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs. Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms). The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences. All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
 
 ### Extension Capabilities
 - Custom chart types and visualizations
@@ -976,11 +977,15 @@ extensionAPI.registerPipeline({
 
 ### Core Concepts
 
-- **Global Keybindings**: System-wide keyboard shortcuts (always active)
-- **Mode-Specific Keybindings**: Context-aware shortcuts based on active component
-- **Keymaps**: Hierarchical keybinding definitions with priority resolution
-- **Chord Support**: Multi-key sequences (e.g., `Ctrl+x Ctrl+s`)
-- **Customizable**: Users can rebind any key combination
+- **Global Keybindings**: System-wide keyboard shortcuts that remain active regardless of which component has focus or what mode the application is in. These bindings handle universal actions like opening the command palette (`Cmd/Ctrl+K`), creating new dashboards (`Cmd/Ctrl+N`), saving work (`Cmd/Ctrl+S`), or toggling the sidebar. Global keybindings have the lowest priority in the resolution hierarchy, ensuring they can be overridden by more specific context-aware bindings when necessary. They provide a consistent baseline of keyboard navigation that users can rely on throughout the application.
+
+- **Mode-Specific Keybindings**: Context-aware keyboard shortcuts that activate only when specific conditions are met, such as when a particular component has focus (text editor, chart canvas, data table) or when the application is in a specific mode (edit mode, presentation mode, debug mode). For example, `Enter` might execute a query in the SQL editor but insert a new row in a data table, while `Escape` might exit edit mode in one context but close a modal in another. Mode-specific bindings have higher priority than global bindings, allowing the same keys to perform different actions based on context without conflicts.
+
+- **Keymaps**: Hierarchical collections of keybinding definitions organized by scope, priority, and context, enabling systematic management of keyboard shortcuts across the application. Keymaps support inheritance (child keymaps can extend parent keymaps), composition (multiple keymaps can be active simultaneously), and priority-based conflict resolution (Local → Mode → Global). Extensions can contribute their own keymaps that integrate seamlessly with core bindings, and users can create custom keymaps to match their preferred workflows (Vim-style, Emacs-style, IDE-style). The keymap system ensures predictable behavior even when dozens of extensions register competing shortcuts.
+
+- **Chord Support**: Multi-key sequences that expand the available keyboard shortcut space by allowing commands to be triggered by pressing keys in sequence rather than simultaneously. For example, `Ctrl+K Ctrl+S` (press Ctrl+K, release, then press Ctrl+K+S) or `g g` (press 'g' twice) enable hundreds of additional shortcuts without requiring obscure modifier combinations. Chord sequences include configurable timeouts (typically 1-2 seconds) to distinguish intentional sequences from accidental key presses, visual feedback showing the current chord state, and the ability to cancel incomplete sequences with `Escape`. This feature is essential for power users who need quick access to many commands without memorizing complex modifier combinations.
+
+- **Customizable**: Users can rebind any key combination to any command through a visual keybinding editor, JSON configuration files, or the settings panel, enabling personalization for different workflows, accessibility needs, and muscle memory from other tools. The customization system validates bindings to prevent conflicts, warns about shadowed shortcuts, supports importing/exporting keybinding profiles, and provides search/filter capabilities to find and modify specific bindings. Custom keybindings persist across sessions via IndexedDB and can be synced across devices through cloud storage, ensuring a consistent experience. The system also supports resetting individual bindings or entire keymaps to defaults when needed.
 
 ### Architecture Overview
 
@@ -1067,14 +1072,15 @@ extensionAPI.registerMacro({
 });
 ```
 
-*For keybinding architecture, see Section 2.2.3 and 9.1.2.*
 
 
 > **Note**: Detailed keybinding architecture consolidated here from multiple sections.
 
 ## Themes
 
+### Purpose
 
+Themes represent the third most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs. Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms). The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences. All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
 
 ### Extension Capabilities
 
@@ -1130,9 +1136,12 @@ extensionAPI.registerTheme({
 });
 ```
 
-*For theme architecture, see Section 9.1.3.*
 
 ## Layouts
+
+### Purpose
+
+Layouts represent the fourth most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs. Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms). The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences. All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
 
 ### Buffer/Window Model
 
@@ -1198,7 +1207,9 @@ extensionAPI.registerLayoutTemplate({
 
 ## Hooks & Advice
 
+### Purpose
 
+Hooks and advice represent the fifth most visible and frequently used extension point in the BI Dashboard Framework, enabling developers to create custom visualizations, interactive widgets, data displays, and user interface elements that seamlessly integrate with the dashboard ecosystem. This extension point is fundamental to the framework's value proposition—while the core provides essential charts (line, bar, pie, scatter) and standard widgets (tables, cards, metrics), the real power emerges when organizations can build domain-specific visualizations tailored to their unique business needs. Component extensions can range from simple data displays (KPI cards, progress bars, status indicators) to sophisticated interactive visualizations (network graphs, geospatial maps, custom D3.js charts, WebGL-accelerated renderings) to complex composite widgets (filterable data tables, drill-down hierarchies, multi-step forms). The framework supports multiple component authoring approaches—React components for developers familiar with the ecosystem, Web Components for framework-agnostic reusability, declarative configurations for simple cases, and render functions for lightweight elements—ensuring that component creation is accessible regardless of technical background or architectural preferences. All component extensions benefit from automatic integration with the framework's state management, event system, theme engine, and layout manager, meaning developers can focus on visualization logic rather than infrastructure concerns. Components receive reactive data updates, respond to theme changes, participate in the command palette, and can be drag-dropped onto dashboards through the visual builder, providing a first-class user experience identical to built-in components.
 
 ### Core Concepts
 
@@ -1528,7 +1539,7 @@ class AdviceSystem {
 
 ### Overview
 
-Hot Module Replacement (HMR) enables developers to update extensions in real-time without losing application state, dramatically improving development velocity.
+Hot Module Replacement (HMR) enables developers to update extensions in real-time without losing application state, dramatically improving development velocity and the overall developer experience in the BI Dashboard Framework. HMR represents a critical component of the "Developer-First Design" philosophy, transforming the traditional edit-save-refresh-navigate workflow into an instantaneous feedback loop where code changes appear immediately in the running application while preserving the current application state, user interactions, and data context. This capability is particularly valuable in dashboard development scenarios where developers need to iterate on visualizations, tweak styling, adjust data transformations, or debug complex interactions—activities that traditionally required full page reloads, losing the current dashboard state, query results, filter selections, and navigation context. The framework's HMR implementation goes beyond simple module replacement by intelligently handling extension lifecycle management: when an extension's code changes, the system gracefully unloads the old version (cleaning up event listeners, timers, and resources), loads the new version, restores relevant state (dashboard configuration, user preferences, cached data), and re-mounts components in their previous positions with their previous props. This sophisticated orchestration ensures that developers can modify extension code, see changes instantly, and continue working from exactly where they left off without manually recreating their testing scenario. The HMR system also provides robust error handling—if a code change introduces a syntax error or runtime exception, the framework displays a helpful error overlay with stack traces and source maps, allows developers to fix the issue, and automatically recovers without requiring a manual page refresh. This combination of speed, state preservation, and error resilience creates a development experience that feels more like live coding than traditional web development, enabling rapid experimentation and iteration that would be impractical with conventional reload-based workflows.
 
 ### Core Capabilities
 
@@ -1635,7 +1646,7 @@ window.addEventListener('error', (event) => {
 
 ### Overview
 
-The framework supports live evaluation and hot reloading of both DSL and JavaScript code blocks within dashboards, enabling rapid development and interactive data exploration.
+The framework supports live evaluation and hot reloading of both DSL and JavaScript code blocks within dashboards, enabling rapid development and interactive data exploration. This capability represents the convergence of the framework's extensibility philosophy with modern development practices, creating an Observable-style notebook experience where code cells can be written in either the custom DSL or full JavaScript, evaluated instantly, and automatically re-executed when their dependencies change. Live evaluation transforms the dashboard from a static configuration into a dynamic, programmable environment where developers and data analysts can experiment with queries, test visualizations, prototype transformations, and explore data interactively without the friction of traditional compile-deploy-test cycles. The system maintains a dependency graph between cells—when a cell's output changes, all dependent cells automatically re-evaluate in topological order, ensuring consistency while minimizing unnecessary computation. This reactive evaluation model, combined with hot module replacement for code changes and intelligent state preservation across reloads, creates a development experience that feels immediate and responsive. The framework's dual-language support means that simple dashboards can be built entirely in the declarative DSL for safety and simplicity, while complex scenarios can leverage JavaScript's full power for custom logic, external API integration, or advanced data processing. Both evaluation paths are sandboxed for security, versioned for compatibility, and integrated with the same state management, event system, and component registry, ensuring a consistent experience regardless of which language is used. This live evaluation capability is particularly powerful for data exploration workflows—analysts can write SQL queries, transform results with JavaScript, visualize data with DSL-defined charts, and iterate on all three in real-time, seeing results update instantly as they refine their analysis.
 
 ### Core Capabilities
 
@@ -1649,7 +1660,7 @@ The framework supports live evaluation and hot reloading of both DSL and JavaScr
 
 #### Architecture Pattern
 
-Observable-style reactive cells with sandboxed execution
+Observable-style reactive cells with sandboxed execution. This pattern implements a cell-based evaluation model inspired by Observable notebooks and Jupyter, where each JavaScript code block is treated as an independent computational unit (cell) with explicit dependencies on other cells or data sources. The architecture maintains a directed acyclic graph (DAG) of cell dependencies, automatically tracking which cells reference which variables or outputs, and orchestrating re-evaluation in the correct order when upstream cells change. Each cell executes in a sandboxed environment with controlled access to browser APIs, framework services, and other cells' outputs, preventing malicious code from compromising the application while still allowing legitimate use cases like data fetching, DOM manipulation, and state updates. The system supports both synchronous and asynchronous cell evaluation, handles circular dependency detection, provides detailed error reporting with source maps, and integrates with the HMR system to preserve cell outputs across code changes. This architecture enables powerful interactive programming capabilities—cells can define functions used by other cells, fetch data from APIs, perform complex transformations, generate visualizations, or even dynamically register new components—all while maintaining security boundaries and providing instant feedback as code changes.
 
 #### Implementation
 
@@ -1746,7 +1757,7 @@ class SecureJSEvaluator extends LiveJSEvaluator {
 
 #### Architecture Pattern
 
-Compile-to-React with Vite HMR integration
+Compile-to-React with Vite HMR integration. This pattern treats DSL code as a high-level declarative specification that compiles down to optimized React components at build time or runtime, leveraging Vite's fast HMR capabilities to provide instant feedback during development. The compilation pipeline parses DSL syntax into an abstract syntax tree (AST), validates the structure against the DSL schema, transforms the AST into React component definitions with proper hooks and lifecycle methods, and generates TypeScript-typed components that integrate seamlessly with the framework's component registry. Unlike traditional template languages that require runtime interpretation, this compile-to-React approach produces first-class React components that benefit from React's optimization strategies (memoization, virtual DOM diffing, concurrent rendering) while maintaining the simplicity and safety of the DSL syntax. The Vite HMR integration enables incremental compilation—when DSL code changes, only the affected components are recompiled and hot-swapped into the running application, preserving component state and avoiding full page reloads. This architecture provides the best of both worlds: the developer-friendly syntax and safety guarantees of a DSL, combined with the performance and ecosystem benefits of React. The compiler also generates source maps that map DSL line numbers to React component code, enabling proper debugging and error reporting that references the original DSL source rather than the compiled output.
 
 #### Implementation
 
@@ -1838,7 +1849,7 @@ class DSLLiveCompiler {
 
 #### Recommended Architecture
 
-Combines DSL and JavaScript evaluation with unified state management
+Combines DSL and JavaScript evaluation with unified state management into a cohesive hybrid system that supports both languages within the same dashboard, sharing state, data, and components seamlessly. This architecture recognizes that different parts of a dashboard have different requirements—some are best expressed declaratively in DSL (layouts, standard charts, simple filters), while others need JavaScript's full power (custom algorithms, API integrations, complex transformations)—and provides a unified execution environment where both can coexist and interoperate. The system maintains a single dependency graph that tracks relationships between DSL cells, JavaScript cells, and shared data sources, ensuring that changes propagate correctly regardless of which language produced the output. State management is centralized through the framework's Zustand store, allowing DSL components to read and write the same state that JavaScript cells manipulate, creating a truly integrated experience. The hybrid engine handles the complexity of coordinating two different evaluation models (compile-time DSL compilation vs. runtime JavaScript interpretation), managing their different security profiles (DSL is inherently safe, JavaScript requires sandboxing), and ensuring consistent behavior across both. This architecture enables powerful composition patterns—a JavaScript cell can fetch data from an API, a DSL cell can visualize that data, another JavaScript cell can process user interactions, and a DSL cell can display the results—all working together as a cohesive unit with automatic dependency tracking and reactive updates.
 
 #### Implementation
 
@@ -2117,7 +2128,6 @@ class CellErrorBoundary extends React.Component<Props, State> {
 }
 ```
 
-*For security considerations, see Section 7. For state management, see Section 1.3. For HMR configuration, see Section 2.2.6.*
 
 
 ---
@@ -2126,9 +2136,622 @@ class CellErrorBoundary extends React.Component<Props, State> {
 
 ## Overview
 
-A comprehensive security model protects users from malicious extensions while enabling powerful customization capabilities. The security model is based on a combination of sandboxing, permissions, and code review.
+A comprehensive security model protects users from malicious code execution while enabling powerful customization capabilities in an infinite canvas dashboard environment. The security model addresses the unique challenges of allowing users to write and execute custom JavaScript and DSL code within dashboard cells alongside trusted built-in components like tables, charts, inputs, and code editors. The architecture employs a defense-in-depth strategy with multiple layers: sandboxed execution environments that isolate user code in separate iframes with their own origins, proxy-based API control that restricts built-in components to only their required permissions, runtime validation that checks every API call, resource limits that prevent runaway code from consuming excessive CPU or memory, audit logging for debugging and compliance, and rate limiting to prevent abuse.
+
+This multi-layered approach recognizes that no single security mechanism is perfect—iframe sandboxing provides strong isolation but has communication overhead, proxy-based controls are performant but can be bypassed, and resource limits may need tuning—so the framework employs multiple overlapping defenses to ensure that even if one layer fails, others provide protection. The security model is designed to be transparent to legitimate users: they can write normal JavaScript or custom DSL without learning complex security models, console logging works as expected, and the provided API surface is intuitive. Meanwhile, malicious code encounters multiple barriers: iframe origin isolation prevents access to the parent window, message validation blocks unauthorized communication, CSP policies restrict network access, and timeout mechanisms terminate long-running code.
+
+This comprehensive approach allows the infinite canvas dashboard to support dynamic, user-generated code execution while maintaining the security, stability, and performance guarantees that production applications demand. The framework provides developer tooling—execution sandboxes for testing code safely, permission documentation for understanding API access, and clear error messages for security violations—ensuring that security becomes an enabler rather than an obstacle to building powerful, interactive dashboards.
 
 ## Execution Environment
+
+### Recommended Architecture for Infinite Canvas Dashboard
+
+For an infinite canvas dashboard with dynamic cells (tables, charts, inputs, CodeMirror editors) and on-the-fly code execution without page reloads, we recommend a **hybrid approach combining iframe Sandbox + Proxy-Based sandboxing**.
+
+#### Architecture Decision
+
+- **Primary: iframe Sandbox** (for custom code execution)
+
+  - **Why it's ideal:**
+
+    - **Strong Isolation**: Custom JS/DSL code runs in complete isolation from main canvas
+    - **No Page Reload**: iframes can be dynamically created/destroyed without affecting the main page
+    - **Separate Crash Domain**: If user code crashes, it won't break the entire dashboard
+    - **CSP Support**: Enforce strict Content Security Policies per cell
+    - **True Sandboxing**: Each cell gets its own origin and execution context
+
+- **Secondary: Proxy-Based** (for built-in components)
+
+  - **Why it complements well:**
+
+    - **Performance**: Built-in components (tables, charts, inputs) run in main context with controlled API access
+    - **Fine-Grained Control**: Audit and limit what APIs each component type can access
+    - **Flexibility**: Easy to add new component types without heavy isolation overhead
+    - **Low Overhead**: No serialization cost for trusted components
+  - **Direct DOM Access**: Components can manipulate DOM efficiently
+
+#### Why NOT Other Approaches?
+
+- **SES (Secure ECMAScript) - Not Suitable**
+
+  - **Too restrictive**: No DOM access means you can't render UI components
+  - **Learning curve**: Users would need to learn capability-based security
+  - **Compatibility**: Many libraries won't work in frozen realm
+  - **No visual output**: Can't create charts, tables, or interactive elements
+
+- **Web Workers (alone) - Not Suitable**
+
+  - **No DOM access**: Can't render tables, charts, or UI elements
+  - **Message passing overhead**: Serialization cost for every UI update
+  - **Limited use**: Only good for background computation (can be used as Layer 3)
+
+- **VM Isolation - Not Suitable**
+
+  - **Too heavy**: Significant overhead (1MB+) for each cell
+  - **Limited browser support**: QuickJS-WASM not widely supported
+  - **Overkill**: Don't need process-level isolation for dashboard cells
+  - **Performance**: Slow startup time for each cell
+
+#### Implementation Strategy
+
+```typescript
+// Cell execution strategy
+class CellExecutor {
+  private iframePool: Map<string, HTMLIFrameElement> = new Map();
+  private computeWorker: Worker;
+  
+  constructor() {
+    // Initialize compute worker for heavy operations
+    this.computeWorker = new Worker('compute-worker.js');
+  }
+  
+  executeCell(cell: Cell): Promise<CellResult> {
+    switch (cell.type) {
+      case 'table':
+      case 'chart':
+      case 'input':
+      case 'codemirror':
+        // Built-in components: Proxy-based sandboxing
+        return this.executeBuiltInComponent(cell);
+      
+      case 'custom-js':
+      case 'custom-dsl':
+        // User code: iframe sandboxing
+        return this.executeUserCode(cell);
+      
+      case 'computation':
+        // Heavy computation: Web Worker
+        return this.executeComputation(cell);
+    }
+  }
+  
+  // Layer 1: Proxy-based for built-in components
+  private executeBuiltInComponent(cell: Cell): Promise<CellResult> {
+    const allowedAPIs = this.getComponentPermissions(cell.type);
+    
+    const sandboxedAPI = new Proxy(this.dashboardAPI, {
+      get(target, prop) {
+        // Whitelist check
+        if (!allowedAPIs.includes(prop as string)) {
+          console.warn(`Component ${cell.type} attempted to access ${String(prop)}`);
+          throw new Error(`API ${String(prop)} not allowed for ${cell.type}`);
+        }
+        
+        // Audit logging
+        this.auditLog({
+          cellId: cell.id,
+          cellType: cell.type,
+          api: String(prop),
+          timestamp: Date.now()
+        });
+        
+        return target[prop];
+      },
+      
+      set(target, prop, value) {
+        throw new Error('Cannot modify dashboard API');
+      }
+    });
+    
+    // Execute in main context with controlled API
+    const component = this.componentRegistry.get(cell.type);
+    return component.render(cell.config, sandboxedAPI);
+  }
+  
+  // Layer 2: iframe-based for user code
+  private async executeUserCode(cell: Cell): Promise<CellResult> {
+    // Reuse iframe if possible
+    let iframe = this.iframePool.get(cell.id);
+    
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.sandbox = 'allow-scripts'; // Minimal permissions
+      iframe.style.cssText = `
+        position: absolute;
+        border: none;
+        background: white;
+      `;
+      
+      // Inject execution environment
+      iframe.srcdoc = this.createSandboxHTML(cell);
+      
+      // Position in infinite canvas
+      this.positionCellInCanvas(iframe, cell.position);
+      
+      // Add to DOM and pool
+      document.getElementById('canvas-container').appendChild(iframe);
+      this.iframePool.set(cell.id, iframe);
+      
+      // Wait for iframe to be ready
+      await this.waitForIframeReady(iframe);
+    }
+    
+    // Execute code in iframe
+    return new Promise((resolve, reject) => {
+      const messageHandler = (event: MessageEvent) => {
+        if (event.source !== iframe.contentWindow) return;
+        
+        if (event.data.type === 'result' && event.data.cellId === cell.id) {
+          window.removeEventListener('message', messageHandler);
+          
+          if (event.data.success) {
+            resolve({
+              output: event.data.output,
+              logs: event.data.logs,
+              executionTime: event.data.executionTime
+            });
+          } else {
+            reject(new Error(event.data.error));
+          }
+        }
+      };
+      
+      window.addEventListener('message', messageHandler);
+      
+      // Send code to execute
+      iframe.contentWindow.postMessage({
+        type: 'execute',
+        cellId: cell.id,
+        code: cell.code,
+        language: cell.language,
+        context: this.serializeContext(cell)
+      }, '*');
+      
+      // Timeout after 30 seconds
+      setTimeout(() => {
+        window.removeEventListener('message', messageHandler);
+        reject(new Error('Execution timeout'));
+      }, 30000);
+    });
+  }
+  
+  // Layer 3: Web Worker for heavy computation
+  private executeComputation(cell: Cell): Promise<CellResult> {
+    return new Promise((resolve, reject) => {
+      const messageHandler = (event: MessageEvent) => {
+        if (event.data.cellId === cell.id) {
+          this.computeWorker.removeEventListener('message', messageHandler);
+          resolve(event.data.result);
+        }
+      };
+      
+      this.computeWorker.addEventListener('message', messageHandler);
+      this.computeWorker.postMessage({
+        type: 'compute',
+        cellId: cell.id,
+        data: cell.data,
+        operation: cell.operation
+      });
+    });
+  }
+  
+  private createSandboxHTML(cell: Cell): string {
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="UTF-8">
+          <style>
+            body { 
+              margin: 0; 
+              padding: 16px; 
+              font-family: system-ui, -apple-system, sans-serif;
+            }
+            #output { min-height: 100px; }
+            .error { color: red; padding: 8px; background: #fee; }
+          </style>
+        </head>
+        <body>
+          <div id="output"></div>
+          <script>
+            const logs = [];
+            const startTime = performance.now();
+            
+            // Override console for logging
+            const originalConsole = { ...console };
+            console.log = (...args) => {
+              logs.push({ type: 'log', args });
+              originalConsole.log(...args);
+            };
+            console.error = (...args) => {
+              logs.push({ type: 'error', args });
+              originalConsole.error(...args);
+            };
+            
+            // Provide limited API to user code
+            const api = {
+              render: (html) => {
+                document.getElementById('output').innerHTML = html;
+              },
+              createElement: (tag, props, children) => {
+                const el = document.createElement(tag);
+                if (props) Object.assign(el, props);
+                if (children) el.innerHTML = children;
+                return el;
+              },
+              appendTo: (element, selector = '#output') => {
+                document.querySelector(selector).appendChild(element);
+              }
+            };
+            
+            // Listen for execution requests
+            window.addEventListener('message', async (event) => {
+              if (event.data.type === 'execute') {
+                const { cellId, code, language, context } = event.data;
+                
+                try {
+                  let result;
+                  
+                  if (language === 'javascript') {
+                    // Execute JavaScript
+                    const fn = new Function('api', 'context', code);
+                    result = await fn(api, context);
+                  } else if (language === 'dsl') {
+                    // Execute custom DSL (implement your DSL parser)
+                    result = await this.executeDSL(code, api, context);
+                  }
+                  
+                  const executionTime = performance.now() - startTime;
+                  
+                  // Send result back
+                  window.parent.postMessage({
+                    type: 'result',
+                    cellId,
+                    success: true,
+                    output: result,
+                    logs,
+                    executionTime
+                  }, '*');
+                  
+                } catch (error) {
+                  const errorDiv = document.createElement('div');
+                  errorDiv.className = 'error';
+                  errorDiv.textContent = error.message;
+                  document.getElementById('output').appendChild(errorDiv);
+                  
+                  window.parent.postMessage({
+                    type: 'result',
+                    cellId,
+                    success: false,
+                    error: error.message,
+                    stack: error.stack,
+                    logs
+                  }, '*');
+                }
+              }
+            });
+            
+            // Signal ready
+            window.parent.postMessage({ type: 'ready' }, '*');
+          </script>
+        </body>
+      </html>
+    `;
+  }
+  
+  private getComponentPermissions(type: string): string[] {
+    const permissions = {
+      table: ['getData', 'formatData', 'exportCSV'],
+      chart: ['getData', 'renderChart', 'updateChart'],
+      input: ['getValue', 'setValue', 'validate'],
+      codemirror: ['getValue', 'setValue', 'setLanguage', 'getSelection']
+    };
+    return permissions[type] || [];
+  }
+  
+  private positionCellInCanvas(iframe: HTMLIFrameElement, position: Position) {
+    iframe.style.left = `${position.x}px`;
+    iframe.style.top = `${position.y}px`;
+    iframe.style.width = `${position.width}px`;
+    iframe.style.height = `${position.height}px`;
+  }
+  
+  private waitForIframeReady(iframe: HTMLIFrameElement): Promise<void> {
+    return new Promise((resolve) => {
+      const handler = (event: MessageEvent) => {
+        if (event.source === iframe.contentWindow && event.data.type === 'ready') {
+          window.removeEventListener('message', handler);
+          resolve();
+        }
+      };
+      window.addEventListener('message', handler);
+    });
+  }
+  
+  private serializeContext(cell: Cell): any {
+    // Serialize only safe data for the cell context
+    return {
+      cellId: cell.id,
+      variables: cell.variables,
+      previousOutput: cell.previousOutput,
+      // Don't serialize functions or DOM references
+    };
+  }
+  
+  private auditLog(entry: AuditLogEntry) {
+    // Send to audit logging system
+    console.log('[AUDIT]', entry);
+  }
+  
+  // Cleanup when cell is removed
+  destroyCell(cellId: string) {
+    const iframe = this.iframePool.get(cellId);
+    if (iframe) {
+      iframe.remove();
+      this.iframePool.delete(cellId);
+    }
+  }
+}
+
+// Usage example
+const executor = new CellExecutor();
+
+// Execute a chart cell (built-in, proxy-based)
+await executor.executeCell({
+  id: 'cell-1',
+  type: 'chart',
+  config: {
+    data: [...],
+    chartType: 'bar'
+  }
+});
+
+// Execute custom JavaScript (iframe-based)
+await executor.executeCell({
+  id: 'cell-2',
+  type: 'custom-js',
+  language: 'javascript',
+  code: `
+    // User's custom code
+    const data = context.previousOutput;
+    const chart = api.createElement('div', { className: 'chart' });
+    chart.innerHTML = '<h3>Custom Chart</h3>';
+    api.appendTo(chart);
+    return { success: true };
+  `
+});
+
+// Execute heavy computation (worker-based)
+await executor.executeCell({
+  id: 'cell-3',
+  type: 'computation',
+  operation: 'aggregate',
+  data: largeDataset
+});
+```
+
+#### Three-Layer Defense Strategy
+
+```typescript
+// Layer 1: Built-in components (fast, proxy-based)
+const builtInComponents = {
+  table: {
+    permissions: ['getData', 'formatData', 'exportCSV'],
+    executor: ProxySandboxedComponent
+  },
+  chart: {
+    permissions: ['getData', 'renderChart', 'updateChart'],
+    executor: ProxySandboxedComponent
+  },
+  input: {
+    permissions: ['getValue', 'setValue', 'validate'],
+    executor: ProxySandboxedComponent
+  },
+  codemirror: {
+    permissions: ['getValue', 'setValue', 'setLanguage'],
+    executor: ProxySandboxedComponent
+  }
+};
+
+// Layer 2: User code (isolated, iframe-based)
+const userCodeExecutor = {
+  javascript: IframeSandboxedExecutor,
+  typescript: IframeSandboxedExecutor,
+  dsl: IframeSandboxedExecutor
+};
+
+// Layer 3: Heavy computation (parallel, worker-based)
+const computeWorker = new ComputeWorkerPool({
+  maxWorkers: 4,
+  timeout: 60000
+});
+
+// Cell execution decision tree
+async function executeCell(cell: Cell): Promise<CellResult> {
+  // Fast path: built-in components
+  if (cell.type in builtInComponents) {
+    const component = builtInComponents[cell.type];
+    return component.executor.render(cell, component.permissions);
+  }
+  
+  // Check if computation should be offloaded
+  if (cell.requiresComputation && cell.dataSize > LARGE_THRESHOLD) {
+    return computeWorker.execute(cell);
+  }
+  
+  // User code: iframe isolation
+  return userCodeExecutor[cell.language].execute(cell);
+}
+```
+
+#### Benefits for Infinite Canvas Dashboard
+
+1. **Performance**
+   - Built-in components run at native speed in main context
+   - No serialization overhead for trusted components
+   - iframe pooling reduces creation overhead
+   - Web Workers handle heavy computation without blocking UI
+
+2. **Safety**
+   - User code completely isolated in iframes
+   - Each iframe has its own origin (null origin)
+   - Proxy layer prevents unauthorized API access
+   - Crash in one cell doesn't affect others
+
+3. **No Reload Required**
+   - All execution happens dynamically
+   - iframes created/destroyed on demand
+   - Canvas state preserved across cell executions
+   - Hot module replacement possible
+
+4. **Scalability**
+   - Each cell is independent
+   - Can have hundreds of cells on canvas
+   - Lazy loading: only execute visible cells
+   - iframe pooling reduces memory footprint
+
+5. **Developer Experience**
+   - Users write normal JavaScript/DSL
+   - No need to learn new security models
+   - Rich API provided through `api` object
+   - Console logging works as expected
+
+6. **Audit Trail**
+   - Proxy layer logs all API usage
+   - Track which cells access what data
+   - Security monitoring and debugging
+   - Compliance and forensics
+
+7. **Flexibility**
+   - Easy to add new component types
+   - Can adjust permissions per component
+   - Support multiple languages (JS, TS, DSL)
+   - Extensible architecture
+
+#### Real-World Inspiration
+
+This approach is similar to:
+
+- **Observable**: Uses iframes for user code, built-in components in main context
+- **Jupyter**: Kernel isolation with rich front-end components
+- **Figma**: Plugin isolation with controlled API surface
+- **VS Code**: Extension host process with message passing
+- **CodeSandbox**: iframe-based sandboxing for live preview
+
+#### Security Considerations
+
+```typescript
+// Validate message origins
+window.addEventListener('message', (event) => {
+  // Only accept messages from our iframes
+  const iframe = Array.from(this.iframePool.values())
+    .find(f => f.contentWindow === event.source);
+  
+  if (!iframe) {
+    console.warn('Message from unknown source', event.origin);
+    return;
+  }
+  
+  // Process message
+  this.handleCellMessage(event.data);
+});
+
+// Rate limiting for cell execution
+class RateLimiter {
+  private executions: Map<string, number[]> = new Map();
+  
+  canExecute(cellId: string): boolean {
+    const now = Date.now();
+    const recent = this.executions.get(cellId) || [];
+    
+    // Remove executions older than 1 minute
+    const filtered = recent.filter(time => now - time < 60000);
+    
+    // Allow max 10 executions per minute
+    if (filtered.length >= 10) {
+      return false;
+    }
+    
+    filtered.push(now);
+    this.executions.set(cellId, filtered);
+    return true;
+  }
+}
+
+// Resource limits
+const CELL_LIMITS = {
+  maxExecutionTime: 30000,  // 30 seconds
+  maxMemory: 50 * 1024 * 1024,  // 50MB per cell
+  maxOutputSize: 1024 * 1024,  // 1MB output
+  maxConcurrentExecutions: 5
+};
+```
+
+#### Performance Optimizations
+
+```typescript
+// 1. iframe pooling
+class IframePool {
+  private pool: HTMLIFrameElement[] = [];
+  private maxSize = 10;
+  
+  acquire(): HTMLIFrameElement {
+    return this.pool.pop() || this.createIframe();
+  }
+  
+  release(iframe: HTMLIFrameElement) {
+    if (this.pool.length < this.maxSize) {
+      // Reset iframe state
+      iframe.srcdoc = '';
+      this.pool.push(iframe);
+    } else {
+      iframe.remove();
+    }
+  }
+}
+
+// 2. Lazy execution - only execute visible cells
+class VisibilityManager {
+  private observer: IntersectionObserver;
+  
+  constructor(private executor: CellExecutor) {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const cellId = entry.target.getAttribute('data-cell-id');
+          this.executor.executeCell(this.getCellById(cellId));
+        }
+      });
+    }, { threshold: 0.1 });
+  }
+  
+  observe(cellElement: HTMLElement) {
+    this.observer.observe(cellElement);
+  }
+}
+
+// 3. Debounced execution for code editors
+function createDebouncedExecutor(delay = 500) {
+  let timeout: number;
+  
+  return (cell: Cell) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      executor.executeCell(cell);
+    }, delay);
+  };
+}
+```
 
 ### Sandboxing Approaches
 
@@ -2139,6 +2762,592 @@ A comprehensive security model protects users from malicious extensions while en
 | **Web Workers** | Background thread | No DOM access; Isolated; Parallel | No UI; Message passing; Limited | CPU-intensive tasks |
 | **Proxy-Based** | Intercept API calls | Flexible; Fine-grained; Auditable | Performance overhead; Complex; Bypassable | API control |
 | **VM Isolation** | Separate JavaScript VM | Complete isolation; Resource limits | Large overhead; Complex; Limited browser support | Maximum security |
+
+---
+
+#### 1. SES (Secure ECMAScript)
+
+**Overview:**
+SES is a hardened subset of JavaScript developed by Agoric that provides deterministic, secure execution by removing ambient authority and non-deterministic features. It creates a "frozen realm" where all built-in objects are immutable and access to global state is controlled.
+
+**How It Works:**
+
+- **Compartments**: Creates isolated execution contexts with their own global scope
+- **Frozen Intrinsics**: All built-in prototypes (`Object.prototype`, `Array.prototype`, etc.) are frozen to prevent prototype pollution
+- **Capability-Based Security**: Code only has access to what's explicitly passed to it
+- **Deterministic Execution**: Removes `Date.now()`, `Math.random()`, and other non-deterministic APIs
+
+**Implementation Example:**
+```javascript
+import { lockdown, Compartment } from 'ses';
+
+// Harden the JavaScript environment
+lockdown();
+
+// Create isolated compartment
+const compartment = new Compartment({
+  // Endowments: explicitly provided capabilities
+  console: {
+    log: (...args) => console.log('[Extension]', ...args)
+  }
+});
+
+// Execute untrusted code
+const result = compartment.evaluate(`
+  // No access to global window, document, or fetch
+  // Only has access to provided console
+  console.log('Hello from sandbox');
+  return 42;
+`);
+```
+
+**Pros:**
+
+- **Strong Isolation**: Complete separation from host environment
+- **Deterministic**: Same input always produces same output (useful for testing)
+- **Prototype Safety**: Immune to prototype pollution attacks
+- **Memory Safety**: Prevents memory leaks across compartments
+- **Standards-Based**: Built on TC39 proposals
+
+**Cons:**
+
+- **Limited APIs**: No access to DOM, timers, network by default
+- **Learning Curve**: Capability-based security requires different thinking
+- **Compatibility**: May break code expecting full JavaScript environment
+- **Performance**: Additional overhead from frozen intrinsics
+- **Ecosystem**: Limited third-party library support
+
+**Best For:**
+
+- Financial applications requiring deterministic execution
+- Plugin systems with untrusted code
+- Smart contracts and blockchain applications
+- High-security environments (banking, healthcare)
+- Multi-tenant SaaS platforms
+
+**Real-World Usage:**
+
+- **Agoric**: Blockchain smart contracts
+- **MetaMask Snaps**: Browser extension plugins
+- **Salesforce LWC**: Lightning Web Components security
+
+---
+
+#### 2. iframe Sandbox
+
+**Overview:**
+Uses HTML5 sandboxed iframes to create a completely isolated browsing context with its own origin, DOM, and JavaScript environment. The `sandbox` attribute restricts capabilities like form submission, scripts, and top navigation.
+
+**How It Works:**
+
+- **Origin Isolation**: Creates unique opaque origin (null origin)
+- **CSP Integration**: Content Security Policy for additional restrictions
+- **Permission Model**: Granular control via sandbox flags
+- **Message Passing**: `postMessage` API for secure communication
+
+**Implementation Example:**
+```javascript
+// Create sandboxed iframe
+const iframe = document.createElement('iframe');
+iframe.sandbox = 'allow-scripts'; // Minimal permissions
+iframe.srcdoc = `
+  <!DOCTYPE html>
+  <html>
+    <body>
+      <script>
+        // Isolated JavaScript context
+        window.parent.postMessage({
+          type: 'result',
+          data: 'Hello from sandbox'
+        }, '*');
+      </script>
+    </body>
+  </html>
+`;
+
+// Listen for messages
+window.addEventListener('message', (event) => {
+  if (event.source === iframe.contentWindow) {
+    console.log('Received:', event.data);
+  }
+});
+
+document.body.appendChild(iframe);
+```
+
+**Sandbox Flags:**
+
+- `allow-scripts`: Enable JavaScript execution
+- `allow-same-origin`: Allow same-origin access (dangerous with allow-scripts)
+- `allow-forms`: Allow form submission
+- `allow-popups`: Allow opening new windows
+- `allow-modals`: Allow `alert()`, `confirm()`, etc.
+- `allow-top-navigation`: Allow navigating top frame
+
+**Pros:**
+
+- **True Isolation**: Separate origin and execution context
+- **Browser Native**: No external libraries required
+- **CSP Support**: Leverage Content Security Policy
+- **Resource Isolation**: Separate memory, storage, cookies
+- **Well-Tested**: Battle-tested browser security feature
+
+**Cons:**
+
+- **Communication Overhead**: `postMessage` adds latency
+- **Performance**: Full document context is heavyweight
+- **Complexity**: Managing lifecycle and communication
+- **Layout Issues**: CSS and positioning challenges
+- **Debugging**: Harder to debug across iframe boundary
+
+**Best For:**
+
+- Embedding untrusted third-party content
+- User-generated HTML/CSS/JavaScript
+- Widget systems (ads, embeds)
+- Preview environments
+- Multi-tenant dashboards with custom visualizations
+
+**Security Considerations:**
+```javascript
+// DANGEROUS: Never combine these flags
+iframe.sandbox = 'allow-scripts allow-same-origin';
+// This allows sandbox escape!
+
+// SAFE: Minimal permissions
+iframe.sandbox = 'allow-scripts';
+
+// SAFE: Validate message origins
+window.addEventListener('message', (event) => {
+  if (event.origin !== 'https://trusted-domain.com') {
+    return; // Ignore untrusted messages
+  }
+});
+```
+
+---
+
+#### 3. Web Workers
+
+**Overview:**
+Web Workers run JavaScript in background threads separate from the main UI thread. They have no access to the DOM and communicate via message passing, providing natural isolation for compute-heavy tasks.
+
+**How It Works:**
+
+- **Thread Isolation**: Runs in separate thread (not process)
+- **No DOM Access**: Cannot access `window`, `document`, or DOM APIs
+- **Message Passing**: Structured cloning for data transfer
+- **Shared Memory**: Optional `SharedArrayBuffer` for advanced use cases
+
+**Implementation Example:**
+```javascript
+// Main thread
+const worker = new Worker('worker.js');
+
+worker.postMessage({
+  type: 'calculate',
+  data: [1, 2, 3, 4, 5]
+});
+
+worker.addEventListener('message', (event) => {
+  console.log('Result:', event.data);
+});
+
+// worker.js
+self.addEventListener('message', (event) => {
+  const { type, data } = event.data;
+  
+  if (type === 'calculate') {
+    const sum = data.reduce((a, b) => a + b, 0);
+    self.postMessage({ result: sum });
+  }
+});
+```
+
+**Types of Workers:**
+
+- **Dedicated Workers**: One-to-one with creating script
+- **Shared Workers**: Shared across multiple scripts/tabs
+- **Service Workers**: Network proxy for offline support
+
+**Pros:**
+
+- **No DOM Access**: Natural security boundary
+- **Parallel Execution**: True multi-threading
+- **Isolated Scope**: Separate global scope
+- **Resource Limits**: Browser manages memory
+- **Transferable Objects**: Efficient large data transfer
+
+**Cons:**
+
+- **No UI Manipulation**: Cannot update DOM directly
+- **Message Passing Overhead**: Serialization costs
+- **Limited APIs**: No access to many browser APIs
+- **Debugging Complexity**: Separate debugging context
+- **Cold Start**: Worker initialization time
+
+**Best For:**
+
+- CPU-intensive calculations (data processing, parsing)
+- Background data synchronization
+- Image/video processing
+- Cryptographic operations
+- Large dataset transformations
+- Real-time data analysis
+
+**Advanced Pattern - Comlink:**
+```javascript
+// Using Comlink library for easier RPC
+import * as Comlink from 'comlink';
+
+// worker.js
+const api = {
+  async processData(data) {
+    // Heavy computation
+    return data.map(x => x * 2);
+  }
+};
+
+Comlink.expose(api);
+
+// Main thread
+const worker = new Worker('worker.js');
+const api = Comlink.wrap(worker);
+
+const result = await api.processData([1, 2, 3]);
+console.log(result); // [2, 4, 6]
+```
+
+---
+
+#### 4. Proxy-Based Sandboxing
+
+**Overview:**
+Uses JavaScript Proxy objects to intercept and control access to APIs, objects, and properties. Provides fine-grained control over what code can access and how it behaves.
+
+**How It Works:**
+
+- **Interception**: Proxy traps intercept property access, function calls, etc.
+- **Whitelisting**: Only allow access to approved APIs
+- **Auditing**: Log all API usage for security monitoring
+- **Transformation**: Modify behavior of existing APIs
+
+**Implementation Example:**
+```javascript
+// Create sandboxed global object
+function createSandbox(permissions) {
+  const sandbox = {
+    console: {
+      log: (...args) => console.log('[Sandbox]', ...args)
+    }
+  };
+  
+  // Proxy to control access
+  return new Proxy(sandbox, {
+    get(target, prop) {
+      // Whitelist check
+      if (prop in target) {
+        return target[prop];
+      }
+      
+      // Deny access to dangerous APIs
+      if (['eval', 'Function', 'XMLHttpRequest'].includes(prop)) {
+        throw new Error(`Access to ${prop} denied`);
+      }
+      
+      // Audit logging
+      console.warn(`Access attempt: ${prop}`);
+      return undefined;
+    },
+    
+    set(target, prop, value) {
+      // Prevent modification of sandbox
+      throw new Error('Cannot modify sandbox');
+    },
+    
+    has(target, prop) {
+      // Control 'in' operator
+      return prop in target;
+    }
+  });
+}
+
+// Execute code in sandbox
+const sandbox = createSandbox(['console']);
+const fn = new Function('sandbox', `
+  with (sandbox) {
+    console.log('Hello'); // Works
+    fetch('https://evil.com'); // undefined
+  }
+`);
+
+fn(sandbox);
+```
+
+**Advanced Pattern - Membrane:**
+```javascript
+// Membrane pattern: wrap all objects transitively
+function createMembrane(target) {
+  const wrapped = new WeakMap();
+  
+  function wrap(obj) {
+    if (typeof obj !== 'object' || obj === null) {
+      return obj;
+    }
+    
+    if (wrapped.has(obj)) {
+      return wrapped.get(obj);
+    }
+    
+    const proxy = new Proxy(obj, {
+      get(target, prop) {
+        const value = target[prop];
+        // Recursively wrap returned values
+        return wrap(value);
+      }
+    });
+    
+    wrapped.set(obj, proxy);
+    return proxy;
+  }
+  
+  return wrap(target);
+}
+```
+
+**Pros:**
+
+- **Fine-Grained Control**: Precise API access control
+- **Flexible**: Can modify behavior dynamically
+- **Auditable**: Log all access attempts
+- **No External Dependencies**: Pure JavaScript
+- **Gradual Adoption**: Can wrap existing code incrementally
+
+**Cons:**
+
+- **Performance Overhead**: Proxy traps add latency
+- **Complex Implementation**: Easy to make mistakes
+- **Bypassable**: Can be circumvented with careful code
+- **Maintenance**: Requires keeping up with new APIs
+- **Not True Isolation**: Shares same JavaScript realm
+
+**Best For:**
+
+- API usage monitoring and analytics
+- Gradual security hardening
+- Development/debugging tools
+- Permission-based API access
+- Legacy code that can't be fully sandboxed
+
+**Security Limitations:**
+```javascript
+// ⚠️ Proxy-based sandboxing can be bypassed:
+
+// 1. Prototype access
+({}).__proto__.constructor.constructor('alert(1)')();
+
+// 2. Error stack traces
+try {
+  null.f();
+} catch (e) {
+  e.stack; // May contain references to outer scope
+}
+
+// 3. Async timing attacks
+// Use timing to infer information about blocked APIs
+```
+
+---
+
+#### 5. VM Isolation (Separate JavaScript VM)
+
+**Overview:**
+Creates a completely separate JavaScript virtual machine with its own heap, garbage collector, and execution context. Provides the strongest isolation but with significant overhead.
+
+**How It Works:**
+
+- **Process Isolation**: Separate OS process (in some implementations)
+- **Memory Isolation**: Separate heap and garbage collector
+- **Resource Limits**: CPU, memory, and time limits
+- **API Bridging**: Explicit serialization boundary
+
+**Implementation Example (Node.js vm2):**
+```javascript
+// Note: vm2 is Node.js only, not browser
+const { VM } = require('vm2');
+
+const vm = new VM({
+  timeout: 1000, // 1 second timeout
+  sandbox: {
+    // Explicitly provided globals
+    console: {
+      log: (...args) => console.log('[VM]', ...args)
+    }
+  },
+  eval: false, // Disable eval
+  wasm: false  // Disable WebAssembly
+});
+
+try {
+  const result = vm.run(`
+    // Completely isolated environment
+    console.log('Hello from VM');
+    
+    // No access to require, process, etc.
+    // require('fs'); // Would throw error
+    
+    42
+  `);
+  
+  console.log('Result:', result);
+} catch (err) {
+  console.error('VM error:', err);
+}
+```
+
+**Browser Implementation (QuickJS-WASM):**
+```javascript
+import { getQuickJS } from 'quickjs-emscripten';
+
+async function runInVM(code) {
+  const QuickJS = await getQuickJS();
+  const vm = QuickJS.newContext();
+  
+  try {
+    // Create isolated VM
+    const result = vm.evalCode(code);
+    
+    if (result.error) {
+      const error = vm.dump(result.error);
+      result.error.dispose();
+      throw error;
+    }
+    
+    const value = vm.dump(result.value);
+    result.value.dispose();
+    return value;
+  } finally {
+    vm.dispose();
+  }
+}
+
+// Usage
+const result = await runInVM('2 + 2');
+console.log(result); // 4
+```
+
+**Pros:**
+
+- **Complete Isolation**: Strongest security boundary
+- **Resource Limits**: Enforce CPU, memory, time limits
+- **Crash Isolation**: VM crash doesn't affect host
+- **Multiple Engines**: Can use different JS engines
+- **Deterministic**: Can control all non-determinism
+
+**Cons:**
+
+- **Large Overhead**: Significant memory and CPU cost
+- **Complex Setup**: Requires VM management
+- **Limited Browser Support**: Mostly Node.js solutions
+- **Serialization Cost**: All data must cross boundary
+- **Debugging Difficulty**: Hard to debug across VM boundary
+
+**Best For:**
+
+- Maximum security requirements (financial, healthcare)
+- Multi-tenant serverless platforms
+- Code execution services (online IDEs, playgrounds)
+- Plugin systems with untrusted code
+- Blockchain smart contract execution
+
+**Resource Limiting:**
+```javascript
+const { VM } = require('vm2');
+
+const vm = new VM({
+  timeout: 5000,        // 5 second timeout
+  sandbox: {},
+  fixAsync: true,       // Fix async timing issues
+  
+  // Custom console with rate limiting
+  console: 'redirect',
+  
+  // Compiler options
+  compiler: 'javascript',
+  
+  // Require options
+  require: {
+    external: false,    // No external modules
+    builtin: [],        // No builtin modules
+    root: './',
+    mock: {}
+  }
+});
+
+// Catch timeout errors
+try {
+  vm.run('while(true) {}'); // Will timeout
+} catch (err) {
+  console.error('Timeout:', err.message);
+}
+```
+
+---
+
+### Comparison Matrix
+
+| Feature | SES | iframe | Web Worker | Proxy | VM |
+|---------|-----|--------|------------|-------|-----|
+| **Isolation Strength** | Strong | Very Strong | Strong | Weak | Very Strong |
+| **Performance** | Good | Moderate | Good | Good | Poor |
+| **DOM Access** | No | Yes (sandboxed) | No | Yes | No |
+| **Setup Complexity** | Moderate | Low | Low | High | High |
+| **Browser Support** | Modern | All | All | All | Limited |
+| **Memory Overhead** | Low | High | Moderate | Low | Very High |
+| **Debugging** | Moderate | Hard | Hard | Easy | Very Hard |
+| **Escape Risk** | Very Low | Very Low | Low | High | Very Low |
+
+### Hybrid Approach Recommendation
+
+For a production BI dashboard extension system, consider combining multiple approaches:
+
+```javascript
+// Layer 1: iframe for strong isolation
+const extensionFrame = document.createElement('iframe');
+extensionFrame.sandbox = 'allow-scripts';
+
+// Layer 2: SES inside iframe for additional hardening
+extensionFrame.srcdoc = `
+  <script src="ses.umd.js"></script>
+  <script>
+    lockdown();
+    
+    const compartment = new Compartment({
+      // Layer 3: Proxy-based API control
+      dashboard: new Proxy(dashboardAPI, {
+        get(target, prop) {
+          // Audit and control access
+          auditLog('API access:', prop);
+          return target[prop];
+        }
+      })
+    });
+    
+    // Layer 4: Web Worker for heavy computation
+    const worker = new Worker('compute-worker.js');
+    
+    // Execute extension code
+    compartment.evaluate(extensionCode);
+  </script>
+`;
+```
+
+This defense-in-depth approach provides:
+
+- **iframe**: Process-level isolation
+- **SES**: Capability-based security
+- **Proxy**: Fine-grained API control and auditing
+- **Web Worker**: Parallel execution without DOM access
 
 ### Sandboxing Library Comparison
 
@@ -2269,6 +3478,10 @@ class PermissionManager {
 *For permission UI patterns, see Section 2.2. For audit logging, see Section 6.3.*
 
 ## API Surface
+
+### Purpose
+
+The API surface provides a carefully curated set of functions, hooks, and interfaces that define how extensions interact with the dashboard framework, serving as the contract between the core system and third-party code. This API represents the framework's public interface—the stable, versioned, documented set of capabilities that extensions can depend on across releases—and is designed with several critical goals in mind: minimalism (exposing only necessary functionality to reduce attack surface and maintenance burden), type safety (comprehensive TypeScript definitions that catch errors at compile time rather than runtime), explicitness (clear, self-documenting function names and parameters that make code intent obvious), auditability (logging all sensitive operations for security monitoring and debugging), and stability (maintaining backward compatibility through semantic versioning and deprecation policies). The API surface acts as a security boundary, mediating all extension access to core framework capabilities—component registration, state management, event subscription, command execution, data access, and UI manipulation—through well-defined entry points that enforce permissions, validate inputs, and log operations. By controlling what extensions can do through a limited API rather than exposing internal implementation details, the framework maintains flexibility to refactor internals, optimize performance, and fix bugs without breaking extensions. The API is organized into logical namespaces (components, commands, state, events, storage, network) that group related functionality, uses consistent patterns across all endpoints (promise-based async operations, error handling conventions, naming schemes), and provides both low-level primitives for advanced use cases and high-level convenience functions for common patterns. This thoughtful API design ensures that extension developers have the power they need while the framework maintains the control it requires for security, stability, and evolution.
 
 ### API Design Principles
 
@@ -2441,7 +3654,7 @@ function getExtensionTrust(extension: Extension): ExtensionTrust {
 
 # Advanced Features
 
-Modern BI dashboard capabilities including canvas interfaces, SQL integration, real-time collaboration, and performance optimization.
+Modern BI dashboard capabilities that elevate the framework beyond traditional static dashboards into a sophisticated, interactive data exploration and collaboration platform. This section covers advanced architectural patterns and features that distinguish cutting-edge BI tools from conventional reporting systems: **Canvas Architecture** for infinite, free-form workspace layouts inspired by tools like Count.co and tldraw, enabling users to arrange visualizations spatially rather than being constrained by rigid grid systems; **SQL Integration** that treats SQL as a first-class language alongside the DSL and JavaScript, with live query execution, result caching, and intelligent query optimization; **Real-Time Collaboration** enabling multiple users to work simultaneously on the same dashboard with operational transformation for conflict resolution, presence awareness showing who's viewing what, and live cursors tracking collaborator actions; **Performance Optimization** strategies including virtualization for rendering only visible elements, memoization to prevent unnecessary re-renders, code splitting for faster initial loads, and Web Workers for offloading CPU-intensive computations; **Time-Travel Debugging** that records application state over time, allowing developers to step backward through state changes to diagnose issues; **Offline Support** through service workers and local-first architecture, ensuring dashboards remain functional without network connectivity; and **Advanced Data Processing** with DuckDB WASM for in-browser analytics on large datasets, streaming data support for real-time updates, and incremental computation for efficient reactive updates. These advanced features transform the BI Dashboard Framework from a simple visualization tool into a comprehensive platform for data analysis, enabling workflows that were previously only possible in desktop applications or specialized tools. Each feature is designed to integrate seamlessly with the core architecture—canvas interfaces work with the component registry, SQL cells participate in the dependency graph, collaboration syncs through the state management system, and performance optimizations respect the plugin lifecycle—ensuring that advanced capabilities enhance rather than complicate the developer experience.
 
 ---
 
@@ -2449,7 +3662,7 @@ Modern BI dashboard capabilities including canvas interfaces, SQL integration, r
 
 ### Overview
 
-Canvas-based interfaces (inspired by Count.co and tldraw) provide infinite workspace for flexible data exploration and visualization.
+Canvas-based interfaces (inspired by Count.co and tldraw) provide infinite workspace for flexible data exploration and visualization, fundamentally reimagining how users interact with dashboards by replacing traditional fixed-grid layouts with a boundless, zoomable canvas where visualizations, data tables, text annotations, and interactive elements can be positioned freely in two-dimensional space. This canvas paradigm mirrors physical whiteboards and design tools like Figma or Miro, creating an intuitive spatial environment where users can organize information according to their mental models rather than conforming to predetermined layouts. The infinite canvas architecture enables powerful workflows: users can zoom out to see the big picture of an entire analysis, zoom in to focus on specific details, pan across different sections of a dashboard, group related visualizations spatially, draw connections between data points, and create hierarchical layouts where high-level summaries link to detailed drill-downs positioned nearby. This approach is particularly valuable for exploratory data analysis, where the structure of the analysis emerges organically as users investigate data, add visualizations, annotate findings, and reorganize elements to tell a coherent story. The technical implementation leverages HTML5 Canvas or WebGL for high-performance rendering, viewport transformation matrices for smooth pan and zoom, spatial indexing (R-trees or quadtrees) for efficient collision detection and visibility queries, and virtualization to render only elements within the visible viewport, ensuring performance even with hundreds of visualization cells. The canvas system integrates deeply with the framework's component architecture—any registered component can be instantiated as a canvas cell, cells can communicate through the event system, state changes trigger selective re-renders, and the entire canvas state serializes for persistence and collaboration. This canvas-first approach represents a significant evolution in BI dashboard design, moving from static report layouts to dynamic, explorable workspaces that adapt to user needs rather than imposing rigid structure.
 
 ### Infinite Canvas Pattern
 
@@ -2853,7 +4066,1572 @@ async function loadCollaboration() {
 
 # Data Persistence
 
-Configuration and data persistence strategies for the framework.
+Comprehensive data persistence architecture for the BI Dashboard Framework, encompassing configuration management, user preferences, dashboard state, query results, cached data, and application metadata. Data Persistence represents one of the most critical architectural concerns in modern web applications, particularly for data-intensive BI tools where users expect their work to be preserved across sessions, synchronized across devices, and accessible even when offline. This system must balance competing requirements: performance (fast reads and writes), reliability (no data loss), scalability (handle large datasets), security (encrypt sensitive data), and user experience (seamless synchronization, conflict resolution, offline support). The framework implements a multi-tiered persistence strategy that leverages browser storage APIs (localStorage, IndexedDB, Cache API), optional cloud backends (REST APIs, WebSocket for real-time sync), and intelligent caching layers to provide optimal performance while ensuring data durability. Unlike traditional server-centric applications where persistence is straightforward—write to database, read from database—client-side web applications face unique challenges including storage quota limits (typically 50MB-1GB depending on browser), lack of transactions across storage types, browser-specific quirks and bugs, and the need to handle offline scenarios gracefully. The Data Persistence architecture addresses these challenges through careful storage selection (localStorage for small key-value data, IndexedDB for structured data and large objects, Cache API for HTTP responses), intelligent quota management (compression, cleanup policies, user notifications), and robust error handling (fallbacks, retries, user-facing error messages). This section explores the complete persistence stack from low-level storage APIs through high-level abstractions like settings management and state synchronization, providing architectural guidance, implementation patterns, performance optimizations, and security best practices for building a production-grade BI dashboard framework.
+
+## Overview
+
+### Persistence Layers
+
+The framework implements a three-tier persistence architecture, each layer serving distinct purposes with specific trade-offs:
+
+**1. Client-Side Persistence (Browser Storage)**
+- **Purpose**: Immediate access, offline support, reduced server load
+- **Technologies**: localStorage, IndexedDB, Cache API, Service Workers
+- **Use Cases**: User preferences, dashboard layouts, cached query results, offline data
+- **Advantages**: Fast access, works offline, reduces network traffic
+- **Limitations**: Storage quotas (50MB-1GB), browser-specific, no cross-device sync
+- **Data Types**: Settings, UI state, cached responses, temporary data
+
+**2. Server-Side Persistence (Cloud Storage)**
+- **Purpose**: Cross-device sync, backup, collaboration, unlimited storage
+- **Technologies**: PostgreSQL, MongoDB, S3, Redis
+- **Use Cases**: Shared dashboards, user accounts, large datasets, audit logs
+- **Advantages**: Unlimited storage, cross-device access, backup/recovery
+- **Limitations**: Network latency, requires connectivity, server costs
+- **Data Types**: User accounts, shared resources, historical data, backups
+
+**3. Hybrid Persistence (Offline-First with Sync)**
+- **Purpose**: Best of both worlds—offline capability with cloud backup
+- **Technologies**: IndexedDB + REST API, Service Worker + Background Sync
+- **Use Cases**: Collaborative dashboards, mobile access, unreliable networks
+- **Advantages**: Works offline, syncs when online, conflict resolution
+- **Limitations**: Complex implementation, sync conflicts, storage management
+- **Data Types**: Dashboards, queries, annotations, user-generated content
+
+### Storage Technology Comparison
+
+| Technology | Capacity | API Type | Use Case | Persistence | Performance |
+|------------|----------|----------|----------|-------------|-------------|
+| **localStorage** | ~5-10MB | Synchronous | Small key-value data | Permanent | Fast (in-memory) |
+| **sessionStorage** | ~5-10MB | Synchronous | Temporary session data | Session only | Fast (in-memory) |
+| **IndexedDB** | ~50MB-1GB+ | Asynchronous | Structured data, large objects | Permanent | Fast (indexed queries) |
+| **Cache API** | ~50MB-1GB+ | Asynchronous (Promise) | HTTP responses, assets | Permanent | Very fast (optimized for HTTP) |
+| **Web SQL** | ~50MB | Asynchronous (callback) | ⚠️ Deprecated | Permanent | Fast (SQL queries) |
+| **File System API** | User-granted | Asynchronous (Promise) | Large files, user documents | Permanent | Fast (native FS) |
+
+### Data Categories
+
+The framework persists several distinct categories of data, each with different requirements:
+
+**1. Configuration Data**
+- User preferences (theme, language, timezone)
+- Application settings (auto-save, notifications)
+- Workspace configurations (panel layouts, shortcuts)
+- **Size**: Small (1-100KB)
+- **Update Frequency**: Low (occasional changes)
+- **Storage**: localStorage or IndexedDB
+- **Sync**: Optional cloud backup
+
+**2. Dashboard State**
+- Dashboard definitions (layouts, components, queries)
+- Filter states and selections
+- Drill-down paths and navigation history
+- **Size**: Medium (100KB-10MB)
+- **Update Frequency**: Medium (frequent edits)
+- **Storage**: IndexedDB with versioning
+- **Sync**: Required for collaboration
+
+**3. Query Results**
+- Cached data from database queries
+- Aggregated metrics and calculations
+- Time-series data for charts
+- **Size**: Large (1MB-100MB+)
+- **Update Frequency**: High (real-time updates)
+- **Storage**: IndexedDB with TTL expiration
+- **Sync**: Not synced (regenerated on-demand)
+
+**4. User-Generated Content**
+- Annotations and comments
+- Custom calculations and formulas
+- Saved filters and bookmarks
+- **Size**: Small to Medium (1KB-1MB)
+- **Update Frequency**: Low to Medium
+- **Storage**: IndexedDB + server backup
+- **Sync**: Required for sharing
+
+**5. Application Metadata**
+- Audit logs and usage analytics
+- Error reports and diagnostics
+- Performance metrics
+- **Size**: Medium (100KB-10MB)
+- **Update Frequency**: High (continuous logging)
+- **Storage**: IndexedDB with rotation
+- **Sync**: Periodic upload to server
+
+### Persistence Strategies
+
+Choosing the right persistence strategy is critical for balancing data safety, performance, and user experience. The BI Dashboard Framework supports multiple persistence patterns, each optimized for different data types, update frequencies, and criticality levels. The strategy selection depends on several factors: how frequently the data changes (high-frequency updates benefit from debouncing), how critical the data is (user settings require immediate persistence), whether the operation is user-initiated or automatic (manual vs. automatic saves), network availability (offline scenarios need local-first approaches), and performance constraints (large datasets may require background processing). Modern applications often employ a hybrid approach, using different strategies for different data categories—immediate persistence for critical settings, debounced persistence for UI state, periodic auto-save for documents, and optimistic updates for collaborative features. Understanding these patterns and their trade-offs enables developers to build robust persistence layers that feel responsive while ensuring data durability.
+
+#### Strategy Comparison Matrix
+
+| Strategy | Data Safety | Performance | UX Impact | Complexity | Best Use Case |
+|----------|-------------|-------------|-----------|------------|---------------|
+| **Immediate** | Highest | Low (blocking) | Noticeable lag | Low | Critical settings, explicit saves |
+| **Debounced** | High | High | Smooth | Medium | Frequently changing UI state |
+| **Periodic** | Medium | High | Transparent | Low | Auto-save, draft preservation |
+| **Manual** | Variable | Highest | Requires action | Low | Power-user tools, large documents |
+| **Optimistic** | High | Highest | Seamless | High | Collaborative editing, real-time sync |
+| **Lazy** | Low | Highest | Transparent | Medium | Non-critical cache, prefetch data |
+| **Transactional** | Highest | Medium | Depends | High | Multi-step operations, data integrity |
+
+#### 1. Immediate Persistence
+
+Write data to storage synchronously or with minimal delay immediately after every change, ensuring maximum data safety at the cost of performance.
+
+**Characteristics**
+- Zero or minimal delay between change and persistence
+- Blocks UI until write completes (if synchronous)
+- Guarantees data is saved before next operation
+- Simple error handling (fail immediately)
+
+**Implementation Patterns**
+
+```typescript
+// Pattern 1: Synchronous localStorage (simple, blocking)
+function saveSettingImmediate(key: string, value: any) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    handleStorageError(error);
+  }
+}
+
+// Pattern 2: Immediate IndexedDB (async, non-blocking)
+async function saveDashboardImmediate(dashboard: Dashboard) {
+  const db = await openDB('dashboards');
+  const tx = db.transaction('dashboards', 'readwrite');
+  
+  try {
+    await tx.objectStore('dashboards').put(dashboard);
+    await tx.done;
+    showSuccessNotification('Dashboard saved');
+  } catch (error) {
+    showErrorNotification('Failed to save dashboard');
+    throw error;
+  }
+}
+
+// Pattern 3: Immediate with optimistic UI update
+async function updateSettingImmediate(key: string, value: any) {
+  // Update UI immediately
+  updateUIState(key, value);
+  
+  try {
+    // Persist to storage
+    await persistToIndexedDB(key, value);
+  } catch (error) {
+    // Rollback UI on failure
+    revertUIState(key);
+    showErrorNotification('Failed to save setting');
+  }
+}
+```
+
+**Use Cases**
+- User explicitly clicks "Save" button
+- Critical settings (security preferences, data source credentials)
+- One-time configuration changes
+- Small data payloads (<10KB)
+- When data loss is unacceptable
+
+**Advantages**
+- Maximum data safety—no risk of losing unsaved changes
+- Simple mental model for users (save = persisted)
+- Immediate feedback on storage errors
+- No complex timing logic required
+
+**Disadvantages**
+- Performance overhead on every change
+- Can cause UI lag if persistence is slow
+- May trigger excessive writes for rapid changes
+- Synchronous operations block the main thread
+
+#### 2. Debounced Persistence
+
+Batch multiple rapid changes and persist only after a quiet period (e.g., 500ms-2s after last change), optimizing for performance while maintaining reasonable data safety.
+
+**Characteristics**
+- Delays persistence until user stops making changes
+- Cancels pending writes when new changes occur
+- Reduces write frequency for rapid successive updates
+- Balances performance and data safety
+
+**Implementation Patterns**
+
+```typescript
+// Pattern 1: Basic debounce with lodash
+import { debounce } from 'lodash';
+
+const debouncedSave = debounce(async (data: any) => {
+  await persistToIndexedDB(data);
+}, 1000); // Wait 1s after last change
+
+function onFilterChange(filter: Filter) {
+  updateUIState(filter);
+  debouncedSave(filter);
+}
+
+// Pattern 2: Custom debounce with TypeScript
+function createDebouncedPersistence<T>(
+  persistFn: (data: T) => Promise<void>,
+  delay: number = 1000
+) {
+  let timeoutId: number | null = null;
+  let pendingData: T | null = null;
+
+  return {
+    save: (data: T) => {
+      pendingData = data;
+      
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+      
+      timeoutId = window.setTimeout(async () => {
+        if (pendingData !== null) {
+          try {
+            await persistFn(pendingData);
+            pendingData = null;
+          } catch (error) {
+            console.error('Debounced save failed:', error);
+          }
+        }
+        timeoutId = null;
+      }, delay);
+    },
+    
+    flush: async () => {
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      if (pendingData !== null) {
+        await persistFn(pendingData);
+        pendingData = null;
+      }
+    },
+    
+    cancel: () => {
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      pendingData = null;
+    }
+  };
+}
+
+// Usage
+const dashboardPersistence = createDebouncedPersistence(
+  async (dashboard: Dashboard) => {
+    await saveDashboardToIndexedDB(dashboard);
+  },
+  1500
+);
+
+// Save changes with debouncing
+function onDashboardEdit(dashboard: Dashboard) {
+  updateUIState(dashboard);
+  dashboardPersistence.save(dashboard);
+}
+
+// Force immediate save on navigation
+window.addEventListener('beforeunload', () => {
+  dashboardPersistence.flush();
+});
+
+// Pattern 3: Debounce with leading edge (save immediately, then debounce)
+function createLeadingDebounce<T>(
+  persistFn: (data: T) => Promise<void>,
+  delay: number = 1000
+) {
+  let timeoutId: number | null = null;
+  let lastSaveTime = 0;
+
+  return async (data: T) => {
+    const now = Date.now();
+    const timeSinceLastSave = now - lastSaveTime;
+    
+    // Save immediately if enough time has passed
+    if (timeSinceLastSave > delay) {
+      lastSaveTime = now;
+      await persistFn(data);
+      return;
+    }
+    
+    // Otherwise, debounce
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+    }
+    
+    timeoutId = window.setTimeout(async () => {
+      lastSaveTime = Date.now();
+      await persistFn(data);
+      timeoutId = null;
+    }, delay);
+  };
+}
+```
+
+**Use Cases**
+- Text input fields (search queries, filter values)
+- Slider controls (adjusting chart parameters)
+- Drag-and-drop positioning (panel layouts)
+- Frequently changing UI state (scroll positions, zoom levels)
+- Form fields with auto-save
+
+**Advantages**
+- Reduces write frequency (better performance)
+- Smooth user experience (no lag on each keystroke)
+- Automatically batches rapid changes
+- Lower storage wear and tear
+
+**Disadvantages**
+- Potential data loss if browser crashes during delay
+- Complexity in managing pending writes
+- Requires careful handling of navigation/logout
+- May confuse users about save state
+
+**Best Practices**
+- Use 500ms-2s delay depending on data criticality
+- Flush pending writes on `beforeunload` event
+- Show "Saving..." indicator during debounce period
+- Provide manual "Save Now" option for user control
+- Consider leading-edge debounce for immediate feedback
+
+#### 3. Periodic Persistence
+
+Save data at fixed time intervals (e.g., every 30 seconds) regardless of whether changes occurred, providing predictable auto-save behavior.
+
+**Characteristics**
+- Saves on a fixed schedule (e.g., every 30s, 1min, 5min)
+- Independent of user actions
+- Predictable save points
+- May save unchanged data (wasteful)
+
+**Implementation Patterns**
+
+```typescript
+// Pattern 1: Simple interval-based auto-save
+class AutoSaveManager {
+  private intervalId: number | null = null;
+  private isDirty = false;
+  private currentData: any = null;
+
+  start(interval: number = 30000) {
+    this.intervalId = window.setInterval(async () => {
+      if (this.isDirty && this.currentData) {
+        await this.save();
+      }
+    }, interval);
+  }
+
+  markDirty(data: any) {
+    this.isDirty = true;
+    this.currentData = data;
+  }
+
+  private async save() {
+    try {
+      await persistToIndexedDB(this.currentData);
+      this.isDirty = false;
+      showAutoSaveIndicator('Saved at ' + new Date().toLocaleTimeString());
+    } catch (error) {
+      showAutoSaveIndicator('Auto-save failed');
+    }
+  }
+
+  stop() {
+    if (this.intervalId !== null) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+  }
+
+  async forceSave() {
+    if (this.isDirty) {
+      await this.save();
+    }
+  }
+}
+
+// Usage
+const autoSave = new AutoSaveManager();
+autoSave.start(30000); // Auto-save every 30 seconds
+
+function onDocumentEdit(document: Document) {
+  updateUIState(document);
+  autoSave.markDirty(document);
+}
+
+// Pattern 2: Adaptive interval (adjust based on activity)
+class AdaptiveAutoSave {
+  private intervalId: number | null = null;
+  private baseInterval = 30000; // 30 seconds
+  private activeInterval = 10000; // 10 seconds when active
+  private inactiveInterval = 60000; // 1 minute when inactive
+  private lastActivityTime = Date.now();
+  private currentData: any = null;
+
+  start() {
+    this.updateInterval();
+  }
+
+  onActivity(data: any) {
+    this.lastActivityTime = Date.now();
+    this.currentData = data;
+    this.updateInterval();
+  }
+
+  private updateInterval() {
+    const timeSinceActivity = Date.now() - this.lastActivityTime;
+    const interval = timeSinceActivity < 60000 
+      ? this.activeInterval 
+      : this.inactiveInterval;
+
+    if (this.intervalId !== null) {
+      clearInterval(this.intervalId);
+    }
+
+    this.intervalId = window.setInterval(async () => {
+      if (this.currentData) {
+        await persistToIndexedDB(this.currentData);
+      }
+      this.updateInterval(); // Re-evaluate interval
+    }, interval);
+  }
+
+  stop() {
+    if (this.intervalId !== null) {
+      clearInterval(this.intervalId);
+    }
+  }
+}
+
+// Pattern 3: Periodic with version history
+class VersionedAutoSave {
+  private intervalId: number | null = null;
+  private maxVersions = 10;
+
+  start(interval: number = 30000) {
+    this.intervalId = window.setInterval(async () => {
+      await this.saveVersion();
+    }, interval);
+  }
+
+  private async saveVersion() {
+    const currentState = getCurrentDashboardState();
+    const version = {
+      timestamp: Date.now(),
+      data: currentState,
+      id: generateVersionId(),
+    };
+
+    const db = await openDB('versions');
+    const tx = db.transaction('versions', 'readwrite');
+    await tx.objectStore('versions').add(version);
+    
+    // Cleanup old versions
+    await this.cleanupOldVersions();
+  }
+
+  private async cleanupOldVersions() {
+    const db = await openDB('versions');
+    const versions = await db.getAll('versions');
+    
+    if (versions.length > this.maxVersions) {
+      const toDelete = versions
+        .sort((a, b) => a.timestamp - b.timestamp)
+        .slice(0, versions.length - this.maxVersions);
+      
+      const tx = db.transaction('versions', 'readwrite');
+      for (const version of toDelete) {
+        await tx.objectStore('versions').delete(version.id);
+      }
+    }
+  }
+}
+```
+
+**Use Cases**
+- Document editors (Google Docs-style auto-save)
+- Long-form content creation
+- Dashboard builder with complex state
+- Applications with unreliable manual saves
+- Compliance requirements (regular backups)
+
+**Advantages**
+- Predictable save behavior (users know when saves occur)
+- Simple implementation (just setInterval)
+- Works even if user forgets to save
+- Can implement version history easily
+
+**Disadvantages**
+- May lose up to interval duration of work
+- Wastes resources saving unchanged data
+- Fixed interval may not match user activity patterns
+- Can interfere with user actions if not careful
+
+**Best Practices**
+- Use 30-60 second intervals for documents
+- Only save if data has changed (dirty flag)
+- Show visual indicator of last auto-save time
+- Pause auto-save during intensive operations
+- Provide manual save option alongside auto-save
+
+#### 4. Manual Persistence
+
+User explicitly triggers save operations via UI controls (buttons, keyboard shortcuts), giving users full control over when data is persisted.
+
+**Characteristics**
+- User initiates all save operations
+- No automatic persistence
+- Clear save/unsaved state indication
+- Familiar desktop application model
+
+**Implementation Patterns**
+
+```typescript
+// Pattern 1: Basic manual save with dirty tracking
+class ManualSaveManager {
+  private isDirty = false;
+  private currentData: any = null;
+  private saveButton: HTMLButtonElement;
+
+  constructor(saveButtonId: string) {
+    this.saveButton = document.getElementById(saveButtonId) as HTMLButtonElement;
+    this.saveButton.addEventListener('click', () => this.save());
+    
+    // Warn on navigation if unsaved changes
+    window.addEventListener('beforeunload', (e) => {
+      if (this.isDirty) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+      }
+    });
+  }
+
+  onChange(data: any) {
+    this.currentData = data;
+    this.markDirty();
+  }
+
+  private markDirty() {
+    this.isDirty = true;
+    this.saveButton.disabled = false;
+    this.saveButton.textContent = 'Save *';
+    document.title = '* ' + document.title.replace(/^\* /, '');
+  }
+
+  private markClean() {
+    this.isDirty = false;
+    this.saveButton.disabled = true;
+    this.saveButton.textContent = 'Saved';
+    document.title = document.title.replace(/^\* /, '');
+  }
+
+  async save() {
+    if (!this.isDirty) return;
+
+    try {
+      this.saveButton.textContent = 'Saving...';
+      this.saveButton.disabled = true;
+      
+      await persistToIndexedDB(this.currentData);
+      
+      this.markClean();
+      showNotification('Changes saved successfully');
+    } catch (error) {
+      this.saveButton.disabled = false;
+      this.saveButton.textContent = 'Save (failed)';
+      showErrorNotification('Failed to save changes');
+      throw error;
+    }
+  }
+
+  hasUnsavedChanges(): boolean {
+    return this.isDirty;
+  }
+}
+
+// Pattern 2: Keyboard shortcut support (Ctrl+S)
+class KeyboardSaveManager extends ManualSaveManager {
+  constructor(saveButtonId: string) {
+    super(saveButtonId);
+    
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        this.save();
+      }
+    });
+  }
+}
+
+// Pattern 3: Command palette integration
+interface SaveCommand {
+  id: string;
+  name: string;
+  shortcut: string;
+  execute: () => Promise<void>;
+}
+
+class CommandBasedSave {
+  private commands: Map<string, SaveCommand> = new Map();
+
+  registerSaveCommand(command: SaveCommand) {
+    this.commands.set(command.id, command);
+  }
+
+  async executeSave(commandId: string) {
+    const command = this.commands.get(commandId);
+    if (command) {
+      await command.execute();
+    }
+  }
+}
+
+// Usage
+const saveManager = new CommandBasedSave();
+
+saveManager.registerSaveCommand({
+  id: 'save-dashboard',
+  name: 'Save Dashboard',
+  shortcut: 'Ctrl+S',
+  execute: async () => {
+    await saveDashboard(getCurrentDashboard());
+  }
+});
+
+saveManager.registerSaveCommand({
+  id: 'save-as',
+  name: 'Save Dashboard As...',
+  shortcut: 'Ctrl+Shift+S',
+  execute: async () => {
+    const name = await promptForDashboardName();
+    await saveDashboardAs(getCurrentDashboard(), name);
+  }
+});
+```
+
+**Use Cases**
+- Power-user tools (IDEs, design software)
+- Large documents where auto-save is expensive
+- Applications with complex save logic
+- When users need explicit control
+- Desktop-like applications
+
+**Advantages**
+- User has full control over persistence
+- No unexpected saves during editing
+- Minimal performance overhead (save only when needed)
+- Clear mental model (familiar to desktop users)
+
+**Disadvantages**
+- Users must remember to save (risk of data loss)
+- Requires UI elements (save button, indicators)
+- Poor UX for web applications (users expect auto-save)
+- Need to handle navigation/close events
+
+**Best Practices**
+- Show clear unsaved changes indicator (* in title)
+- Support Ctrl+S keyboard shortcut
+- Warn on navigation if unsaved changes exist
+- Disable save button when no changes
+- Provide "Save As" for creating copies
+
+#### 5. Optimistic Persistence
+
+Update UI immediately while persisting asynchronously in the background, providing the best user experience with eventual consistency guarantees.
+
+**Characteristics**
+- UI updates instantly (no waiting for persistence)
+- Persistence happens asynchronously
+- Requires rollback mechanism on failure
+- Eventual consistency model
+
+**Implementation Patterns**
+
+```typescript
+// Pattern 1: Optimistic update with rollback
+class OptimisticPersistence<T> {
+  private previousState: T | null = null;
+
+  async update(
+    newState: T,
+    updateUI: (state: T) => void,
+    persist: (state: T) => Promise<void>
+  ) {
+    // Save current state for potential rollback
+    this.previousState = getCurrentState<T>();
+    
+    // Update UI immediately
+    updateUI(newState);
+    
+    try {
+      // Persist asynchronously
+      await persist(newState);
+    } catch (error) {
+      // Rollback on failure
+      if (this.previousState) {
+        updateUI(this.previousState);
+        showErrorNotification('Failed to save changes. Reverted to previous state.');
+      }
+      throw error;
+    }
+  }
+}
+
+// Usage
+const optimistic = new OptimisticPersistence<Dashboard>();
+
+async function updateDashboardTitle(newTitle: string) {
+  const dashboard = getCurrentDashboard();
+  dashboard.title = newTitle;
+  
+  await optimistic.update(
+    dashboard,
+    (state) => renderDashboard(state),
+    (state) => saveDashboardToServer(state)
+  );
+}
+
+// Pattern 2: Queue-based optimistic updates
+class OptimisticQueue<T> {
+  private queue: Array<{
+    id: string;
+    operation: () => Promise<void>;
+    rollback: () => void;
+  }> = [];
+  private processing = false;
+
+  async enqueue(
+    id: string,
+    optimisticUpdate: () => void,
+    persistOperation: () => Promise<void>,
+    rollbackOperation: () => void
+  ) {
+    // Apply optimistic update immediately
+    optimisticUpdate();
+    
+    // Queue persistence operation
+    this.queue.push({
+      id,
+      operation: persistOperation,
+      rollback: rollbackOperation,
+    });
+    
+    // Process queue
+    this.processQueue();
+  }
+
+  private async processQueue() {
+    if (this.processing || this.queue.length === 0) return;
+    
+    this.processing = true;
+    
+    while (this.queue.length > 0) {
+      const item = this.queue[0];
+      
+      try {
+        await item.operation();
+        this.queue.shift(); // Remove on success
+      } catch (error) {
+        // Rollback and remove from queue
+        item.rollback();
+        this.queue.shift();
+        showErrorNotification(`Operation ${item.id} failed and was rolled back`);
+      }
+    }
+    
+    this.processing = false;
+  }
+
+  clear() {
+    // Rollback all pending operations
+    this.queue.forEach(item => item.rollback());
+    this.queue = [];
+  }
+}
+
+// Pattern 3: Collaborative optimistic updates with conflict resolution
+class CollaborativeOptimistic {
+  private localVersion = 0;
+  private serverVersion = 0;
+
+  async update(change: any) {
+    const localId = ++this.localVersion;
+    
+    // Apply change locally
+    applyChangeLocally(change, localId);
+    
+    try {
+      // Send to server
+      const result = await sendChangeToServer(change, localId);
+      
+      if (result.conflict) {
+        // Server detected conflict, resolve it
+        await this.resolveConflict(result.serverState, change);
+      } else {
+        // Success, update server version
+        this.serverVersion = result.version;
+      }
+    } catch (error) {
+      // Network error, queue for retry
+      queueForRetry(change, localId);
+    }
+  }
+
+  private async resolveConflict(serverState: any, localChange: any) {
+    // Implement conflict resolution strategy
+    const resolved = mergeChanges(serverState, localChange);
+    applyChangeLocally(resolved, ++this.localVersion);
+    await sendChangeToServer(resolved, this.localVersion);
+  }
+}
+```
+
+**Use Cases**
+- Collaborative editing (Google Docs, Figma)
+- Real-time dashboards with live updates
+- Mobile applications with unreliable networks
+- Social media interactions (likes, comments)
+- Any UI requiring instant feedback
+
+**Advantages**
+- Best user experience (instant feedback)
+- Works well with unreliable networks
+- Enables offline-first applications
+- Reduces perceived latency
+
+**Disadvantages**
+- Complex implementation (rollback logic)
+- Requires conflict resolution for collaborative features
+- May confuse users if rollbacks are frequent
+- Difficult to debug
+
+**Best Practices**
+- Always save previous state for rollback
+- Show subtle indicators for pending operations
+- Implement retry logic for network failures
+- Use operational transformation for conflicts
+- Test rollback scenarios thoroughly
+
+#### 6. Lazy Persistence
+
+Defer persistence until absolutely necessary (e.g., when data is about to be evicted from memory or user navigates away), minimizing storage operations.
+
+**Implementation**
+
+```typescript
+class LazyPersistence {
+  private cache = new Map<string, any>();
+  private dirtyKeys = new Set<string>();
+
+  set(key: string, value: any) {
+    this.cache.set(key, value);
+    this.dirtyKeys.add(key);
+  }
+
+  get(key: string): any {
+    return this.cache.get(key);
+  }
+
+  async flush() {
+    const promises = Array.from(this.dirtyKeys).map(async (key) => {
+      const value = this.cache.get(key);
+      await persistToIndexedDB(key, value);
+    });
+    
+    await Promise.all(promises);
+    this.dirtyKeys.clear();
+  }
+}
+
+// Flush on page unload
+window.addEventListener('beforeunload', () => {
+  lazyPersistence.flush();
+});
+```
+
+**Use Cases**
+- Non-critical cache data
+- Temporary UI state
+- Prefetched data
+- Analytics events
+
+#### 7. Transactional Persistence
+
+Group multiple related changes into atomic transactions that either all succeed or all fail, ensuring data consistency.
+
+**Implementation**
+
+```typescript
+class TransactionalPersistence {
+  async executeTransaction(operations: Array<() => Promise<void>>) {
+    const db = await openDB('app');
+    const tx = db.transaction(['dashboards', 'settings'], 'readwrite');
+    
+    try {
+      // Execute all operations within transaction
+      for (const operation of operations) {
+        await operation();
+      }
+      
+      // Commit transaction
+      await tx.done;
+    } catch (error) {
+      // Transaction automatically rolls back on error
+      throw new Error('Transaction failed: ' + error.message);
+    }
+  }
+}
+
+// Usage
+await transactional.executeTransaction([
+  () => saveDashboard(dashboard),
+  () => updateSettings(settings),
+  () => logAuditEvent(event),
+]);
+```
+
+**Use Cases**
+- Multi-step data updates
+- Ensuring referential integrity
+- Financial transactions
+- Critical state changes
+
+### Strategy Selection Guide
+
+Choose persistence strategy based on these criteria:
+
+**Data Criticality**
+- **Critical** (settings, user data): Immediate or Transactional
+- **Important** (dashboards, documents): Debounced or Periodic
+- **Nice-to-have** (UI state, cache): Lazy or Optimistic
+
+**Update Frequency**
+- **High** (>10/sec): Debounced or Lazy
+- **Medium** (1-10/sec): Debounced or Periodic
+- **Low** (<1/sec): Immediate or Manual
+
+**User Expectations**
+- **Desktop-like**: Manual with Ctrl+S
+- **Web-like**: Debounced or Periodic
+- **Real-time**: Optimistic with sync
+
+**Network Dependency**
+- **Offline-capable**: Optimistic with queue
+- **Online-only**: Immediate to server
+- **Hybrid**: Optimistic local + eventual server sync
+
+### Storage Quota Management
+
+Browser storage quotas represent one of the most significant constraints for client-side data persistence, requiring sophisticated management strategies to prevent data loss, maintain application functionality, and provide transparent user experiences. Unlike server-side databases with virtually unlimited storage, browser storage APIs impose strict limits that vary by browser, operating system, available disk space, and user settings. These quotas are designed to prevent malicious websites from consuming excessive disk space, but they create challenges for legitimate applications—particularly data-intensive BI dashboards that cache large query results, store extensive dashboard configurations, and maintain offline-capable datasets. The framework must implement proactive quota monitoring to detect approaching limits before they cause failures, intelligent cleanup policies to automatically reclaim space from stale or low-priority data, user-facing notifications that explain storage usage and provide actionable remediation options, and graceful degradation strategies that maintain core functionality even when storage is exhausted. Effective quota management requires understanding browser-specific behaviors (Safari's aggressive eviction policies, Chrome's generous quotas, Firefox's user prompts), implementing prioritization schemes that preserve critical data while sacrificing cache, and providing escape hatches like cloud sync or data export when local storage proves insufficient.
+
+#### Quota Limits by Browser
+
+Different browsers implement vastly different storage quota policies, requiring applications to adapt their persistence strategies accordingly:
+
+**Desktop Browsers**
+
+| Browser | Quota Calculation | Typical Limit | Eviction Policy | User Prompts |
+|---------|-------------------|---------------|-----------------|---------------|
+| **Chrome/Edge** | ~60% of available disk space | 2-10GB+ (varies by disk) | Best-effort (rarely evicts) | No prompt for quota increase |
+| **Firefox** | ~50% of available disk space | 2GB default, up to 8GB | Persistent (won't evict without permission) | Prompts at 50MB, 100MB thresholds |
+| **Safari** | Fixed limit | ~1GB | Aggressive (evicts after 7 days of inactivity) | Prompts for quota increase |
+| **Opera** | Similar to Chrome | 2-10GB+ | Best-effort | No prompt |
+
+**Mobile Browsers**
+
+| Browser | Quota Calculation | Typical Limit | Eviction Policy | Considerations |
+|---------|-------------------|---------------|-----------------|----------------|
+| **Chrome Mobile** | ~60% of available space | 50-500MB (device-dependent) | Best-effort | Limited by device storage |
+| **Safari iOS** | Fixed limit | ~50-100MB | Very aggressive (evicts quickly) | Extremely limited |
+| **Firefox Mobile** | ~50% of available space | 100-500MB | Persistent | Better than Safari |
+| **Samsung Internet** | Similar to Chrome | 50-500MB | Best-effort | Android storage limits |
+
+**Storage API Quota Estimation**
+
+```typescript
+interface StorageEstimate {
+  quota?: number;      // Total available storage in bytes
+  usage?: number;      // Currently used storage in bytes
+  usageDetails?: {     // Breakdown by storage type
+    indexedDB?: number;
+    caches?: number;
+    serviceWorkerRegistrations?: number;
+  };
+}
+
+// Check current quota status
+const estimate: StorageEstimate = await navigator.storage.estimate();
+console.log(`Using ${estimate.usage} of ${estimate.quota} bytes`);
+console.log(`Percentage used: ${(estimate.usage! / estimate.quota!) * 100}%`);
+```
+
+#### Quota Management Strategies
+
+The framework implements a multi-layered approach to quota management, combining proactive monitoring, automatic cleanup, user notifications, and graceful degradation.
+
+**1. Proactive Monitoring**
+
+Continuously track storage usage and predict when quota limits will be reached, enabling preemptive action before failures occur.
+
+```typescript
+class QuotaMonitor {
+  private checkInterval = 60000; // Check every minute
+  private thresholds = {
+    warning: 0.75,    // 75% - show warning
+    critical: 0.90,   // 90% - trigger cleanup
+    emergency: 0.95,  // 95% - aggressive cleanup
+  };
+  private listeners: Array<(status: QuotaStatus) => void> = [];
+
+  async start() {
+    // Initial check
+    await this.checkQuota();
+    
+    // Periodic monitoring
+    setInterval(() => this.checkQuota(), this.checkInterval);
+    
+    // Check before large writes
+    this.interceptStorageOperations();
+  }
+
+  private async checkQuota(): Promise<QuotaStatus> {
+    const estimate = await navigator.storage.estimate();
+    const percentUsed = (estimate.usage! / estimate.quota!) * 100;
+    
+    const status: QuotaStatus = {
+      usage: estimate.usage!,
+      quota: estimate.quota!,
+      percentUsed,
+      available: estimate.quota! - estimate.usage!,
+      level: this.determineLevel(percentUsed),
+      breakdown: estimate.usageDetails,
+    };
+    
+    // Notify listeners
+    this.notifyListeners(status);
+    
+    // Take action based on level
+    await this.handleQuotaLevel(status);
+    
+    return status;
+  }
+
+  private determineLevel(percentUsed: number): QuotaLevel {
+    if (percentUsed >= this.thresholds.emergency) return 'emergency';
+    if (percentUsed >= this.thresholds.critical) return 'critical';
+    if (percentUsed >= this.thresholds.warning) return 'warning';
+    return 'normal';
+  }
+
+  private async handleQuotaLevel(status: QuotaStatus) {
+    switch (status.level) {
+      case 'warning':
+        showNotification('Storage space running low', 'warning');
+        break;
+      
+      case 'critical':
+        showNotification('Storage space critically low. Cleaning up...', 'error');
+        await this.performCleanup('moderate');
+        break;
+      
+      case 'emergency':
+        showNotification('Storage full! Performing emergency cleanup.', 'error');
+        await this.performCleanup('aggressive');
+        break;
+    }
+  }
+
+  private interceptStorageOperations() {
+    // Wrap IndexedDB operations to check quota before writes
+    const originalPut = IDBObjectStore.prototype.put;
+    IDBObjectStore.prototype.put = async function(value: any, key?: any) {
+      const estimate = await navigator.storage.estimate();
+      const percentUsed = (estimate.usage! / estimate.quota!) * 100;
+      
+      if (percentUsed > 95) {
+        throw new Error('Storage quota exceeded. Cannot save data.');
+      }
+      
+      return originalPut.call(this, value, key);
+    };
+  }
+
+  subscribe(listener: (status: QuotaStatus) => void) {
+    this.listeners.push(listener);
+  }
+
+  private notifyListeners(status: QuotaStatus) {
+    this.listeners.forEach(listener => listener(status));
+  }
+}
+
+interface QuotaStatus {
+  usage: number;
+  quota: number;
+  percentUsed: number;
+  available: number;
+  level: QuotaLevel;
+  breakdown?: {
+    indexedDB?: number;
+    caches?: number;
+    serviceWorkerRegistrations?: number;
+  };
+}
+
+type QuotaLevel = 'normal' | 'warning' | 'critical' | 'emergency';
+```
+
+**2. Automatic Cleanup**
+
+Implement intelligent cleanup policies that automatically reclaim storage space from low-priority or stale data.
+
+```typescript
+class StorageCleanupManager {
+  private cleanupPolicies: CleanupPolicy[] = [
+    // Policy 1: TTL-based expiration
+    {
+      name: 'expired-cache',
+      priority: 1,
+      execute: async () => {
+        const db = await openDB('cache');
+        const now = Date.now();
+        const expired = await db.getAllFromIndex(
+          'cache',
+          'expiresAt',
+          IDBKeyRange.upperBound(now)
+        );
+        
+        for (const item of expired) {
+          await db.delete('cache', item.id);
+        }
+        
+        return { deletedCount: expired.length, bytesFreed: this.calculateSize(expired) };
+      },
+    },
+    
+    // Policy 2: LRU eviction for query results
+    {
+      name: 'lru-queries',
+      priority: 2,
+      execute: async () => {
+        const db = await openDB('queries');
+        const queries = await db.getAll('queries');
+        
+        // Sort by last access time
+        queries.sort((a, b) => a.lastAccessedAt - b.lastAccessedAt);
+        
+        // Remove oldest 25%
+        const toDelete = queries.slice(0, Math.floor(queries.length * 0.25));
+        
+        for (const query of toDelete) {
+          await db.delete('queries', query.id);
+        }
+        
+        return { deletedCount: toDelete.length, bytesFreed: this.calculateSize(toDelete) };
+      },
+    },
+    
+    // Policy 3: Compress large objects
+    {
+      name: 'compress-large-objects',
+      priority: 3,
+      execute: async () => {
+        const db = await openDB('dashboards');
+        const dashboards = await db.getAll('dashboards');
+        let bytesFreed = 0;
+        
+        for (const dashboard of dashboards) {
+          const serialized = JSON.stringify(dashboard);
+          if (serialized.length > 100000) { // > 100KB
+            const compressed = await this.compress(serialized);
+            const savings = serialized.length - compressed.length;
+            
+            if (savings > 0) {
+              await db.put('dashboards', {
+                ...dashboard,
+                _compressed: true,
+                data: compressed,
+              });
+              bytesFreed += savings;
+            }
+          }
+        }
+        
+        return { deletedCount: 0, bytesFreed };
+      },
+    },
+    
+    // Policy 4: Remove old versions
+    {
+      name: 'old-versions',
+      priority: 4,
+      execute: async () => {
+        const db = await openDB('versions');
+        const versions = await db.getAll('versions');
+        
+        // Keep only last 5 versions per dashboard
+        const grouped = this.groupBy(versions, 'dashboardId');
+        let deletedCount = 0;
+        let bytesFreed = 0;
+        
+        for (const [dashboardId, dashboardVersions] of Object.entries(grouped)) {
+          const sorted = dashboardVersions.sort((a, b) => b.timestamp - a.timestamp);
+          const toDelete = sorted.slice(5); // Keep 5 most recent
+          
+          for (const version of toDelete) {
+            await db.delete('versions', version.id);
+            deletedCount++;
+            bytesFreed += this.calculateSize([version]);
+          }
+        }
+        
+        return { deletedCount, bytesFreed };
+      },
+    },
+  ];
+
+  async performCleanup(intensity: 'light' | 'moderate' | 'aggressive'): Promise<CleanupResult> {
+    const policiesToRun = this.selectPolicies(intensity);
+    const results: CleanupResult[] = [];
+    
+    for (const policy of policiesToRun) {
+      try {
+        const result = await policy.execute();
+        results.push({ policy: policy.name, ...result });
+        console.log(`Cleanup policy '${policy.name}': deleted ${result.deletedCount} items, freed ${result.bytesFreed} bytes`);
+      } catch (error) {
+        console.error(`Cleanup policy '${policy.name}' failed:`, error);
+      }
+    }
+    
+    const totalFreed = results.reduce((sum, r) => sum + r.bytesFreed, 0);
+    const totalDeleted = results.reduce((sum, r) => sum + r.deletedCount, 0);
+    
+    showNotification(`Cleanup complete: freed ${this.formatBytes(totalFreed)}, removed ${totalDeleted} items`);
+    
+    return { policy: 'combined', deletedCount: totalDeleted, bytesFreed: totalFreed };
+  }
+
+  private selectPolicies(intensity: 'light' | 'moderate' | 'aggressive'): CleanupPolicy[] {
+    switch (intensity) {
+      case 'light':
+        return this.cleanupPolicies.filter(p => p.priority <= 2);
+      case 'moderate':
+        return this.cleanupPolicies.filter(p => p.priority <= 3);
+      case 'aggressive':
+        return this.cleanupPolicies;
+    }
+  }
+
+  private async compress(data: string): Promise<ArrayBuffer> {
+    const blob = new Blob([data]);
+    const stream = blob.stream().pipeThrough(new CompressionStream('gzip'));
+    const compressed = await new Response(stream).arrayBuffer();
+    return compressed;
+  }
+
+  private calculateSize(items: any[]): number {
+    return items.reduce((sum, item) => {
+      return sum + JSON.stringify(item).length;
+    }, 0);
+  }
+
+  private formatBytes(bytes: number): string {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  }
+
+  private groupBy<T>(array: T[], key: keyof T): Record<string, T[]> {
+    return array.reduce((groups, item) => {
+      const groupKey = String(item[key]);
+      if (!groups[groupKey]) groups[groupKey] = [];
+      groups[groupKey].push(item);
+      return groups;
+    }, {} as Record<string, T[]>);
+  }
+}
+
+interface CleanupPolicy {
+  name: string;
+  priority: number;
+  execute: () => Promise<{ deletedCount: number; bytesFreed: number }>;
+}
+
+interface CleanupResult {
+  policy: string;
+  deletedCount: number;
+  bytesFreed: number;
+}
+```
+
+**3. User Notifications**
+
+Provide transparent, actionable notifications that help users understand and manage storage usage.
+
+```typescript
+class StorageNotificationManager {
+  showQuotaWarning(status: QuotaStatus) {
+    const message = `
+      Storage space is running low (${status.percentUsed.toFixed(1)}% used).
+      
+      Current usage: ${this.formatBytes(status.usage)}
+      Available: ${this.formatBytes(status.available)}
+      
+      Consider:
+      • Clearing old query results
+      • Removing unused dashboards
+      • Enabling cloud sync
+    `;
+    
+    showNotificationWithActions(message, [
+      {
+        label: 'View Storage Usage',
+        action: () => this.showStorageBreakdown(status),
+      },
+      {
+        label: 'Clean Up Now',
+        action: () => this.performCleanup(),
+      },
+      {
+        label: 'Enable Cloud Sync',
+        action: () => this.enableCloudSync(),
+      },
+    ]);
+  }
+
+  showStorageBreakdown(status: QuotaStatus) {
+    const breakdown = status.breakdown || {};
+    const total = status.usage;
+    
+    const chart = [
+      { label: 'IndexedDB', bytes: breakdown.indexedDB || 0, percent: ((breakdown.indexedDB || 0) / total) * 100 },
+      { label: 'Cache API', bytes: breakdown.caches || 0, percent: ((breakdown.caches || 0) / total) * 100 },
+      { label: 'Service Workers', bytes: breakdown.serviceWorkerRegistrations || 0, percent: ((breakdown.serviceWorkerRegistrations || 0) / total) * 100 },
+    ];
+    
+    // Show modal with breakdown
+    showModal({
+      title: 'Storage Usage Breakdown',
+      content: this.renderBreakdownChart(chart),
+      actions: [
+        { label: 'Close', action: 'close' },
+        { label: 'Clear Cache', action: () => this.clearCache() },
+      ],
+    });
+  }
+
+  private formatBytes(bytes: number): string {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  }
+}
+```
+
+**4. Graceful Degradation**
+
+Maintain core functionality even when storage quota is exceeded by implementing fallback strategies.
+
+```typescript
+class GracefulDegradationManager {
+  private quotaExceeded = false;
+  private fallbackMode: 'memory-only' | 'server-only' | 'disabled' = 'memory-only';
+
+  async handleQuotaExceeded() {
+    this.quotaExceeded = true;
+    
+    // Disable non-essential caching
+    this.disableQueryCache();
+    
+    // Switch to memory-only mode
+    this.enableMemoryOnlyMode();
+    
+    // Notify user
+    showNotification(
+      'Storage quota exceeded. Running in limited mode. Some features may be unavailable.',
+      'warning'
+    );
+    
+    // Attempt cleanup
+    await this.attemptRecovery();
+  }
+
+  private disableQueryCache() {
+    // Disable caching of query results
+    window.QUERY_CACHE_ENABLED = false;
+    
+    // Clear existing cache to free space
+    this.clearQueryCache();
+  }
+
+  private enableMemoryOnlyMode() {
+    // Store data in memory instead of IndexedDB
+    this.fallbackMode = 'memory-only';
+    
+    // Warn about data loss on refresh
+    window.addEventListener('beforeunload', (e) => {
+      if (this.quotaExceeded) {
+        e.preventDefault();
+        e.returnValue = 'Data will be lost on refresh due to storage limitations.';
+      }
+    });
+  }
+
+  private async attemptRecovery() {
+    // Try aggressive cleanup
+    const cleanupManager = new StorageCleanupManager();
+    await cleanupManager.performCleanup('aggressive');
+    
+    // Check if we recovered enough space
+    const estimate = await navigator.storage.estimate();
+    const percentUsed = (estimate.usage! / estimate.quota!) * 100;
+    
+    if (percentUsed < 90) {
+      this.quotaExceeded = false;
+      this.fallbackMode = 'memory-only';
+      showNotification('Storage space recovered. Normal operation resumed.', 'success');
+    }
+  }
+
+  async saveWithFallback(key: string, value: any) {
+    if (this.quotaExceeded && this.fallbackMode === 'memory-only') {
+      // Store in memory only
+      memoryStore.set(key, value);
+      return;
+    }
+    
+    try {
+      // Try IndexedDB
+      await saveToIndexedDB(key, value);
+    } catch (error) {
+      if (error.name === 'QuotaExceededError') {
+        await this.handleQuotaExceeded();
+        // Fallback to memory
+        memoryStore.set(key, value);
+      } else {
+        throw error;
+      }
+    }
+  }
+}
+```
+
+#### Browser-Specific Considerations
+
+**Safari**
+- Extremely aggressive eviction (7 days of inactivity)
+- Request persistent storage: `await navigator.storage.persist()`
+- Warn users about Safari's limitations
+- Recommend cloud sync for Safari users
+
+**Firefox**
+- Prompts users at 50MB and 100MB thresholds
+- Persistent storage prevents eviction
+- Better quota management than Safari
+
+**Chrome/Edge**
+- Generous quotas (60% of disk space)
+- Rarely evicts data
+- Best-effort storage by default
+- Request persistent storage for critical apps
+
+**Mobile Browsers**
+- Much stricter limits (50-500MB)
+- More aggressive eviction
+- Prioritize critical data only
+- Implement aggressive cleanup policies
+
+### Security and Privacy
+
+Data persistence in browser storage introduces significant security and privacy challenges that must be carefully addressed to protect sensitive user data, comply with regulations like GDPR and CCPA, and prevent unauthorized access or data leakage. Unlike server-side databases protected by firewalls, authentication layers, and network isolation, browser storage is inherently more vulnerable—data persists on user devices that may be shared, stolen, or compromised, storage APIs are accessible to any JavaScript code running in the same origin, and browser developer tools provide direct access to inspect and modify stored data. The framework must implement defense-in-depth security strategies including encryption at rest for sensitive data, strict data isolation between users and workspaces, comprehensive privacy controls that respect user preferences and regulatory requirements, and secure transmission protocols for synchronizing data with remote servers. Security considerations extend beyond technical controls to include user education (warning about shared devices), audit logging (tracking who accessed what data when), and incident response procedures (detecting and responding to potential breaches). Privacy compliance requires implementing data minimization (only store necessary data), retention policies (automatically delete old data), user rights (export, deletion, portability), and transparency (clear privacy policies explaining what data is stored and why).
+
+#### 1. Encryption at Rest
+
+Protect sensitive data stored in IndexedDB by encrypting it before persistence, ensuring that even if an attacker gains access to the browser storage, they cannot read the data without the encryption key.
+
+**Encryption Architecture**
+
+```typescript
+class StorageEncryptionService {
+  private algorithm = 'AES-GCM';
+  private keyLength = 256;
+  private ivLength = 12; // 96 bits for GCM
+  
+  /**
+   * Generate encryption key from user password using PBKDF2
+   */
+  async deriveKeyFromPassword(password: string, salt: Uint8Array): Promise<CryptoKey> {
+    const encoder = new TextEncoder();
+    const passwordBuffer = encoder.encode(password);
+    
+    // Import password as key material
+    const keyMaterial = await crypto.subtle.importKey(
+      'raw',
+      passwordBuffer,
+      'PBKDF2',
+      false,
+      ['deriveKey']
+    );
+    
+    // Derive AES key using PBKDF2
+    const key = await crypto.subtle.deriveKey(
+      {
+        name: 'PBKDF2',
+        salt: salt,
+        iterations: 100000, // OWASP recommendation
+        hash: 'SHA-256',
+      },
+      keyMaterial,
+      {
+        name: this.algorithm,
+        length: this.keyLength,
+      },
+      false, // Not extractable
+      ['encrypt', 'decrypt']
+    );
+    
+    return key;
+  }\n\n  /**\n   * Generate random encryption key (for session-based encryption)\n   */\n  async generateKey(): Promise<CryptoKey> {\n    return await crypto.subtle.generateKey(\n      {\n        name: this.algorithm,\n        length: this.keyLength,\n      },\n      true, // Extractable (for storage)\n      ['encrypt', 'decrypt']\n    );\n  }\n\n  /**\n   * Encrypt data using AES-GCM\n   */\n  async encrypt(data: any, key: CryptoKey): Promise<EncryptedData> {\n    const encoder = new TextEncoder();\n    const plaintext = encoder.encode(JSON.stringify(data));\n    \n    // Generate random IV\n    const iv = crypto.getRandomValues(new Uint8Array(this.ivLength));\n    \n    // Encrypt\n    const ciphertext = await crypto.subtle.encrypt(\n      {\n        name: this.algorithm,\n        iv: iv,\n      },\n      key,\n      plaintext\n    );\n    \n    return {\n      ciphertext: new Uint8Array(ciphertext),\n      iv: iv,\n      algorithm: this.algorithm,\n    };\n  }\n\n  /**\n   * Decrypt data using AES-GCM\n   */\n  async decrypt(encryptedData: EncryptedData, key: CryptoKey): Promise<any> {\n    try {\n      const plaintext = await crypto.subtle.decrypt(\n        {\n          name: encryptedData.algorithm,\n          iv: encryptedData.iv,\n        },\n        key,\n        encryptedData.ciphertext\n      );\n      \n      const decoder = new TextDecoder();\n      const json = decoder.decode(plaintext);\n      return JSON.parse(json);\n    } catch (error) {\n      throw new Error('Decryption failed. Invalid key or corrupted data.');\n    }\n  }\n\n  /**\n   * Store encrypted data in IndexedDB\n   */\n  async saveEncrypted(key: string, data: any, encryptionKey: CryptoKey) {\n    const encrypted = await this.encrypt(data, encryptionKey);\n    \n    const db = await openDB('secure-storage');\n    await db.put('encrypted-data', {\n      key,\n      ...encrypted,\n      timestamp: Date.now(),\n    });\n  }\n\n  /**\n   * Load and decrypt data from IndexedDB\n   */\n  async loadEncrypted(key: string, encryptionKey: CryptoKey): Promise<any> {\n    const db = await openDB('secure-storage');\n    const encrypted = await db.get('encrypted-data', key);\n    \n    if (!encrypted) {\n      return null;\n    }\n    \n    return await this.decrypt(encrypted, encryptionKey);\n  }\n}\n\ninterface EncryptedData {\n  ciphertext: Uint8Array;\n  iv: Uint8Array;\n  algorithm: string;\n}\n```\n\n**Key Management Strategies**\n\n```typescript\nclass KeyManagementService {\n  /**\n   * Strategy 1: Password-derived key (most secure, requires user password)\n   */\n  async usePasswordDerivedKey(password: string): Promise<CryptoKey> {\n    // Generate or retrieve salt\n    let salt = await this.getSalt();\n    if (!salt) {\n      salt = crypto.getRandomValues(new Uint8Array(16));\n      await this.storeSalt(salt);\n    }\n    \n    const encryption = new StorageEncryptionService();\n    return await encryption.deriveKeyFromPassword(password, salt);\n  }\n\n  /**\n   * Strategy 2: Session-based key (stored in sessionStorage, lost on tab close)\n   */\n  async useSessionKey(): Promise<CryptoKey> {\n    let keyData = sessionStorage.getItem('encryption-key');\n    \n    if (!keyData) {\n      const encryption = new StorageEncryptionService();\n      const key = await encryption.generateKey();\n      \n      // Export and store in sessionStorage\n      const exported = await crypto.subtle.exportKey('jwk', key);\n      sessionStorage.setItem('encryption-key', JSON.stringify(exported));\n      \n      return key;\n    }\n    \n    // Import existing key\n    const jwk = JSON.parse(keyData);\n    return await crypto.subtle.importKey(\n      'jwk',\n      jwk,\n      'AES-GCM',\n      true,\n      ['encrypt', 'decrypt']\n    );\n  }\n\n  /**\n   * Strategy 3: Device-bound key (using Web Authentication API)\n   */\n  async useDeviceBoundKey(): Promise<CryptoKey> {\n    // Use WebAuthn to generate device-bound key\n    // This requires user gesture (biometric or security key)\n    const credential = await navigator.credentials.create({\n      publicKey: {\n        challenge: crypto.getRandomValues(new Uint8Array(32)),\n        rp: { name: 'BI Dashboard' },\n        user: {\n          id: crypto.getRandomValues(new Uint8Array(16)),\n          name: 'user@example.com',\n          displayName: 'User',\n        },\n        pubKeyCredParams: [{ alg: -7, type: 'public-key' }],\n      },\n    });\n    \n    // Derive encryption key from credential\n    // (Simplified - actual implementation more complex)\n    const keyMaterial = new Uint8Array(credential.rawId);\n    return await crypto.subtle.importKey(\n      'raw',\n      keyMaterial,\n      'AES-GCM',\n      false,\n      ['encrypt', 'decrypt']\n    );\n  }\n\n  private async getSalt(): Promise<Uint8Array | null> {\n    const stored = localStorage.getItem('encryption-salt');\n    return stored ? new Uint8Array(JSON.parse(stored)) : null;\n  }\n\n  private async storeSalt(salt: Uint8Array) {\n    localStorage.setItem('encryption-salt', JSON.stringify(Array.from(salt)));\n  }\n}\n```\n\n**Selective Encryption**\n\nOnly encrypt sensitive fields to balance security and performance:\n\n```typescript\ninterface DashboardConfig {\n  id: string;\n  name: string;\n  layout: any; // Not sensitive\n  dataSource: {\n    url: string;\n    credentials: {\n      apiKey: string;      // SENSITIVE - encrypt\n      username: string;    // SENSITIVE - encrypt\n      password: string;    // SENSITIVE - encrypt\n    };\n  };\n  settings: any; // Not sensitive\n}\n\nclass SelectiveEncryptionService {\n  private sensitiveFields = ['apiKey', 'username', 'password', 'token', 'secret'];\n  \n  async encryptSensitiveFields(obj: any, key: CryptoKey): Promise<any> {\n    const encrypted = { ...obj };\n    \n    for (const [field, value] of Object.entries(obj)) {\n      if (this.isSensitive(field)) {\n        encrypted[field] = await this.encryptField(value, key);\n        encrypted[`${field}_encrypted`] = true;\n      } else if (typeof value === 'object' && value !== null) {\n        encrypted[field] = await this.encryptSensitiveFields(value, key);\n      }\n    }\n    \n    return encrypted;\n  }\n\n  async decryptSensitiveFields(obj: any, key: CryptoKey): Promise<any> {\n    const decrypted = { ...obj };\n    \n    for (const [field, value] of Object.entries(obj)) {\n      if (obj[`${field}_encrypted`]) {\n        decrypted[field] = await this.decryptField(value, key);\n        delete decrypted[`${field}_encrypted`];\n      } else if (typeof value === 'object' && value !== null) {\n        decrypted[field] = await this.decryptSensitiveFields(value, key);\n      }\n    }\n    \n    return decrypted;\n  }\n\n  private isSensitive(fieldName: string): boolean {\n    return this.sensitiveFields.some(sensitive => \n      fieldName.toLowerCase().includes(sensitive.toLowerCase())\n    );\n  }\n}\n```\n\n#### 2. Data Isolation\n\nEnsure strict separation of data between users, workspaces, and tenants to prevent unauthorized access and data leakage.\n\n```typescript\nclass DataIsolationService {\n  /**\n   * Create isolated storage namespace for each user/workspace\n   */\n  getDatabaseName(userId: string, workspaceId: string): string {\n    // Use hash to prevent database name enumeration\n    const namespace = `${userId}:${workspaceId}`;\n    const hash = this.hashString(namespace);\n    return `app-${hash}`;\n  }\n\n  /**\n   * Open user-specific database\n   */\n  async openIsolatedDB(userId: string, workspaceId: string): Promise<IDBDatabase> {\n    const dbName = this.getDatabaseName(userId, workspaceId);\n    \n    return await openDB(dbName, 1, {\n      upgrade(db) {\n        // Create object stores\n        db.createObjectStore('dashboards', { keyPath: 'id' });\n        db.createObjectStore('settings', { keyPath: 'key' });\n        db.createObjectStore('cache', { keyPath: 'id' });\n      },\n    });\n  }\n\n  /**\n   * Clear all data for a user (on logout)\n   */\n  async clearUserData(userId: string, workspaceId: string) {\n    const dbName = this.getDatabaseName(userId, workspaceId);\n    \n    // Delete database\n    await deleteDB(dbName);\n    \n    // Clear localStorage entries\n    this.clearLocalStorageForUser(userId, workspaceId);\n    \n    // Clear sessionStorage\n    sessionStorage.clear();\n    \n    // Clear service worker cache\n    await this.clearServiceWorkerCache();\n  }\n\n  /**\n   * Implement access control checks\n   */\n  async checkAccess(userId: string, resourceId: string, permission: Permission): Promise<boolean> {\n    // Load user permissions from secure storage\n    const permissions = await this.loadUserPermissions(userId);\n    \n    // Check if user has required permission for resource\n    return permissions.some(p => \n      p.resourceId === resourceId && p.permission === permission\n    );\n  }\n\n  /**\n   * Audit data access\n   */\n  async auditAccess(userId: string, resourceId: string, action: string) {\n    const auditEntry = {\n      userId,\n      resourceId,\n      action,\n      timestamp: Date.now(),\n      userAgent: navigator.userAgent,\n    };\n    \n    const db = await this.openIsolatedDB(userId, 'audit');\n    await db.add('audit-log', auditEntry);\n  }\n\n  private hashString(str: string): string {\n    // Simple hash for demonstration (use crypto.subtle.digest in production)\n    let hash = 0;\n    for (let i = 0; i < str.length; i++) {\n      const char = str.charCodeAt(i);\n      hash = ((hash << 5) - hash) + char;\n      hash = hash & hash;\n    }\n    return Math.abs(hash).toString(36);\n  }\n\n  private clearLocalStorageForUser(userId: string, workspaceId: string) {\n    const prefix = `${userId}:${workspaceId}:`;\n    const keysToDelete: string[] = [];\n    \n    for (let i = 0; i < localStorage.length; i++) {\n      const key = localStorage.key(i);\n      if (key && key.startsWith(prefix)) {\n        keysToDelete.push(key);\n      }\n    }\n    \n    keysToDelete.forEach(key => localStorage.removeItem(key));\n  }\n\n  private async clearServiceWorkerCache() {\n    if ('caches' in window) {\n      const cacheNames = await caches.keys();\n      await Promise.all(cacheNames.map(name => caches.delete(name)));\n    }\n  }\n}\n\ntype Permission = 'read' | 'write' | 'delete' | 'admin';\n```\n\n#### 3. Privacy Compliance\n\nImplement GDPR, CCPA, and other privacy regulations' requirements for user data management.\n\n```typescript\nclass PrivacyComplianceService {\n  /**\n   * Export all user data (GDPR Article 20 - Right to Data Portability)\n   */\n  async exportUserData(userId: string): Promise<Blob> {\n    const data: any = {};\n    \n    // Collect data from all storage sources\n    data.indexedDB = await this.exportIndexedDB(userId);\n    data.localStorage = this.exportLocalStorage(userId);\n    data.cookies = this.exportCookies();\n    \n    // Add metadata\n    data.exportDate = new Date().toISOString();\n    data.userId = userId;\n    \n    // Create downloadable JSON file\n    const json = JSON.stringify(data, null, 2);\n    return new Blob([json], { type: 'application/json' });\n  }\n\n  /**\n   * Delete all user data (GDPR Article 17 - Right to Erasure)\n   */\n  async deleteUserData(userId: string) {\n    // Delete IndexedDB databases\n    const databases = await this.getUserDatabases(userId);\n    for (const dbName of databases) {\n      await deleteDB(dbName);\n    }\n    \n    // Clear localStorage\n    this.clearLocalStorageForUser(userId);\n    \n    // Clear cookies\n    this.clearCookies();\n    \n    // Clear service worker cache\n    await this.clearServiceWorkerCache();\n    \n    // Log deletion for audit\n    await this.logDataDeletion(userId);\n  }\n\n  /**\n   * Implement data retention policy\n   */\n  async enforceRetentionPolicy() {\n    const retentionPeriod = 365 * 24 * 60 * 60 * 1000; // 1 year\n    const cutoffDate = Date.now() - retentionPeriod;\n    \n    // Delete old audit logs\n    const db = await openDB('audit');\n    const oldLogs = await db.getAllFromIndex(\n      'audit-log',\n      'timestamp',\n      IDBKeyRange.upperBound(cutoffDate)\n    );\n    \n    for (const log of oldLogs) {\n      await db.delete('audit-log', log.id);\n    }\n  }\n\n  /**\n   * Get user consent for data collection\n   */\n  async requestConsent(): Promise<ConsentStatus> {\n    // Show consent dialog\n    const consent = await showConsentDialog({\n      essential: true, // Always required\n      analytics: false, // Optional\n      marketing: false, // Optional\n    });\n    \n    // Store consent preferences\n    await this.storeConsentPreferences(consent);\n    \n    return consent;\n  }\n\n  /**\n   * Respect Do Not Track header\n   */\n  respectDoNotTrack(): boolean {\n    return navigator.doNotTrack === '1' || \n           (window as any).doNotTrack === '1' ||\n           (navigator as any).msDoNotTrack === '1';\n  }\n}\n\ninterface ConsentStatus {\n  essential: boolean;\n  analytics: boolean;\n  marketing: boolean;\n  timestamp: number;\n}\n```\n\n#### 4. Secure Transmission\n\nProtect data during synchronization with remote servers using encryption, authentication, and integrity checks.\n\n```typescript\nclass SecureTransmissionService {\n  private apiUrl = 'https://api.example.com';\n  private authToken: string | null = null;\n\n  /**\n   * Sync data with server using HTTPS and authentication\n   */\n  async syncToServer(data: any) {\n    // Ensure HTTPS\n    if (!this.apiUrl.startsWith('https://')) {\n      throw new Error('Insecure connection. HTTPS required.');\n    }\n    \n    // Get authentication token\n    const token = await this.getAuthToken();\n    \n    // Add CSRF token\n    const csrfToken = await this.getCSRFToken();\n    \n    // Send request\n    const response = await fetch(`${this.apiUrl}/sync`, {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/json',\n        'Authorization': `Bearer ${token}`,\n        'X-CSRF-Token': csrfToken,\n      },\n      body: JSON.stringify(data),\n      credentials: 'include', // Include cookies for session\n    });\n    \n    if (!response.ok) {\n      throw new Error(`Sync failed: ${response.statusText}`);\n    }\n    \n    return await response.json();\n  }\n\n  /**\n   * Implement certificate pinning (for mobile apps)\n   */\n  async verifyCertificate(response: Response): Promise<boolean> {\n    // In web context, browser handles certificate validation\n    // For Electron/mobile apps, implement custom validation\n    return true;\n  }\n\n  /**\n   * Use JWT tokens for authentication\n   */\n  private async getAuthToken(): Promise<string> {\n    if (this.authToken && !this.isTokenExpired(this.authToken)) {\n      return this.authToken;\n    }\n    \n    // Refresh token\n    this.authToken = await this.refreshAuthToken();\n    return this.authToken;\n  }\n\n  private isTokenExpired(token: string): boolean {\n    try {\n      const payload = JSON.parse(atob(token.split('.')[1]));\n      return payload.exp * 1000 < Date.now();\n    } catch {\n      return true;\n    }\n  }\n\n  /**\n   * Implement CSRF protection\n   */\n  private async getCSRFToken(): Promise<string> {\n    let token = sessionStorage.getItem('csrf-token');\n    \n    if (!token) {\n      // Request CSRF token from server\n      const response = await fetch(`${this.apiUrl}/csrf-token`);\n      const data = await response.json();\n      token = data.token;\n      sessionStorage.setItem('csrf-token', token);\n    }\n    \n    return token;\n  }\n}\n```\n\n#### Security Best Practices\n\n**1. Never Store Sensitive Data in Plain Text**\n- Always encrypt API keys, passwords, tokens\n- Use Web Crypto API for encryption\n- Derive keys from user passwords or use session keys\n\n**2. Implement Content Security Policy**\n```html\n<meta http-equiv=\"Content-Security-Policy\" \n      content=\"default-src 'self'; \n               script-src 'self' 'unsafe-inline'; \n               connect-src 'self' https://api.example.com;\">\n```\n\n**3. Sanitize User Input**\n```typescript\nfunction sanitizeInput(input: string): string {\n  return input\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#x27;');\n}\n```\n\n**4. Implement Rate Limiting**\n```typescript\nclass RateLimiter {\n  private attempts = new Map<string, number[]>();\n  \n  checkRateLimit(key: string, maxAttempts: number, windowMs: number): boolean {\n    const now = Date.now();\n    const attempts = this.attempts.get(key) || [];\n    \n    // Remove old attempts outside window\n    const recentAttempts = attempts.filter(time => now - time < windowMs);\n    \n    if (recentAttempts.length >= maxAttempts) {\n      return false; // Rate limit exceeded\n    }\n    \n    recentAttempts.push(now);\n    this.attempts.set(key, recentAttempts);\n    return true;\n  }\n}\n```\n\n**5. Clear Sensitive Data on Logout**\n```typescript\nasync function logout() {\n  // Clear all storage\n  await clearAllDatabases();\n  localStorage.clear();\n  sessionStorage.clear();\n  \n  // Clear cookies\n  document.cookie.split(';').forEach(cookie => {\n    document.cookie = cookie.split('=')[0] + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';\n  });\n  \n  // Redirect to login\n  window.location.href = '/login';\n}
+
+### Performance Considerations
+
+Persistence operations represent a critical performance bottleneck in client-side applications, with the potential to significantly impact user experience through UI freezes, slow page loads, and unresponsive interactions. Unlike server-side databases optimized for concurrent access and high throughput, browser storage APIs (localStorage, IndexedDB, Cache API) operate on the main thread or with limited concurrency, making poorly optimized persistence code a common source of performance problems. The framework must implement comprehensive performance optimizations across read operations (minimizing database queries, caching frequently accessed data, using indexes effectively), write operations (batching transactions, debouncing updates, compressing payloads), memory management (avoiding memory leaks, streaming large datasets, triggering garbage collection), and network synchronization (delta updates, compression, request batching). Performance monitoring and profiling are essential—measuring persistence latency, tracking memory usage, identifying slow queries, and optimizing hot paths based on real-world usage patterns rather than assumptions.
+
+#### 1. Read Optimization
+
+Optimize data retrieval to minimize latency and maximize throughput for frequently accessed data.
+
+**Indexing Strategy**
+
+```typescript
+// Create indexes for frequently queried fields
+const db = await openDB('dashboards', 1, {
+  upgrade(db) {
+    const dashboardStore = db.createObjectStore('dashboards', { keyPath: 'id' });
+    \n    // Index by user ID for fast user-specific queries
+    dashboardStore.createIndex('userId', 'userId', { unique: false });
+    \n    // Index by creation date for time-based queries
+    dashboardStore.createIndex('createdAt', 'createdAt', { unique: false });
+    \n    // Compound index for user + date queries
+    dashboardStore.createIndex('userIdCreatedAt', ['userId', 'createdAt'], { unique: false });
+    \n    // Index by tags for filtering
+    dashboardStore.createIndex('tags', 'tags', { unique: false, multiEntry: true });
+  },
+});\n\n// Use indexes for fast queries
+async function getDashboardsByUser(userId: string): Promise<Dashboard[]> {
+  const db = await openDB('dashboards');
+  return await db.getAllFromIndex('dashboards', 'userId', userId);
+}\n\n// Range queries using indexes
+async function getRecentDashboards(userId: string, days: number = 7): Promise<Dashboard[]> {
+  const db = await openDB('dashboards');
+  const cutoff = Date.now() - (days * 24 * 60 * 60 * 1000);
+  \n  return await db.getAllFromIndex(\n    'dashboards',\n    'userIdCreatedAt',\n    IDBKeyRange.bound([userId, cutoff], [userId, Date.now()])\n  );\n}\n```\n\n**Multi-Level Caching**\n\n```typescript\nclass CacheManager {\n  // L1: In-memory cache (fastest, limited size)\n  private memoryCache = new Map<string, { data: any; timestamp: number }>();\n  private maxMemoryCacheSize = 100;\n  \n  // L2: IndexedDB (slower, larger capacity)\n  // L3: Network (slowest, unlimited)\n  \n  async get(key: string): Promise<any> {\n    // Check L1 cache\n    const cached = this.memoryCache.get(key);\n    if (cached && !this.isExpired(cached.timestamp)) {\n      console.log(`[Cache] L1 hit: ${key}`);\n      return cached.data;\n    }\n    \n    // Check L2 cache (IndexedDB)\n    const db = await openDB('cache');\n    const dbCached = await db.get('cache', key);\n    if (dbCached && !this.isExpired(dbCached.timestamp)) {\n      console.log(`[Cache] L2 hit: ${key}`);\n      // Promote to L1\n      this.setMemoryCache(key, dbCached.data);\n      return dbCached.data;\n    }\n    \n    // L3: Fetch from network\n    console.log(`[Cache] Miss: ${key}, fetching from network`);\n    const data = await this.fetchFromNetwork(key);\n    \n    // Store in both caches\n    await this.set(key, data);\n    \n    return data;\n  }\n  \n  async set(key: string, data: any) {\n    const timestamp = Date.now();\n    \n    // Store in L1\n    this.setMemoryCache(key, data);\n    \n    // Store in L2\n    const db = await openDB('cache');\n    await db.put('cache', { key, data, timestamp });\n  }\n  \n  private setMemoryCache(key: string, data: any) {\n    // Evict oldest if cache full\n    if (this.memoryCache.size >= this.maxMemoryCacheSize) {\n      const oldestKey = this.memoryCache.keys().next().value;\n      this.memoryCache.delete(oldestKey);\n    }\n    \n    this.memoryCache.set(key, { data, timestamp: Date.now() });\n  }\n  \n  private isExpired(timestamp: number, ttl: number = 5 * 60 * 1000): boolean {\n    return Date.now() - timestamp > ttl;\n  }\n}\n```\n\n**Cursor-Based Pagination**\n\n```typescript\n// Efficient pagination for large datasets\nasync function* paginateDashboards(\n  pageSize: number = 20\n): AsyncGenerator<Dashboard[], void, unknown> {\n  const db = await openDB('dashboards');\n  const tx = db.transaction('dashboards', 'readonly');\n  const store = tx.objectStore('dashboards');\n  \n  let cursor = await store.openCursor();\n  let batch: Dashboard[] = [];\n  \n  while (cursor) {\n    batch.push(cursor.value);\n    \n    if (batch.length >= pageSize) {\n      yield batch;\n      batch = [];\n    }\n    \n    cursor = await cursor.continue();\n  }\n  \n  // Yield remaining items\n  if (batch.length > 0) {\n    yield batch;\n  }\n}\n\n// Usage\nfor await (const page of paginateDashboards(20)) {\n  renderDashboardPage(page);\n}\n```\n\n**Virtual Scrolling**\n\n```typescript\nclass VirtualScrollList {\n  private itemHeight = 50;\n  private visibleCount = 20;\n  private buffer = 5; // Extra items to render\n  \n  async renderVisibleItems(scrollTop: number) {\n    const startIndex = Math.floor(scrollTop / this.itemHeight);\n    const endIndex = startIndex + this.visibleCount + this.buffer;\n    \n    // Only fetch visible items from IndexedDB\n    const db = await openDB('dashboards');\n    const tx = db.transaction('dashboards', 'readonly');\n    const store = tx.objectStore('dashboards');\n    \n    let cursor = await store.openCursor();\n    let currentIndex = 0;\n    const items: Dashboard[] = [];\n    \n    while (cursor && currentIndex < endIndex) {\n      if (currentIndex >= startIndex) {\n        items.push(cursor.value);\n      }\n      currentIndex++;\n      cursor = await cursor.continue();\n    }\n    \n    return items;\n  }\n}\n```\n\n#### 2. Write Optimization\n\nOptimize data persistence to minimize write latency and avoid blocking the UI.\n\n**Transaction Batching**\n\n```typescript\nclass BatchWriter {\n  private pendingWrites: Array<{ store: string; data: any }> = [];\n  private flushTimeout: number | null = null;\n  private batchSize = 50;\n  private flushDelay = 100; // ms\n  \n  async write(store: string, data: any) {\n    this.pendingWrites.push({ store, data });\n    \n    // Flush immediately if batch full\n    if (this.pendingWrites.length >= this.batchSize) {\n      await this.flush();\n      return;\n    }\n    \n    // Otherwise, debounce flush\n    if (this.flushTimeout) {\n      clearTimeout(this.flushTimeout);\n    }\n    \n    this.flushTimeout = window.setTimeout(() => this.flush(), this.flushDelay);\n  }\n  \n  async flush() {\n    if (this.pendingWrites.length === 0) return;\n    \n    const writes = [...this.pendingWrites];\n    this.pendingWrites = [];\n    \n    const db = await openDB('app');\n    const tx = db.transaction(\n      [...new Set(writes.map(w => w.store))],\n      'readwrite'\n    );\n    \n    // Execute all writes in single transaction\n    for (const { store, data } of writes) {\n      await tx.objectStore(store).put(data);\n    }\n    \n    await tx.done;\n    console.log(`[BatchWriter] Flushed ${writes.length} writes`);\n  }\n}\n```\n\n**Web Worker Offloading**\n\n```typescript\n// worker.ts - Heavy persistence operations in background thread\nself.addEventListener('message', async (e) => {\n  const { type, data } = e.data;\n  \n  switch (type) {\n    case 'compress':\n      const compressed = await compressData(data);\n      self.postMessage({ type: 'compressed', data: compressed });\n      break;\n    \n    case 'encrypt':\n      const encrypted = await encryptData(data);\n      self.postMessage({ type: 'encrypted', data: encrypted });\n      break;\n    \n    case 'bulkWrite':\n      await bulkWriteToIndexedDB(data);\n      self.postMessage({ type: 'writeComplete' });\n      break;\n  }\n});\n\n// main.ts - Offload heavy work to worker\nconst worker = new Worker('worker.js');\n\nfunction compressInWorker(data: any): Promise<ArrayBuffer> {\n  return new Promise((resolve) => {\n    worker.postMessage({ type: 'compress', data });\n    worker.addEventListener('message', (e) => {\n      if (e.data.type === 'compressed') {\n        resolve(e.data.data);\n      }\n    }, { once: true });\n  });\n}\n```\n\n**Compression**\n\n```typescript\nclass CompressionService {\n  async compress(data: any): Promise<ArrayBuffer> {\n    const json = JSON.stringify(data);\n    const blob = new Blob([json]);\n    \n    // Use CompressionStream API (modern browsers)\n    if ('CompressionStream' in window) {\n      const stream = blob.stream().pipeThrough(new CompressionStream('gzip'));\n      return await new Response(stream).arrayBuffer();\n    }\n    \n    // Fallback: Use pako library\n    const pako = await import('pako');\n    return pako.gzip(json);\n  }\n  \n  async decompress(compressed: ArrayBuffer): Promise<any> {\n    // Use DecompressionStream API\n    if ('DecompressionStream' in window) {\n      const blob = new Blob([compressed]);\n      const stream = blob.stream().pipeThrough(new DecompressionStream('gzip'));\n      const decompressed = await new Response(stream).text();\n      return JSON.parse(decompressed);\n    }\n    \n    // Fallback: Use pako library\n    const pako = await import('pako');\n    const decompressed = pako.ungzip(new Uint8Array(compressed), { to: 'string' });\n    return JSON.parse(decompressed);\n  }\n  \n  // Selective compression (only compress large objects)\n  async compressIfLarge(data: any, threshold: number = 100000): Promise<any> {\n    const json = JSON.stringify(data);\n    \n    if (json.length > threshold) {\n      const compressed = await this.compress(data);\n      return {\n        _compressed: true,\n        data: compressed,\n      };\n    }\n    \n    return data;\n  }\n}\n```\n\n#### 3. Memory Management\n\nPrevent memory leaks and optimize memory usage for large datasets.\n\n**Streaming Large Datasets**\n\n```typescript\nasync function processLargeDataset(processItem: (item: any) => void) {\n  const db = await openDB('large-dataset');\n  const tx = db.transaction('items', 'readonly');\n  const store = tx.objectStore('items');\n  \n  let cursor = await store.openCursor();\n  \n  while (cursor) {\n    // Process one item at a time (don't load all into memory)\n    processItem(cursor.value);\n    \n    // Allow UI to update\n    await new Promise(resolve => setTimeout(resolve, 0));\n    \n    cursor = await cursor.continue();\n  }\n}\n```\n\n**Memory Monitoring**\n\n```typescript\nclass MemoryMonitor {\n  private threshold = 100 * 1024 * 1024; // 100MB\n  \n  async checkMemory() {\n    if ('memory' in performance) {\n      const memory = (performance as any).memory;\n      const usedMemory = memory.usedJSHeapSize;\n      const totalMemory = memory.totalJSHeapSize;\n      \n      console.log(`Memory: ${(usedMemory / 1024 / 1024).toFixed(2)} MB / ${(totalMemory / 1024 / 1024).toFixed(2)} MB`);\n      \n      if (usedMemory > this.threshold) {\n        console.warn('High memory usage detected. Triggering cleanup...');\n        await this.cleanup();\n      }\n    }\n  }\n  \n  private async cleanup() {\n    // Clear caches\n    cacheManager.clear();\n    \n    // Trigger garbage collection (if available)\n    if ('gc' in window) {\n      (window as any).gc();\n    }\n  }\n}\n```\n\n#### 4. Network Optimization\n\nOptimize data synchronization with remote servers to minimize bandwidth and latency.\n\n**Delta Sync (Incremental Updates)**\n\n```typescript\nclass DeltaSyncService {\n  private lastSyncTimestamp = 0;\n  \n  async sync() {\n    // Only send changes since last sync\n    const changes = await this.getChangesSince(this.lastSyncTimestamp);\n    \n    if (changes.length === 0) {\n      console.log('[Sync] No changes to sync');\n      return;\n    }\n    \n    // Send delta to server\n    const response = await fetch('/api/sync', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify({\n        since: this.lastSyncTimestamp,\n        changes,\n      }),\n    });\n    \n    const result = await response.json();\n    \n    // Apply server changes locally\n    await this.applyChanges(result.changes);\n    \n    this.lastSyncTimestamp = Date.now();\n  }\n  \n  private async getChangesSince(timestamp: number): Promise<Change[]> {\n    const db = await openDB('app');\n    return await db.getAllFromIndex(\n      'changes',\n      'timestamp',\n      IDBKeyRange.lowerBound(timestamp)\n    );\n  }\n}\n```\n\n**Request Batching**\n\n```typescript\nclass RequestBatcher {\n  private pendingRequests: Array<{ url: string; data: any; resolve: Function }> = [];\n  private batchTimeout: number | null = null;\n  \n  async request(url: string, data: any): Promise<any> {\n    return new Promise((resolve) => {\n      this.pendingRequests.push({ url, data, resolve });\n      \n      if (this.batchTimeout) {\n        clearTimeout(this.batchTimeout);\n      }\n      \n      this.batchTimeout = window.setTimeout(() => this.flush(), 50);\n    });\n  }\n  \n  private async flush() {\n    const requests = [...this.pendingRequests];\n    this.pendingRequests = [];\n    \n    // Send all requests in single batch\n    const response = await fetch('/api/batch', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify(requests.map(r => ({ url: r.url, data: r.data }))),\n    });\n    \n    const results = await response.json();\n    \n    // Resolve individual promises\n    requests.forEach((req, i) => {\n      req.resolve(results[i]);\n    });\n  }\n}\n```\n\n**Payload Compression**\n\n```typescript\n// Compress large payloads before sending\nasync function syncWithCompression(data: any) {\n  const json = JSON.stringify(data);\n  \n  // Only compress if payload > 10KB\n  if (json.length > 10000) {\n    const compressed = await compressData(json);\n    \n    await fetch('/api/sync', {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/octet-stream',\n        'Content-Encoding': 'gzip',\n      },\n      body: compressed,\n    });\n  } else {\n    await fetch('/api/sync', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: json,\n    });\n  }\n}\n```\n\n#### Performance Monitoring\n\n```typescript\nclass PersistencePerformanceMonitor {\n  measureOperation<T>(name: string, operation: () => Promise<T>): Promise<T> {\n    const start = performance.now();\n    \n    return operation().then(\n      (result) => {\n        const duration = performance.now() - start;\n        console.log(`[Perf] ${name}: ${duration.toFixed(2)}ms`);\n        \n        // Send to analytics\n        this.recordMetric(name, duration);\n        \n        return result;\n      },\n      (error) => {\n        const duration = performance.now() - start;\n        console.error(`[Perf] ${name} failed after ${duration.toFixed(2)}ms:`, error);\n        throw error;\n      }\n    );\n  }\n  \n  private recordMetric(operation: string, duration: number) {\n    // Send to analytics service\n    if (duration > 1000) {\n      console.warn(`Slow persistence operation: ${operation} took ${duration}ms`);\n    }\n  }\n}\n\n// Usage\nconst monitor = new PersistencePerformanceMonitor();\n\nawait monitor.measureOperation('saveDashboard', async () => {\n  await saveDashboard(dashboard);\n});\n```
 
 ---
 
@@ -2863,11 +5641,653 @@ Configuration and data persistence strategies for the framework.
 
 ## User Configurations
 
+### Purpose
+
+Persistent storage and management of user preferences, application settings, and workspace configurations for the BI Dashboard Framework. User Configurations provide a centralized, type-safe mechanism for storing and retrieving user-specific data that persists across sessions, enabling personalized experiences tailored to individual workflows, preferences, and organizational requirements. This system manages everything from simple UI preferences (theme selection, panel layouts, default chart types) to complex workspace configurations (saved queries, custom filters, dashboard templates, data source credentials) to advanced behavioral settings (auto-refresh intervals, notification preferences, keyboard shortcuts, accessibility options). The configuration system is designed with multi-tenancy in mind, supporting user-level, workspace-level, and organization-level settings with proper inheritance and override semantics, ensuring that administrators can enforce organizational policies while users retain control over personal preferences. All configurations are validated against schemas to prevent invalid states, versioned to support migration across application updates, and encrypted when containing sensitive data like API keys or database credentials. The system provides reactive updates—when a setting changes, all dependent UI components automatically re-render with the new values—eliminating the need for manual refresh or application restart. Export and import capabilities enable users to backup configurations, share workspace setups with colleagues, or migrate settings between environments, while audit logging tracks configuration changes for compliance and debugging purposes.
+
+### Features
+
+- **Hierarchical Settings Organization**: Nested configuration structure organized by domain (appearance, behavior, data, security)
+- **Type-Safe Schema Validation**: Runtime validation using Zod schemas with TypeScript type inference
+- **Multi-Level Inheritance**: User settings override workspace defaults, which override organization policies
+- **Reactive Updates**: Automatic UI re-rendering when settings change via Zustand subscriptions
+- **Persistent Storage**: IndexedDB for client-side persistence with optional cloud sync
+- **Import/Export**: JSON-based configuration backup and sharing
+- **Encryption**: Sensitive settings encrypted at rest using Web Crypto API
+- **Versioning**: Schema versioning with automatic migration for backward compatibility
+- **Audit Logging**: Track configuration changes with timestamps and user attribution
+- **Default Management**: Intelligent defaults with reset-to-default functionality
+
+### Configuration Categories
+
+1. **Appearance Settings**
+   - Theme selection (light, dark, high-contrast, custom)
+   - Color scheme customization
+   - Font family and size preferences
+   - Panel layout and sidebar visibility
+   - Dashboard grid density
+   - Icon set selection
+
+2. **Behavior Settings**
+   - Auto-save interval for dashboards
+   - Default chart types for data visualizations
+   - Drag-and-drop sensitivity
+   - Confirmation dialogs (enable/disable)
+   - Undo/redo history depth
+   - Default data refresh intervals
+
+3. **Data Settings**
+   - Default data source connections
+   - Query timeout limits
+   - Cache expiration policies
+   - Data sampling preferences
+   - Export format defaults (CSV, Excel, JSON)
+   - Date/time format and timezone
+
+4. **Security Settings**
+   - Session timeout duration
+   - Two-factor authentication preferences
+   - API key management
+   - Data access permissions
+   - Audit log retention
+   - Encryption preferences
+
+5. **Accessibility Settings**
+   - Screen reader support
+   - Keyboard navigation preferences
+   - High-contrast mode
+   - Animation reduction
+   - Font scaling
+   - Focus indicators
+
+6. **Notification Settings**
+   - Email notification preferences
+   - In-app notification types
+   - Alert thresholds for data anomalies
+   - Scheduled report delivery
+   - Collaboration notifications
+   - System update alerts
+
+### Storage Architecture
+
+The configuration system uses a multi-tiered storage approach combining in-memory state, browser storage, and optional cloud persistence:
+
+**In-Memory Layer (Zustand Store)**
+```typescript
+interface UserConfigStore {
+  appearance: AppearanceConfig;
+  behavior: BehaviorConfig;
+  data: DataConfig;
+  security: SecurityConfig;
+  accessibility: AccessibilityConfig;
+  notifications: NotificationConfig;
+  
+  // Actions
+  updateConfig: <T extends keyof UserConfigStore>(
+    category: T,
+    updates: Partial<UserConfigStore[T]>
+  ) => void;
+  resetToDefaults: (category?: keyof UserConfigStore) => void;
+  exportConfig: () => string;
+  importConfig: (json: string) => void;
+}
+```
+
+**Persistence Layer (IndexedDB)**
+- Stores serialized configuration objects
+- Supports offline-first operation
+- Enables large configuration storage (>10MB)
+- Provides transaction-based updates
+
+**Cloud Sync Layer (Optional)**
+- Syncs configurations across devices
+- Enables team workspace sharing
+- Provides version history and rollback
+- Requires authentication and authorization
+
+### Implementation Example
+
+```typescript
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { z } from 'zod';
+
+// Schema definition
+const AppearanceConfigSchema = z.object({
+  theme: z.enum(['light', 'dark', 'high-contrast', 'custom']),
+  colorScheme: z.string().optional(),
+  fontSize: z.number().min(10).max(24).default(14),
+  sidebarVisible: z.boolean().default(true),
+  gridDensity: z.enum(['compact', 'normal', 'comfortable']).default('normal'),
+});
+
+type AppearanceConfig = z.infer<typeof AppearanceConfigSchema>;
+
+// Store creation
+const useConfigStore = create(
+  persist<UserConfigStore>(
+    (set, get) => ({
+      appearance: AppearanceConfigSchema.parse({}),
+      // ... other categories
+      
+      updateConfig: (category, updates) => {
+        const current = get()[category];
+        const merged = { ...current, ...updates };
+        
+        // Validate against schema
+        const schema = getSchemaForCategory(category);
+        const validated = schema.parse(merged);
+        
+        set({ [category]: validated });
+        
+        // Trigger persistence
+        persistToIndexedDB(category, validated);
+      },
+      
+      resetToDefaults: (category) => {
+        if (category) {
+          const defaults = getDefaultsForCategory(category);
+          set({ [category]: defaults });
+        } else {
+          set(getAllDefaults());
+        }
+      },
+      
+      exportConfig: () => {
+        const config = get();
+        return JSON.stringify(config, null, 2);
+      },
+      
+      importConfig: (json) => {
+        const parsed = JSON.parse(json);
+        // Validate all categories
+        const validated = validateAllCategories(parsed);
+        set(validated);
+      },
+    }),
+    {
+      name: 'user-config-storage',
+      storage: createIndexedDBStorage(),
+    }
+  )
+);
+```
+
+### Migration Strategy
+
+Configuration schema migration is a critical capability for maintaining backward compatibility as the application evolves, enabling seamless upgrades that preserve user data while adapting to new schema requirements. As features are added, removed, or refactored, configuration structures inevitably change—new fields are introduced with default values, deprecated fields are removed, field names are renamed for clarity, nested structures are flattened or reorganized, and data types are converted to more appropriate formats. Without proper migration strategies, these schema changes would force users to reconfigure their settings from scratch after each upgrade, resulting in poor user experience, data loss, and support burden. The framework implements a robust migration system that automatically detects schema version mismatches, applies sequential transformations to bring old configurations up to date, validates migrated data against new schemas, maintains rollback capabilities for failed migrations, and logs migration events for debugging and auditing. Migration strategies must balance several concerns: ensuring data integrity (no data loss during migration), maintaining performance (migrations run synchronously on startup), providing clear error messages (when migrations fail), and supporting rollback (reverting to previous versions if needed).
+
+#### Migration Architecture
+
+**Version-Based Migration System**
+
+```typescript
+interface ConfigVersion {
+  version: number;
+  config: any;
+  timestamp: number;
+}
+
+class MigrationManager {
+  private currentVersion = 5; // Latest schema version
+  private migrations: Map<number, Migration> = new Map();
+  
+  constructor() {
+    this.registerMigrations();
+  }
+  
+  /**
+   * Register all migration functions
+   */
+  private registerMigrations() {
+    // Migration 1: Add gridDensity field
+    this.migrations.set(1, {
+      version: 1,
+      description: 'Add gridDensity field to appearance settings',
+      up: (config: any) => ({
+        ...config,
+        appearance: {
+          ...config.appearance,
+          gridDensity: 'normal',
+        },
+      }),
+      down: (config: any) => {
+        const { gridDensity, ...appearance } = config.appearance;
+        return { ...config, appearance };
+      },
+    });
+    
+    // Migration 2: Rename autoSaveInterval to autoSaveDelay
+    this.migrations.set(2, {
+      version: 2,
+      description: 'Rename autoSaveInterval to autoSaveDelay',
+      up: (config: any) => {
+        const { autoSaveInterval, ...rest } = config.behavior;
+        return {
+          ...config,
+          behavior: {
+            ...rest,
+            autoSaveDelay: autoSaveInterval || 30000,
+          },
+        };
+      },
+      down: (config: any) => {
+        const { autoSaveDelay, ...rest } = config.behavior;
+        return {
+          ...config,
+          behavior: {
+            ...rest,
+            autoSaveInterval: autoSaveDelay,
+          },
+        };
+      },
+    });
+    
+    // Migration 3: Flatten nested theme settings
+    this.migrations.set(3, {
+      version: 3,
+      description: 'Flatten nested theme settings',
+      up: (config: any) => {
+        const { theme } = config.appearance;
+        return {
+          ...config,
+          appearance: {
+            ...config.appearance,
+            themeMode: theme?.mode || 'light',
+            themeColors: theme?.colors || {},
+          },
+        };
+      },
+      down: (config: any) => {
+        const { themeMode, themeColors, ...appearance } = config.appearance;
+        return {
+          ...config,
+          appearance: {
+            ...appearance,
+            theme: {
+              mode: themeMode,
+              colors: themeColors,
+            },
+          },
+        };
+      },
+    });
+    
+    // Migration 4: Convert string IDs to numbers
+    this.migrations.set(4, {
+      version: 4,
+      description: 'Convert dashboard IDs from strings to numbers',
+      up: (config: any) => ({
+        ...config,
+        dashboards: config.dashboards?.map((d: any) => ({
+          ...d,
+          id: parseInt(d.id, 10),
+        })) || [],
+      }),
+      down: (config: any) => ({
+        ...config,
+        dashboards: config.dashboards?.map((d: any) => ({
+          ...d,
+          id: String(d.id),
+        })) || [],
+      }),
+    });
+    
+    // Migration 5: Add security settings
+    this.migrations.set(5, {
+      version: 5,
+      description: 'Add security settings category',
+      up: (config: any) => ({
+        ...config,
+        security: {
+          sessionTimeout: 3600000, // 1 hour
+          twoFactorEnabled: false,
+          encryptionEnabled: true,
+        },
+      }),
+      down: (config: any) => {
+        const { security, ...rest } = config;
+        return rest;
+      },
+    });
+  }
+  
+  /**
+   * Migrate configuration from old version to current version
+   */
+  async migrate(config: any, fromVersion: number): Promise<any> {
+    if (fromVersion === this.currentVersion) {
+      console.log('[Migration] Config already at current version');
+      return config;
+    }
+    
+    if (fromVersion > this.currentVersion) {
+      throw new Error(`Config version ${fromVersion} is newer than current version ${this.currentVersion}`);
+    }
+    
+    console.log(`[Migration] Migrating from v${fromVersion} to v${this.currentVersion}`);
+    
+    // Backup original config
+    await this.backupConfig(config, fromVersion);
+    
+    let migrated = { ...config };
+    const appliedMigrations: number[] = [];
+    
+    try {
+      // Apply migrations sequentially
+      for (let v = fromVersion + 1; v <= this.currentVersion; v++) {
+        const migration = this.migrations.get(v);
+        
+        if (!migration) {
+          throw new Error(`Migration ${v} not found`);
+        }
+        
+        console.log(`[Migration] Applying migration ${v}: ${migration.description}`);
+        migrated = migration.up(migrated);
+        appliedMigrations.push(v);
+        
+        // Validate after each migration
+        await this.validateConfig(migrated, v);
+      }
+      
+      // Add version metadata
+      migrated._version = this.currentVersion;
+      migrated._migratedAt = Date.now();
+      migrated._migratedFrom = fromVersion;
+      
+      console.log(`[Migration] Successfully migrated to v${this.currentVersion}`);
+      
+      // Log migration event
+      await this.logMigration(fromVersion, this.currentVersion, appliedMigrations);
+      
+      return migrated;
+    } catch (error) {
+      console.error('[Migration] Migration failed:', error);
+      
+      // Attempt rollback
+      await this.rollback(config, fromVersion, appliedMigrations);
+      
+      throw new Error(`Migration failed: ${error.message}`);
+    }
+  }
+  
+  /**
+   * Rollback to previous version
+   */
+  async rollback(originalConfig: any, fromVersion: number, appliedMigrations: number[]) {
+    console.warn(`[Migration] Rolling back ${appliedMigrations.length} migrations`);
+    
+    let config = { ...originalConfig };
+    
+    // Apply migrations up to the point of failure
+    for (const v of appliedMigrations) {
+      const migration = this.migrations.get(v);
+      if (migration) {
+        config = migration.up(config);
+      }
+    }
+    
+    // Now rollback in reverse order
+    for (let i = appliedMigrations.length - 1; i >= 0; i--) {
+      const v = appliedMigrations[i];
+      const migration = this.migrations.get(v);
+      
+      if (migration && migration.down) {
+        console.log(`[Migration] Rolling back migration ${v}`);
+        config = migration.down(config);
+      }
+    }
+    
+    return config;
+  }
+  
+  /**
+   * Backup configuration before migration
+   */
+  private async backupConfig(config: any, version: number) {
+    const backup = {
+      config,
+      version,
+      timestamp: Date.now(),
+    };
+    
+    const db = await openDB('config-backups');
+    await db.add('backups', backup);
+    
+    // Keep only last 10 backups
+    const backups = await db.getAll('backups');
+    if (backups.length > 10) {
+      const toDelete = backups
+        .sort((a, b) => a.timestamp - b.timestamp)
+        .slice(0, backups.length - 10);
+      
+      for (const backup of toDelete) {
+        await db.delete('backups', backup.id);
+      }
+    }
+  }
+  
+  /**
+   * Validate configuration against schema
+   */
+  private async validateConfig(config: any, version: number) {
+    const schema = this.getSchemaForVersion(version);
+    
+    try {
+      schema.parse(config);
+    } catch (error) {
+      throw new Error(`Validation failed for version ${version}: ${error.message}`);
+    }
+  }
+  
+  /**
+   * Log migration event for debugging
+   */
+  private async logMigration(fromVersion: number, toVersion: number, appliedMigrations: number[]) {
+    const event = {
+      fromVersion,
+      toVersion,
+      appliedMigrations,
+      timestamp: Date.now(),
+      userAgent: navigator.userAgent,
+    };
+    
+    const db = await openDB('migration-log');
+    await db.add('events', event);
+  }
+  
+  /**
+   * Get schema for specific version
+   */
+  private getSchemaForVersion(version: number): any {
+    // Return appropriate Zod schema for version
+    // Simplified for demonstration
+    return z.object({
+      appearance: z.object({}),
+      behavior: z.object({}),
+      // ... other fields
+    });
+  }
+}
+
+interface Migration {
+  version: number;
+  description: string;
+  up: (config: any) => any;
+  down?: (config: any) => any;
+}
+```
+
+#### Migration Patterns
+
+**1. Adding New Fields**
+
+```typescript
+// Add new field with default value
+const addFieldMigration: Migration = {
+  version: 6,
+  description: 'Add notification preferences',
+  up: (config) => ({
+    ...config,
+    notifications: {
+      email: true,
+      push: false,
+      inApp: true,
+    },
+  }),
+  down: (config) => {
+    const { notifications, ...rest } = config;
+    return rest;
+  },
+};
+```
+
+**2. Renaming Fields**
+
+```typescript
+// Rename field while preserving value
+const renameFieldMigration: Migration = {
+  version: 7,
+  description: 'Rename refreshRate to refreshInterval',
+  up: (config) => {
+    const { refreshRate, ...rest } = config.data;
+    return {
+      ...config,
+      data: {
+        ...rest,
+        refreshInterval: refreshRate,
+      },
+    };
+  },
+  down: (config) => {
+    const { refreshInterval, ...rest } = config.data;
+    return {
+      ...config,
+      data: {
+        ...rest,
+        refreshRate: refreshInterval,
+      },
+    };
+  },
+};
+```
+
+**3. Type Conversions**
+
+```typescript
+// Convert data type
+const typeConversionMigration: Migration = {
+  version: 8,
+  description: 'Convert timeout from seconds to milliseconds',
+  up: (config) => ({
+    ...config,
+    behavior: {
+      ...config.behavior,
+      timeout: config.behavior.timeout * 1000,
+    },
+  }),
+  down: (config) => ({
+    ...config,
+    behavior: {
+      ...config.behavior,
+      timeout: config.behavior.timeout / 1000,
+    },
+  }),
+};
+```
+
+**4. Restructuring Data**
+
+```typescript
+// Flatten or nest structures
+const restructureMigration: Migration = {
+  version: 9,
+  description: 'Flatten user profile structure',
+  up: (config) => {
+    const { profile } = config.user;
+    return {
+      ...config,
+      user: {
+        ...config.user,
+        firstName: profile.name.first,
+        lastName: profile.name.last,
+        email: profile.contact.email,
+      },
+    };
+  },
+  down: (config) => {
+    const { firstName, lastName, email, ...user } = config.user;
+    return {
+      ...config,
+      user: {
+        ...user,
+        profile: {
+          name: { first: firstName, last: lastName },
+          contact: { email },
+        },
+      },
+    };
+  },
+};
+```
+
+#### Migration Testing
+
+```typescript
+class MigrationTester {
+  async testMigration(migration: Migration, testCases: TestCase[]) {
+    for (const testCase of testCases) {
+      console.log(`Testing migration ${migration.version}: ${testCase.name}`);
+      
+      // Test forward migration
+      const migrated = migration.up(testCase.input);
+      expect(migrated).toEqual(testCase.expectedOutput);
+      
+      // Test backward migration (if exists)
+      if (migration.down) {
+        const rolledBack = migration.down(migrated);
+        expect(rolledBack).toEqual(testCase.input);
+      }
+    }
+  }
+}
+
+interface TestCase {
+  name: string;
+  input: any;
+  expectedOutput: any;
+}
+
+// Example test
+const testCases: TestCase[] = [
+  {
+    name: 'Add gridDensity with default value',
+    input: {
+      appearance: { theme: 'dark' },
+    },
+    expectedOutput: {
+      appearance: { theme: 'dark', gridDensity: 'normal' },
+    },
+  },
+];
+```
+
+#### Best Practices
+
+1. **Always provide rollback (down) migrations** for safety
+2. **Validate data after each migration** to catch errors early
+3. **Backup configurations before migrating** to enable recovery
+4. **Test migrations thoroughly** with real-world data
+5. **Log migration events** for debugging and auditing
+6. **Keep migrations idempotent** (safe to run multiple times)
+7. **Document breaking changes** in migration descriptions
+8. **Version schemas explicitly** to track evolution
+
 ## Settings Management
 
-### Concept
+### Purpose
 
-Centralized system for user preferences and application options.
+Comprehensive infrastructure for managing, persisting, and synchronizing application settings across the BI Dashboard Framework. Settings Management provides the technical foundation that powers the User Configurations system, implementing the low-level mechanisms for storing preferences, validating changes, propagating updates, and maintaining consistency across distributed components. While User Configurations focus on what settings exist and their business semantics, Settings Management addresses how those settings are stored, retrieved, updated, and synchronized in a performant, reliable, and scalable manner. This system handles the complex orchestration of multiple storage backends (in-memory state, localStorage, IndexedDB, remote servers), manages the lifecycle of settings from initialization through updates to persistence, implements optimistic updates with rollback capabilities for network failures, and provides reactive subscriptions that automatically notify components when relevant settings change. The architecture supports advanced scenarios like settings inheritance hierarchies (organization → workspace → user), conflict resolution for concurrent updates in collaborative environments, partial updates to minimize network traffic, and efficient caching strategies to reduce database queries. Settings Management also implements critical cross-cutting concerns including encryption for sensitive data, compression for large configuration objects, versioning for schema evolution, and audit logging for compliance tracking, ensuring that the settings infrastructure meets enterprise requirements for security, performance, and observability.
 
 ### Architecture Approaches
 
@@ -2922,7 +6342,656 @@ Centralized system for user preferences and application options.
 
 ### Recommended Architecture
 
-Hierarchical structure with Zustand, Zod validation, hybrid persistence (critical settings eager, UI preferences debounced), IndexedDB storage.
+The recommended architecture for Settings Management in the BI Dashboard Framework combines proven technologies and patterns to deliver a robust, performant, and maintainable configuration system. This architecture leverages Zustand for reactive state management (lightweight, minimal boilerplate, excellent TypeScript support), Zod for runtime schema validation (type inference, clear error messages, composable schemas), hybrid persistence strategies (immediate persistence for critical settings, debounced persistence for frequently changing UI preferences), and IndexedDB for client-side storage (large capacity, indexed queries, transaction support). The architecture is designed to scale from simple single-user scenarios to complex multi-tenant enterprise deployments, supporting features like settings inheritance (organization → workspace → user), conflict resolution (for collaborative environments), encryption (for sensitive data), and cloud synchronization (for cross-device access). This recommended approach has been battle-tested in production applications, balances competing concerns (performance vs. safety, simplicity vs. flexibility), and provides clear upgrade paths as requirements evolve.
+
+#### Technology Stack
+
+**State Management: Zustand**
+
+```typescript
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+
+// Define store with TypeScript
+interface SettingsStore {
+  // State
+  appearance: AppearanceSettings;
+  behavior: BehaviorSettings;
+  data: DataSettings;
+  security: SecuritySettings;
+  
+  // Actions
+  updateAppearance: (updates: Partial<AppearanceSettings>) => void;
+  updateBehavior: (updates: Partial<BehaviorSettings>) => void;
+  resetToDefaults: () => void;
+  exportSettings: () => string;
+  importSettings: (json: string) => void;
+}
+
+// Create store with middleware
+const useSettingsStore = create<SettingsStore>()(  immer(
+    persist(
+      (set, get) => ({
+        // Initial state
+        appearance: {
+          theme: 'light',
+          fontSize: 14,
+          sidebarVisible: true,
+        },
+        behavior: {
+          autoSaveDelay: 30000,
+          confirmOnDelete: true,
+        },
+        data: {
+          refreshInterval: 60000,
+          cacheEnabled: true,
+        },
+        security: {
+          sessionTimeout: 3600000,
+          twoFactorEnabled: false,
+        },
+        
+        // Actions (using Immer for immutable updates)
+        updateAppearance: (updates) => set((state) => {
+          Object.assign(state.appearance, updates);
+        }),
+        
+        updateBehavior: (updates) => set((state) => {
+          Object.assign(state.behavior, updates);
+        }),
+        
+        resetToDefaults: () => set(getDefaultSettings()),
+        
+        exportSettings: () => {
+          const state = get();
+          return JSON.stringify(state, null, 2);
+        },
+        
+        importSettings: (json) => {
+          const imported = JSON.parse(json);
+          set(imported);
+        },
+      }),
+      {
+        name: 'settings-storage',
+        storage: createJSONStorage(() => indexedDBStorage),
+        partialize: (state) => ({
+          // Only persist these fields
+          appearance: state.appearance,
+          behavior: state.behavior,
+          data: state.data,
+          security: state.security,
+        }),
+      }
+    )
+  )
+);
+```
+
+**Schema Validation: Zod**
+
+```typescript
+import { z } from 'zod';
+
+// Define schemas with Zod
+const AppearanceSettingsSchema = z.object({
+  theme: z.enum(['light', 'dark', 'high-contrast']),
+  fontSize: z.number().min(10).max(24),
+  sidebarVisible: z.boolean(),
+  gridDensity: z.enum(['compact', 'normal', 'comfortable']).default('normal'),
+});
+
+const BehaviorSettingsSchema = z.object({
+  autoSaveDelay: z.number().min(1000).max(300000),
+  confirmOnDelete: z.boolean(),
+  undoHistorySize: z.number().min(10).max(100).default(50),
+});
+
+const DataSettingsSchema = z.object({
+  refreshInterval: z.number().min(5000),
+  cacheEnabled: z.boolean(),
+  maxCacheSize: z.number().min(1024 * 1024).default(50 * 1024 * 1024),
+});
+
+const SecuritySettingsSchema = z.object({
+  sessionTimeout: z.number().min(60000),
+  twoFactorEnabled: z.boolean(),
+  encryptionEnabled: z.boolean().default(true),
+});
+
+// Combined schema
+const SettingsSchema = z.object({
+  appearance: AppearanceSettingsSchema,
+  behavior: BehaviorSettingsSchema,
+  data: DataSettingsSchema,
+  security: SecuritySettingsSchema,
+  _version: z.number().optional(),
+});
+
+// Type inference
+type Settings = z.infer<typeof SettingsSchema>;
+type AppearanceSettings = z.infer<typeof AppearanceSettingsSchema>;
+
+// Validation function
+function validateSettings(settings: unknown): Settings {
+  return SettingsSchema.parse(settings);
+}
+```
+
+**Persistence: Hybrid Strategy**
+
+```typescript
+class HybridPersistenceManager {
+  private criticalSettings = ['security', 'data.credentials'];
+  private debouncedSettings = ['appearance', 'behavior'];
+  private debouncedSave = debounce(this.saveToIndexedDB.bind(this), 1000);
+  
+  async persist(category: string, data: any) {
+    // Immediate persistence for critical settings
+    if (this.isCritical(category)) {
+      await this.saveToIndexedDB(category, data);
+      console.log(`[Persistence] Immediate save: ${category}`);
+      return;
+    }
+    
+    // Debounced persistence for UI settings
+    if (this.isDebounced(category)) {
+      this.debouncedSave(category, data);
+      console.log(`[Persistence] Debounced save queued: ${category}`);
+      return;
+    }
+    
+    // Default: immediate save
+    await this.saveToIndexedDB(category, data);
+  }
+  
+  private isCritical(category: string): boolean {
+    return this.criticalSettings.some(c => category.startsWith(c));
+  }
+  
+  private isDebounced(category: string): boolean {
+    return this.debouncedSettings.some(c => category.startsWith(c));
+  }
+  
+  private async saveToIndexedDB(category: string, data: any) {
+    const db = await openDB('settings');
+    await db.put('settings', { category, data, timestamp: Date.now() });
+  }
+}
+```
+
+**Storage: IndexedDB**
+
+```typescript
+import { openDB, DBSchema } from 'idb';
+
+// Define database schema
+interface SettingsDB extends DBSchema {
+  settings: {
+    key: string;
+    value: {
+      category: string;
+      data: any;
+      timestamp: number;
+    };
+    indexes: { 'by-timestamp': number };
+  };
+  backups: {
+    key: number;
+    value: {
+      settings: any;
+      timestamp: number;
+      version: number;
+    };
+  };
+}
+
+// Initialize database
+const db = await openDB<SettingsDB>('settings-db', 1, {
+  upgrade(db) {
+    // Settings store
+    const settingsStore = db.createObjectStore('settings', { keyPath: 'category' });
+    settingsStore.createIndex('by-timestamp', 'timestamp');
+    
+    // Backups store
+    db.createObjectStore('backups', { keyPath: 'timestamp' });
+  },
+});
+
+// IndexedDB storage adapter for Zustand
+const indexedDBStorage = {
+  getItem: async (name: string) => {
+    const item = await db.get('settings', name);
+    return item?.data || null;
+  },
+  setItem: async (name: string, value: any) => {
+    await db.put('settings', {
+      category: name,
+      data: value,
+      timestamp: Date.now(),
+    });
+  },
+  removeItem: async (name: string) => {
+    await db.delete('settings', name);
+  },
+};
+```
+
+#### Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    React Components                      │
+│  (Subscribe to settings via useSettingsStore hooks)     │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│                  Zustand Store                           │
+│  • Reactive state management                             │
+│  • Immer middleware (immutable updates)                  │
+│  • Persist middleware (auto-save)                        │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│               Validation Layer (Zod)                     │
+│  • Runtime schema validation                             │
+│  • Type inference                                        │
+│  • Error messages                                        │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│          Hybrid Persistence Manager                      │
+│  • Critical settings → Immediate save                    │
+│  • UI preferences → Debounced save                       │
+│  • Encryption for sensitive data                         │
+└────────────────────┬────────────────────────────────────┘
+                     │
+        ┌────────────┴────────────┐
+        ▼                         ▼
+┌──────────────┐          ┌──────────────┐
+│  IndexedDB   │          │ Cloud Sync   │
+│  (Local)     │          │  (Optional)  │
+└──────────────┘          └──────────────┘
+```
+
+#### Implementation Checklist
+
+**Phase 1: Core Setup**
+- [ ] Install dependencies (zustand, zod, idb)
+- [ ] Define TypeScript interfaces for all settings categories
+- [ ] Create Zod schemas with validation rules
+- [ ] Set up IndexedDB database with proper indexes
+- [ ] Initialize Zustand store with persist middleware
+
+**Phase 2: Persistence**
+- [ ] Implement hybrid persistence manager
+- [ ] Add debouncing for UI settings
+- [ ] Add immediate persistence for critical settings
+- [ ] Implement encryption for sensitive data
+- [ ] Add error handling and retry logic
+
+**Phase 3: Migration**
+- [ ] Create migration manager
+- [ ] Define migration functions for each version
+- [ ] Implement rollback capabilities
+- [ ] Add migration testing
+- [ ] Set up backup system
+
+**Phase 4: Features**
+- [ ] Implement settings import/export
+- [ ] Add settings reset functionality
+- [ ] Create settings UI components
+- [ ] Add cloud sync (optional)
+- [ ] Implement audit logging
+
+**Phase 5: Optimization**
+- [ ] Add performance monitoring
+- [ ] Optimize bundle size
+- [ ] Implement lazy loading for settings categories
+- [ ] Add compression for large settings
+- [ ] Optimize IndexedDB queries
+
+#### Why This Architecture?
+
+**Zustand over Redux**
+- Simpler API, less boilerplate
+- No provider needed
+- Excellent TypeScript support
+- Smaller bundle size (~1KB vs ~8KB)
+- Built-in persistence middleware
+
+**Zod over TypeScript-only**
+- Runtime validation catches invalid data
+- Protects against corrupted storage
+- Type inference reduces duplication
+- Clear, actionable error messages
+- Validates external data (imports, API responses)
+
+**IndexedDB over localStorage**
+- Much larger storage capacity (50MB-1GB vs 5-10MB)
+- Asynchronous API (doesn't block UI)
+- Supports complex queries with indexes
+- Transaction support for data integrity
+- Better performance for large datasets
+
+**Hybrid Persistence over Single Strategy**
+- Balances safety and performance
+- Critical data saved immediately
+- UI preferences don't cause excessive writes
+- Reduces storage wear
+- Better user experience (no lag on UI changes)
+
+### Core Components
+
+The Settings Management system consists of several interconnected components that work together to provide a robust configuration infrastructure:
+
+**1. Settings Store (State Management)**
+- Central Zustand store holding all application settings in memory
+- Provides reactive subscriptions for components to listen to changes
+- Implements selectors for efficient partial state access
+- Supports middleware for logging, persistence, and validation
+
+**2. Persistence Manager**
+- Coordinates saving settings to various storage backends
+- Implements debouncing and batching for performance
+- Handles storage quota management and cleanup
+- Provides fallback mechanisms when storage is unavailable
+
+**3. Validation Engine**
+- Validates settings against Zod schemas before persistence
+- Provides detailed error messages for invalid configurations
+- Supports custom validation rules and business logic
+- Ensures type safety at runtime
+
+**4. Sync Coordinator**
+- Manages synchronization between local and remote settings
+- Implements conflict resolution strategies
+- Handles offline scenarios with queue-based sync
+- Provides real-time updates via WebSocket connections
+
+**5. Migration Manager**
+- Automatically migrates settings when schemas change
+- Maintains version history for rollback capabilities
+- Validates migrations before applying them
+- Logs migration events for debugging
+
+**6. Encryption Service**
+- Encrypts sensitive settings using Web Crypto API
+- Manages encryption keys securely
+- Provides transparent encryption/decryption
+- Supports key rotation for security
+
+### Settings Lifecycle
+
+Settings flow through a well-defined lifecycle from initialization to persistence:
+
+```
+┌─────────────┐
+│ Initialize  │ → Load defaults, merge with stored settings
+└──────┬──────┘
+       │
+┌──────▼──────┐
+│  Validate   │ → Check against schemas, apply business rules
+└──────┬──────┘
+       │
+┌──────▼──────┐
+│   Update    │ → User changes settings via UI or API
+└──────┬──────┘
+       │
+┌──────▼──────┐
+│  Propagate  │ → Notify subscribers, trigger re-renders
+└──────┬──────┘
+       │
+┌──────▼──────┐
+│   Persist   │ → Save to IndexedDB, sync to cloud
+└──────┬──────┘
+       │
+┌──────▼──────┐
+│    Audit    │ → Log changes for compliance
+└─────────────┘
+```
+
+**Initialization Phase**
+1. Load default settings from configuration files
+2. Retrieve stored settings from IndexedDB
+3. Merge stored settings with defaults (stored takes precedence)
+4. Apply organization-level policies and overrides
+5. Validate merged settings against schemas
+6. Initialize Zustand store with validated settings
+
+**Update Phase**
+1. User triggers setting change via UI component
+2. Validation engine checks new value against schema
+3. If valid, update in-memory store (optimistic update)
+4. Trigger reactive subscriptions to notify components
+5. Queue persistence operation (debounced or immediate)
+6. If persistence fails, rollback in-memory change
+
+**Persistence Phase**
+1. Batch multiple pending changes if debounced
+2. Serialize settings to JSON
+3. Encrypt sensitive fields if configured
+4. Write to IndexedDB with transaction
+5. If cloud sync enabled, queue remote update
+6. Log persistence event to audit trail
+
+**Synchronization Phase**
+1. Detect changes from remote source (other devices/users)
+2. Fetch updated settings from server
+3. Compare with local settings to detect conflicts
+4. Apply conflict resolution strategy (last-write-wins, merge, prompt)
+5. Update local store with resolved settings
+6. Persist merged settings to IndexedDB
+
+### Conflict Resolution Strategies
+
+When settings are modified concurrently across multiple devices or users, the system must resolve conflicts intelligently:
+
+**1. Last-Write-Wins (LWW)**
+- Simplest strategy: most recent change wins
+- Uses timestamps to determine recency
+- May lose user changes if not careful
+- Best for: Single-user scenarios, non-critical settings
+
+**2. Merge Strategy**
+- Attempts to merge non-conflicting changes
+- Uses operational transformation or CRDTs
+- Preserves changes from both sources when possible
+- Best for: Collaborative environments, structured settings
+
+**3. User Prompt**
+- Presents conflict to user for manual resolution
+- Shows both versions side-by-side
+- Allows user to choose or merge manually
+- Best for: Critical settings, expert users
+
+**4. Field-Level Resolution**
+- Different strategies for different setting categories
+- Critical settings use user prompt
+- UI preferences use last-write-wins
+- Data settings use merge strategy
+- Best for: Production systems with mixed requirements
+
+### Performance Optimizations
+
+Settings Management implements several optimizations to ensure minimal performance impact:
+
+**1. Selective Subscriptions**
+```typescript
+// Only re-render when specific settings change
+const theme = useConfigStore((state) => state.appearance.theme);
+const fontSize = useConfigStore((state) => state.appearance.fontSize);
+
+// Avoid: subscribing to entire store
+// const config = useConfigStore(); // Re-renders on ANY change
+```
+
+**2. Debounced Persistence**
+```typescript
+const debouncedPersist = debounce((settings) => {
+  persistToIndexedDB(settings);
+}, 1000); // Wait 1s after last change
+
+// User types in font size input: 12 → 13 → 14 → 15
+// Only persists once after user stops typing
+```
+
+**3. Lazy Loading**
+```typescript
+// Load settings on-demand rather than all at once
+const loadSecuritySettings = async () => {
+  if (!securitySettingsLoaded) {
+    const settings = await fetchFromIndexedDB('security');
+    setSecuritySettings(settings);
+    securitySettingsLoaded = true;
+  }
+};
+```
+
+**4. Compression**
+```typescript
+// Compress large configuration objects before storage
+const compressed = await compress(JSON.stringify(settings));
+await indexedDB.put('settings', compressed);
+
+// Decompress on load
+const compressed = await indexedDB.get('settings');
+const settings = JSON.parse(await decompress(compressed));
+```
+
+**5. Caching**
+```typescript
+// Cache frequently accessed settings in memory
+const settingsCache = new Map();
+
+function getSetting(key: string) {
+  if (settingsCache.has(key)) {
+    return settingsCache.get(key);
+  }
+  const value = store.getState()[key];
+  settingsCache.set(key, value);
+  return value;
+}
+```
+
+### Security Considerations
+
+Settings Management implements multiple security layers to protect sensitive configuration data:
+
+**1. Encryption at Rest**
+- Sensitive settings (API keys, credentials) encrypted using AES-256-GCM
+- Encryption keys derived from user password or stored in secure keychain
+- Transparent encryption/decryption via middleware
+
+**2. Access Control**
+- Role-based permissions for modifying settings
+- Organization admins can lock certain settings
+- Audit trail for all setting changes
+
+**3. Input Validation**
+- All user input validated against schemas
+- Prevents injection attacks via malicious settings
+- Sanitizes string values before storage
+
+**4. Secure Transmission**
+- Settings synced over HTTPS only
+- Certificate pinning for API requests
+- JWT tokens for authentication
+
+**5. Content Security Policy**
+- Prevents XSS attacks via settings injection
+- Restricts eval() and inline scripts
+- Validates URLs in settings before navigation
+
+### Monitoring and Debugging
+
+The Settings Management system provides comprehensive observability for troubleshooting and performance monitoring:
+
+**1. Audit Logging**
+```typescript
+interface SettingChangeEvent {
+  timestamp: Date;
+  userId: string;
+  settingKey: string;
+  oldValue: any;
+  newValue: any;
+  source: 'ui' | 'api' | 'sync' | 'migration';
+}
+
+// Log all changes
+settingsStore.subscribe((state, prevState) => {
+  const changes = detectChanges(prevState, state);
+  changes.forEach(change => {
+    auditLog.record({
+      timestamp: new Date(),
+      userId: currentUser.id,
+      settingKey: change.key,
+      oldValue: change.oldValue,
+      newValue: change.newValue,
+      source: 'ui',
+    });
+  });
+});
+```
+
+**2. Performance Metrics**
+- Track persistence latency (time to save settings)
+- Monitor sync frequency and conflicts
+- Measure validation overhead
+- Alert on storage quota issues
+
+**3. Debug Mode**
+```typescript
+// Enable verbose logging in development
+if (import.meta.env.DEV) {
+  settingsStore.subscribe((state) => {
+    console.log('[Settings] State updated:', state);
+  });
+  
+  // Log all persistence operations
+  persistenceManager.on('save', (key, value) => {
+    console.log(`[Persistence] Saved ${key}:`, value);
+  });
+}
+```
+
+**4. Settings Inspector**
+- DevTools panel showing current settings
+- Visualize setting inheritance hierarchy
+- Test setting changes without persistence
+- Export/import for bug reproduction
+
+### Testing Strategies
+
+Comprehensive testing ensures Settings Management reliability:
+
+**1. Unit Tests**
+- Test validation schemas with valid/invalid inputs
+- Verify persistence manager debouncing logic
+- Test conflict resolution algorithms
+- Validate encryption/decryption roundtrips
+
+**2. Integration Tests**
+- Test full lifecycle: initialize → update → persist → sync
+- Verify IndexedDB transactions and rollbacks
+- Test migration from old to new schema versions
+- Validate multi-tab synchronization
+
+**3. Performance Tests**
+- Benchmark persistence latency with large settings
+- Test memory usage with many subscribers
+- Measure sync overhead with high-frequency updates
+- Validate storage quota handling
+
+**4. Security Tests**
+- Attempt to inject malicious values via settings
+- Verify encryption keys are never logged
+- Test access control enforcement
+- Validate XSS prevention in setting values
 
 ## Keybinding System
 
