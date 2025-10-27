@@ -2914,140 +2914,6 @@ class ConfigManager {
 
 ---
 
-# Technical Stack
-
-
-
-## Technology Choices
-
-## Frontend Framework & UI Libraries
-
-**Core Framework**:
-- **React**: Component-based UI library
-- **React Hooks**: Modern state and lifecycle management
-- **React Context**: Dependency injection and theming
-
-**UI Component Libraries**:
-
-| Library | Type | Pros | Cons | Bundle Size | Use Case |
-|---------|------|------|------|-------------|----------|
-| **shadcn/ui** | Copy-paste components | Full control; Customizable; Radix-based; TypeScript | Manual updates; No npm package | Varies | Modern React apps, full customization |
-| **Radix UI** | Headless primitives | Accessible; Unstyled; Composable; TypeScript | Requires styling; More setup | ~5-10KB/component | Accessible, custom designs |
-| **Headless UI** | Unstyled components | Tailwind-friendly; Accessible; Simple API | Limited components; Tailwind-focused | ~5KB | Tailwind projects |
-| **Mantine** | Full component library | 100+ components; Hooks library; Dark mode; TypeScript | Large bundle; Opinionated | ~50KB+ | Rapid development |
-| **Chakra UI** | Component library | Accessible; Themeable; Composable; Good DX | Bundle size; Performance | ~40KB+ | Accessible apps |
-| **Ant Design** | Enterprise UI | Comprehensive; i18n support; Design system | Very large; Opinionated; Chinese-focused | ~500KB+ | Enterprise dashboards |
-| **Material UI** | Material Design | Mature; Comprehensive; Customizable | Large bundle; Material-only | ~300KB+ | Material Design apps |
-
-**Platform-Specific UI Libraries**:
-
-| Platform | UI Stack | Components Used |
-|----------|----------|-----------------|
-| **Observable** | Custom React + D3 | • Custom React components; • D3.js for visualizations; • Observable Inputs (form controls); • Custom notebook UI; • Inline HTML/SVG |
-| **Count.co** | React + Custom | • Custom React components; • Canvas-based UI; • SQL editor (Monaco/CodeMirror); • Custom chart library; • Drag-and-drop system |
-| **Evidence** | Svelte + Tailwind | • Svelte components; • Tailwind CSS for styling; • Custom markdown renderer; • Built-in chart components; • SQL syntax highlighting |
-| **tldraw** | React + Radix | • Custom React components; • Radix UI primitives; • Custom canvas renderer; • Shape toolbars; • Context menus |
-| **Omni Docs** | React-based | • Custom documentation components; • Markdown renderer; • Code syntax highlighting; • Navigation components |
-
-**Recommended Stack for BI Dashboards**:
-
-```typescript
-// Modern, performant UI stack
-{
-  framework: 'React 18+',
-  components: 'shadcn/ui + Radix UI', // Accessible, customizable
-  styling: 'Tailwind CSS',             // Utility-first
-  charts: 'Observable Plot + D3.js',   // Data visualization
-  editor: 'Monaco Editor',             // Code/SQL editing
-  forms: 'React Hook Form',            // Form management
-  tables: 'TanStack Table',            // Data tables
-  icons: 'Lucide React',               // Icon system
-  canvas: 'Konva.js or custom',        // Canvas rendering
-}
-```
-
-**Component Categories for BI Dashboards**:
-
-1. **Layout Components**:
-   - Resizable panels (react-resizable-panels)
-   - Grid layouts (react-grid-layout)
-   - Tabs and navigation
-   - Sidebar and header
-
-2. **Data Input**:
-   - Form controls (shadcn/ui forms)
-   - SQL/Code editor (Monaco Editor)
-   - Date pickers (react-day-picker)
-   - Filters and search
-
-3. **Data Display**:
-   - Charts (Observable Plot, Recharts, Victory)
-   - Tables (TanStack Table)
-   - Cards and metrics
-   - Lists and trees
-
-4. **Interaction**:
-   - Command palette (cmdk)
-   - Context menus (Radix UI)
-   - Tooltips and popovers
-   - Modals and dialogs
-
-5. **Feedback**:
-   - Toast notifications (sonner)
-   - Loading states
-   - Error boundaries
-   - Progress indicators
-
-## State Management
-- **Zustand** or **Jotai**: Lightweight, flexible state management
-- **Immer**: Immutable state updates
-- **IndexedDB**: Client-side persistence
-
-## Build System
-- **Vite**: Fast development server and build tool
-- **ESBuild**: Fast JavaScript bundler
-- **TypeScript**: Type-safe development
-
-## Extension System
-- **ES Modules**: Standard module format for extensions
-- **Dynamic Import**: Lazy loading of extensions
-- **Web Workers**: Isolated execution for heavy computations
-
-## Security
-- **SES (Secure ECMAScript)**: Hardened JavaScript environment
-- **Content Security Policy**: Browser-level security
-- **Subresource Integrity**: Verify external resources
-
-
-> **Note**: State management details are in Section 1.3. Security technologies are in Section 2.1.
-
----
-
-# Use Cases & Examples
-
-
-
-## BI Dashboard Application
-
-## Dashboard Builder
-- **Drag-and-Drop**: Visual dashboard composition
-- **Data Binding**: Connect components to data sources
-- **Real-Time Updates**: Live data streaming and updates
-- **Responsive Design**: Adaptive layouts for different screen sizes
-
-## Data Visualization
-- **Chart Library**: Comprehensive set of chart types
-- **Custom Visualizations**: User-defined chart components
-- **Interactive Filters**: Cross-filtering between components
-- **Drill-Down**: Navigate from summary to detail views
-
-## Developer Workflows
-- **Version Control**: Dashboard configurations as code
-- **Collaboration**: Share and fork dashboards
-- **Testing**: Unit and integration tests for extensions
-- **Deployment**: CI/CD integration for dashboard updates
-
----
 
 # References & Inspiration
 
@@ -3087,6 +2953,15 @@ class ConfigManager {
 - [Fabric.js](https://github.com/fabricjs/fabric.js) - Canvas library with SVG support
 - [PixiJS](https://github.com/pixijs/pixijs) - WebGL rendering engine
 - [rbush](https://github.com/mourner/rbush) - R-tree spatial indexing
+
+**UI Component Libraries**:
+- [shadcn/ui](https://ui.shadcn.com/) - Copy-paste components built on Radix UI
+- [Radix UI](https://www.radix-ui.com/) - Unstyled, accessible component primitives
+- [Headless UI](https://headlessui.com/) - Unstyled, accessible UI components
+- [Mantine](https://mantine.dev/) - Full-featured React component library
+- [Chakra UI](https://chakra-ui.com/) - Accessible component library
+- [Ant Design](https://ant.design/) - Enterprise-grade UI design system
+- [Material UI](https://mui.com/) - Material Design component library
 
 ## Platform Documentation
 
