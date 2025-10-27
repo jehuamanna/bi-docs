@@ -13,7 +13,7 @@ pandoc docs.md \
   --number-sections \
   --highlight-style=tango \
   --variable geometry:margin=0.6in \
-  --variable fontsize=3pt \
+  --variable fontsize=12pt \
   --variable linestretch=1.15 \
   --variable pagestyle=plain \
   --variable documentclass=report \
