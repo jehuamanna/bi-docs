@@ -6,7 +6,7 @@
 echo "Converting docs.md to professional PDF..."
 
 pandoc docs.md \
-  -o docs.pdf \
+  -o bi-ideal-architecutre.pdf \
   --pdf-engine=lualatex \
   --toc \
   --toc-depth=5 \
