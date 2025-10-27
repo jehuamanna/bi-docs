@@ -2275,7 +2275,7 @@ Configuration and data persistence strategies for the framework.
 
 #### User Configurations
 
-#####.1 Settings Management
+#### 5.1 Settings Management
 
 **Concept**: Centralized system for user preferences and application options.
 
@@ -2332,7 +2332,7 @@ Configuration and data persistence strategies for the framework.
 
 **Recommended Architecture**: Hierarchical structure with Zustand, Zod validation, hybrid persistence (critical settings eager, UI preferences debounced), IndexedDB storage.
 
-#####.2 Keybinding System
+#### 5.2 Keybinding System
 
 **Concept**: Customizable keyboard shortcuts for commands and actions.
 
@@ -2390,7 +2390,7 @@ Configuration and data persistence strategies for the framework.
 
 **Recommended Architecture**: Command-based with keymap hierarchy, context-aware execution, chord support, and user customization. Use tinykeys for minimal apps, hotkeys-js for feature-rich needs.
 
-#####.3 Theme System
+#### 5.3 Theme System
 
 **Concept**: Visual styling and color schemes that can be switched dynamically.
 
@@ -2458,7 +2458,7 @@ Configuration and data persistence strategies for the framework.
 
 **Recommended Architecture**: CSS Variables for tokens, Tailwind CSS for utility classes, system preference detection with manual override, persistent user choice in IndexedDB.
 
-#####.4 Layout System
+#### 5.4 Layout System
 
 **Concept**: Flexible, user-customizable arrangement of dashboard components and panels.
 
