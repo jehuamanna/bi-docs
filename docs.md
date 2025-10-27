@@ -8,16 +8,30 @@
 
 - **Tiny Core, Maximum Extensibility**: Minimal core functionality with comprehensive plugin architecture
 - **Plugin-Based Architecture**: Adopts proven patterns for extensibility and modularity
-- **Developer-First**: Built for developers who need powerful customization capabilities
-- **Security-Conscious**: Sandboxed execution environment with capability-based permissions
+- **Developer-First Design**: Prioritizes developer experience with hot reloading, debugging tools, and clear APIs
 
 ---
 
-## Architecture
+## Table of Contents
 
-### 1. Core System Components
+1. [Core System Architecture](#1-core-system-architecture)
+2. [Extension System](#2-extension-system)
+3. [Security Model](#3-security-model)
+4. [Advanced Features](#4-advanced-features)
+5. [Data Persistence](#5-data-persistence)
+6. [Technical Stack](#6-technical-stack)
+7. [Use Cases & Examples](#7-use-cases--examples)
+8. [References & Inspiration](#8-references--inspiration)
+9. [Architecture Diagram](#9-architecture-diagram)
+10. [Implementation Roadmap](#10-implementation-roadmap)
 
-The minimal core provides essential infrastructure:
+---
+
+## 1. Core System Architecture
+
+The minimal core provides essential infrastructure for the extensible framework.
+
+---
 
 #### 1.1 Component Registry
 
@@ -220,7 +234,7 @@ class TypedEventBus {
 }
 ```
 
-*For integration with hooks, see Section 2.4. For state synchronization, see Section 1.3.*
+*For integration with hooks, see Section 2.2.6. For state synchronization, see Section 1.3.*
 
 #### 1.3 State Management
 
@@ -336,7 +350,10 @@ const useDashboardStore = create<DashboardState>()(
 );
 ```
 
-*For persistence strategies, see Section 9. For performance optimization, see Section 8.*
+*For persistence strategies, see Section 5. For performance optimization, see Section 6.*
+
+
+> **Note**: This section consolidates state management information. Technology recommendations and settings management patterns have been integrated here for completeness.
 
 #### 1.4 Plugin Loader
 
@@ -481,63 +498,129 @@ class PluginLoader {
 }
 ```
 
-*For security and sandboxing, see Section 7. For hot module replacement, see Section 8.*
+*For security and sandboxing, see Section 7. For hot module replacement, see Section 6.*
+
 
 ---
 
-### 2. Core Architectural Patterns
+## 2. Extension System
 
-#### 2.1 Buffer/Window Model
-- **Buffers**: Logical content containers (data views, charts, tables)
-- **Windows**: Visual panes that display buffers
-- **Layout Management**: Split, resize, and arrange windows dynamically
-- **Buffer Switching**: Quick navigation between different data views
+The framework provides comprehensive extension capabilities through dual languages and multiple extension points.
 
-#### 2.2 Keybinding System
+---
 
-**Core Concepts**:
-- **Global Keybindings**: System-wide keyboard shortcuts (always active)
-- **Mode-Specific Keybindings**: Context-aware shortcuts based on active component
-- **Keymaps**: Hierarchical keybinding definitions with priority resolution
-- **Chord Support**: Multi-key sequences (e.g., `Ctrl+x Ctrl+s`)
-- **Customizable**: Users can rebind any key combination
+### 2.1 Extension Languages
 
-**Architecture Overview**:
+#### 2.1.1 Custom DSL
 
-The keybinding system follows a **command-based architecture** where:
-1. Commands are first-class entities with unique IDs
-2. Keybindings map to commands (many-to-one relationship)
-3. Context evaluation determines which bindings are active
-4. Priority hierarchy resolves conflicts (Local → Mode → Global)
 
-**Key Design Decisions**:
+- **Purpose**: Declarative, safe UI composition
+- **Features**:
+  - Simple, readable syntax for common patterns
+  - Type-safe by design
+  - Limited to safe operations
+  - Compiles to React components
+  - Hot-reloadable
 
-| Aspect | Recommended Approach | Rationale |
-|--------|---------------------|-----------|
-| **Command Registry** | Centralized registry with command objects | Enables command palette, customization, and discoverability |
-| **Context Awareness** | "When" clauses for conditional activation | Allows same key to trigger different commands based on context |
-| **Conflict Resolution** | Priority-based hierarchy with context evaluation | Predictable behavior while supporting complex scenarios |
-| **Chord Sequences** | Support multi-key sequences with timeout | Expands available key combinations for power users |
-| **Persistence** | Store custom bindings in IndexedDB | User customizations persist across sessions |
+**Example DSL Syntax** (conceptual):
+```
+dashboard "Sales Overview" {
+  layout: grid(2, 2)
+  
+  panel chart {
+    type: line
+    data: query("sales.monthly")
+    position: (0, 0)
+  }
+  
+  panel table {
+    data: query("sales.top_products")
+    position: (1, 0)
+  }
+}
+```
 
-**Library Recommendations by Use Case**:
+#### 2.1.2 JavaScript Extensions
 
-- **Minimal Bundle Size** (<1KB): `tinykeys` - 400 bytes, chord support, zero dependencies
-- **Feature-Rich** (~3KB): `hotkeys-js` - scope support, filtering, mature ecosystem
-- **React Integration** (~2KB): `react-hotkeys-hook` - hooks-based, component-scoped
-- **Full Control**: Custom implementation - tailored to exact needs, no dependencies
+
+- **Purpose**: Full programmatic control for advanced use cases
+- **Features**:
+  - Access to extension API
+  - React component creation
+  - Custom data transformations
+  - Integration with external libraries
+  - Sandboxed execution
+
+
+### 2.2 Extension Points
+
+The framework provides multiple extension points for customizing every aspect of the system.
+
+#### 2.2.1 UI Components
+
+
+
+**Extension Capabilities**:
+- Custom chart types and visualizations
+- Data widgets (tables, cards, metrics)
+- Input controls and forms
+- Layout containers and panels
+- Themes and styling systems
+
+**Component Extension Patterns**:
+
+| Pattern | Description | Pros | Cons | Best For |
+|---------|-------------|------|------|----------|
+| **React Component** | Standard React component | ✅ Familiar<br>✅ Full ecosystem<br>✅ Easy integration | ❌ React-only<br>❌ Bundle size | React-based dashboards |
+| **Web Component** | Custom elements | ✅ Framework-agnostic<br>✅ Encapsulation<br>✅ Reusable | ❌ Less ecosystem<br>❌ Complexity | Multi-framework support |
+| **Plugin API** | Declarative config | ✅ Simple<br>✅ Safe<br>✅ Validated | ❌ Less flexible<br>❌ Limited features | Simple extensions |
+| **Render Function** | Function returning JSX/HTML | ✅ Flexible<br>✅ Lightweight<br>✅ Composable | ❌ No lifecycle<br>❌ Manual cleanup | Simple UI elements |
 
 **BI Dashboard Examples**:
 
-- **Observable**: Command palette (Cmd+K) with fuzzy search, cell-specific shortcuts, notebook-level keybindings
-- **Evidence**: Vim-like modal keybindings for power users, context-aware navigation
-- **Count.co**: Canvas shortcuts (navigation, cell execution, query editing), SQL editor keybindings
-- **tldraw**: Canvas shortcuts (shape creation, selection, transformation), tool-specific bindings
-- **VS Code** (pattern): Comprehensive "when" clause system, keybinding editor UI
+| Platform | Component System | Extension Method |
+|----------|-----------------|------------------|
+| **Observable** | Reactive cells | • Custom cells with JavaScript<br>• Import external libraries<br>• Inline HTML/SVG<br>• D3.js visualizations |
+| **Evidence** | Svelte components | • Custom Svelte components in /components<br>• Markdown with component tags<br>• SQL + component binding |
+| **Count.co** | Canvas components | • Custom visualization cells<br>• SQL-driven components<br>• React-based extensions<br>• Drag-and-drop integration |
+| **tldraw** | Shape components | • Custom shape definitions<br>• SVG-based rendering<br>• Tool components<br>• React shape API |
 
-*See Section 9.1.2 for detailed architectural analysis, pros/cons comparison, and implementation strategies.*
+**Recommended Architecture**:
 
-#### 2.3 Command Palette
+```typescript
+// Component extension API
+interface ComponentExtension {
+  id: string;
+  type: 'chart' | 'widget' | 'control' | 'container';
+  component: React.ComponentType<any>;
+  schema?: JSONSchema; // Props validation
+  defaultProps?: Record<string, any>;
+  icon?: string;
+  category?: string;
+}
+
+// Registration
+extensionAPI.registerComponent({
+  id: 'custom-heatmap',
+  type: 'chart',
+  component: CustomHeatmap,
+  schema: {
+    type: 'object',
+    properties: {
+      data: { type: 'array' },
+      colorScheme: { type: 'string', enum: ['viridis', 'plasma'] }
+    }
+  },
+  icon: 'grid',
+  category: 'Advanced Charts'
+});
+```
+
+*For component registry details, see Section 1.1. For React integration, see Section 8.1.*
+
+#### 2.2.2 Commands & Command Palette
+
+
 
 **Core Concepts**:
 - **Command Registry**: All actions exposed as named commands
@@ -726,9 +809,298 @@ const modes = {
 - [ ] Visual feedback (loading, no results)
 - [ ] Mobile support (optional for BI dashboards)
 
-*For integration with keybindings, see Section 2.2. For state management patterns, see Section 9.1.1.*
+*For integration with keybindings, see Section 2.2.3. For state management patterns, see Section 9.1.1.*
 
-#### 2.4 Hooks & Advice System
+
+**Extension Capabilities**:
+
+
+- Custom actions and workflows
+- Data processing pipelines
+- External API integrations
+- Batch operations
+- Scheduled tasks
+
+**Command Extension Patterns**:
+
+| Pattern | Description | Use Case |
+|---------|-------------|----------|
+| **Simple Command** | Single action | Quick operations |
+| **Parameterized** | Accepts arguments | Flexible actions |
+| **Async Command** | Promise-based | API calls, long operations |
+| **Composite** | Multiple sub-commands | Complex workflows |
+| **Scheduled** | Cron-like execution | Periodic tasks |
+
+**BI Dashboard Examples**:
+
+| Platform | Command System | Extension Method |
+|----------|---------------|------------------|
+| **Observable** | Cell execution | • Cells as commands<br>• Function exports<br>• Import and call |
+| **Evidence** | Build commands | • npm scripts<br>• CLI commands<br>• No runtime commands |
+| **Count.co** | Canvas commands | • Cell execution commands<br>• Query commands<br>• Canvas actions |
+| **tldraw** | Tool commands | • Shape commands<br>• Canvas commands<br>• Tool actions |
+| **VS Code** | Commands API | • commands.registerCommand<br>• Command palette<br>• Keybinding integration |
+
+**Recommended API**:
+
+```typescript
+// Command registration
+extensionAPI.registerCommand({
+  id: 'export-to-pdf',
+  name: 'Export Dashboard to PDF',
+  category: 'Export',
+  execute: async (context) => {
+    const dashboard = context.getActiveDashboard();
+    const pdf = await generatePDF(dashboard);
+    await downloadFile(pdf, 'dashboard.pdf');
+  },
+  when: (context) => context.hasActiveDashboard(),
+  icon: 'download'
+});
+
+// Pipeline command
+extensionAPI.registerPipeline({
+  id: 'data-transform',
+  steps: [
+    { command: 'fetch-data', params: { source: 'api' } },
+    { command: 'transform-data', params: { type: 'aggregate' } },
+    { command: 'update-panel', params: { panelId: 'main' } }
+  ]
+});
+```
+
+*For command palette integration, see Section 2.2.2.*
+
+#### 2.2.3 Keybindings
+
+
+
+**Core Concepts**:
+- **Global Keybindings**: System-wide keyboard shortcuts (always active)
+- **Mode-Specific Keybindings**: Context-aware shortcuts based on active component
+- **Keymaps**: Hierarchical keybinding definitions with priority resolution
+- **Chord Support**: Multi-key sequences (e.g., `Ctrl+x Ctrl+s`)
+- **Customizable**: Users can rebind any key combination
+
+**Architecture Overview**:
+
+The keybinding system follows a **command-based architecture** where:
+1. Commands are first-class entities with unique IDs
+2. Keybindings map to commands (many-to-one relationship)
+3. Context evaluation determines which bindings are active
+4. Priority hierarchy resolves conflicts (Local → Mode → Global)
+
+**Key Design Decisions**:
+
+| Aspect | Recommended Approach | Rationale |
+|--------|---------------------|-----------|
+| **Command Registry** | Centralized registry with command objects | Enables command palette, customization, and discoverability |
+| **Context Awareness** | "When" clauses for conditional activation | Allows same key to trigger different commands based on context |
+| **Conflict Resolution** | Priority-based hierarchy with context evaluation | Predictable behavior while supporting complex scenarios |
+| **Chord Sequences** | Support multi-key sequences with timeout | Expands available key combinations for power users |
+| **Persistence** | Store custom bindings in IndexedDB | User customizations persist across sessions |
+
+**Library Recommendations by Use Case**:
+
+- **Minimal Bundle Size** (<1KB): `tinykeys` - 400 bytes, chord support, zero dependencies
+- **Feature-Rich** (~3KB): `hotkeys-js` - scope support, filtering, mature ecosystem
+- **React Integration** (~2KB): `react-hotkeys-hook` - hooks-based, component-scoped
+- **Full Control**: Custom implementation - tailored to exact needs, no dependencies
+
+**BI Dashboard Examples**:
+
+- **Observable**: Command palette (Cmd+K) with fuzzy search, cell-specific shortcuts, notebook-level keybindings
+- **Evidence**: Vim-like modal keybindings for power users, context-aware navigation
+- **Count.co**: Canvas shortcuts (navigation, cell execution, query editing), SQL editor keybindings
+- **tldraw**: Canvas shortcuts (shape creation, selection, transformation), tool-specific bindings
+- **VS Code** (pattern): Comprehensive "when" clause system, keybinding editor UI
+
+*See Section 9.1.2 for detailed architectural analysis, pros/cons comparison, and implementation strategies.*
+
+
+**Extension Capabilities**:
+
+
+- Custom keyboard shortcuts
+- Mode-specific bindings
+- Chord sequences (multi-key)
+- Macro recording and playback
+- Context-aware activation
+
+**Keybinding Extension Patterns**:
+
+| Approach | Implementation | Pros | Cons |
+|----------|---------------|------|------|
+| **Declarative** | JSON/YAML config | ✅ Simple<br>✅ Validated<br>✅ Safe | ❌ Limited logic<br>❌ No dynamic binding |
+| **Programmatic** | API calls | ✅ Flexible<br>✅ Dynamic<br>✅ Conditional | ❌ More complex<br>❌ Error-prone |
+| **Hybrid** | Config + API | ✅ Best of both<br>✅ Validated + flexible | ❌ Two systems | 
+
+**BI Dashboard Examples**:
+
+| Platform | Keybinding System | Extension Method |
+|----------|------------------|------------------|
+| **Observable** | Built-in shortcuts | • Limited customization<br>• Cell-level shortcuts<br>• Cmd+K command palette |
+| **Evidence** | Not extensible | • Fixed keybindings<br>• No custom shortcuts |
+| **Count.co** | Canvas shortcuts | • Cell navigation keys<br>• Query execution shortcuts<br>• Custom keybindings |
+| **tldraw** | Tool shortcuts | • Shape creation keys<br>• Canvas navigation<br>• Tool-specific bindings |
+| **VS Code** | Keybindings API | • keybindings.json<br>• when clauses<br>• Full customization |
+
+**Recommended API**:
+
+```typescript
+// Keybinding extension
+extensionAPI.registerKeybinding({
+  key: 'Ctrl+Shift+E',
+  command: 'export-dashboard',
+  when: 'dashboardActive && !editing',
+  description: 'Export current dashboard'
+});
+
+// Macro support
+extensionAPI.registerMacro({
+  name: 'refresh-all-panels',
+  keys: ['Ctrl+R', 'Ctrl+A'],
+  actions: [
+    { command: 'select-all-panels' },
+    { command: 'refresh-panels' }
+  ]
+});
+```
+
+*For keybinding architecture, see Section 2.2.3 and 9.1.2.*
+
+
+> **Note**: Detailed keybinding architecture consolidated here from multiple sections.
+
+#### 2.2.4 Themes
+
+
+
+**Extension Capabilities**:
+- Color schemes and palettes
+- Typography systems
+- Component styling
+- Dark/light mode variants
+- Custom CSS variables
+
+**Theme Extension Patterns**:
+
+| Approach | Implementation | Pros | Cons |
+|----------|---------------|------|------|
+| **CSS Variables** | Override root variables | ✅ Simple<br>✅ Performant<br>✅ Dynamic | ❌ Limited scope<br>❌ No logic |
+| **Theme Object** | JavaScript config | ✅ Type-safe<br>✅ Validated<br>✅ Programmatic | ❌ Runtime overhead<br>❌ More complex |
+| **CSS File** | Separate stylesheet | ✅ Familiar<br>✅ Standard<br>✅ Cacheable | ❌ No dynamic<br>❌ Load overhead |
+| **Hybrid** | Variables + Object | ✅ Flexible<br>✅ Best of both | ❌ Complexity |
+
+**BI Dashboard Examples**:
+
+| Platform | Theme System | Extension Method |
+|----------|-------------|------------------|
+| **Observable** | CSS variables | • Custom CSS in cells<br>• Theme cells<br>• CSS imports |
+| **Evidence** | Tailwind config | • tailwind.config.js<br>• Custom CSS<br>• Component styling |
+| **Count.co** | Theme settings | • Color customization<br>• Canvas themes<br>• CSS variables |
+| **tldraw** | Theme system | • CSS variables<br>• Custom themes<br>• Dark/light mode<br>• Color overrides |
+
+**Recommended API**:
+
+```typescript
+// Theme registration
+extensionAPI.registerTheme({
+  id: 'ocean-blue',
+  name: 'Ocean Blue',
+  type: 'dark',
+  colors: {
+    primary: '#0077be',
+    background: '#001f3f',
+    text: '#ffffff',
+    // ... more colors
+  },
+  typography: {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: {
+      base: '14px',
+      heading: '24px'
+    }
+  },
+  shadows: {
+    sm: '0 1px 2px rgba(0,0,0,0.1)',
+    md: '0 4px 6px rgba(0,0,0,0.1)'
+  }
+});
+```
+
+*For theme architecture, see Section 9.1.3.*
+
+#### 2.2.5 Layouts
+
+**Buffer/Window Model**:
+
+
+- **Buffers**: Logical content containers (data views, charts, tables)
+- **Windows**: Visual panes that display buffers
+- **Layout Management**: Split, resize, and arrange windows dynamically
+- **Buffer Switching**: Quick navigation between different data views
+
+
+**Extension Capabilities**:
+
+
+- Window arrangements
+- Dashboard templates
+- Responsive breakpoints
+- Grid configurations
+- Split pane layouts
+
+**Layout Extension Patterns**:
+
+| Pattern | Description | Use Case |
+|---------|-------------|----------|
+| **Template** | Predefined layout | Quick start dashboards |
+| **Programmatic** | Code-defined layout | Dynamic layouts |
+| **Declarative** | JSON/YAML config | Shareable layouts |
+| **Interactive** | Drag-and-drop | User customization |
+
+**BI Dashboard Examples**:
+
+| Platform | Layout System | Extension Method |
+|----------|--------------|------------------|
+| **Observable** | Notebook flow | • Linear cell layout<br>• Custom layouts via HTML<br>• Grid layouts in cells |
+| **Evidence** | Page templates | • Markdown-based<br>• Component slots<br>• Fixed layouts |
+| **Count.co** | Canvas layout | • Free-form canvas<br>• Cell positioning<br>• Auto-layout options<br>• Responsive grids |
+| **tldraw** | Canvas system | • Infinite canvas<br>• Shape positioning<br>• Grouping and frames<br>• Custom layouts |
+
+**Recommended API**:
+
+```typescript
+// Layout template registration
+extensionAPI.registerLayoutTemplate({
+  id: 'analytics-dashboard',
+  name: 'Analytics Dashboard',
+  description: '3-column layout with header',
+  thumbnail: '/templates/analytics.png',
+  layout: {
+    type: 'grid',
+    cols: 12,
+    rows: 'auto',
+    items: [
+      { id: 'header', x: 0, y: 0, w: 12, h: 2, component: 'header' },
+      { id: 'sidebar', x: 0, y: 2, w: 3, h: 10, component: 'sidebar' },
+      { id: 'main', x: 3, y: 2, w: 9, h: 10, component: 'main' }
+    ]
+  },
+  responsive: {
+    mobile: { cols: 1 },
+    tablet: { cols: 6 },
+    desktop: { cols: 12 }
+  }
+});
+```
+
+*For layout architecture, see Section 9.1.4.*
+
+#### 2.2.6 Hooks & Advice
+
+
 
 **Core Concepts**:
 
@@ -1051,342 +1423,12 @@ class AdviceSystem {
 - [ ] Debugging/tracing tools
 - [ ] Performance monitoring
 
-*For plugin architecture, see Section 1.4. For extension patterns, see Section 3.*
+*For plugin architecture, see Section 1.4. For extension patterns, see Section 2.1.*
 
----
 
-## Extensibility
+### 2.3 Hot Reloading
 
-### 3. Dual Extension Languages
 
-#### 3.1 Custom DSL
-- **Purpose**: Declarative, safe UI composition
-- **Features**:
-  - Simple, readable syntax for common patterns
-  - Type-safe by design
-  - Limited to safe operations
-  - Compiles to React components
-  - Hot-reloadable
-
-**Example DSL Syntax** (conceptual):
-```
-dashboard "Sales Overview" {
-  layout: grid(2, 2)
-  
-  panel chart {
-    type: line
-    data: query("sales.monthly")
-    position: (0, 0)
-  }
-  
-  panel table {
-    data: query("sales.top_products")
-    position: (1, 0)
-  }
-}
-```
-
-#### 3.2 JavaScript Extensions
-- **Purpose**: Full programmatic control for advanced use cases
-- **Features**:
-  - Access to extension API
-  - React component creation
-  - Custom data transformations
-  - Integration with external libraries
-  - Sandboxed execution
-
----
-
-### 4. Extension Scope
-
-**Overview**: The framework provides comprehensive extension points across all system layers, enabling developers to customize and extend every aspect of the BI dashboard.
-
-#### 4.1 UI Components
-
-**Extension Capabilities**:
-- Custom chart types and visualizations
-- Data widgets (tables, cards, metrics)
-- Input controls and forms
-- Layout containers and panels
-- Themes and styling systems
-
-**Component Extension Patterns**:
-
-| Pattern | Description | Pros | Cons | Best For |
-|---------|-------------|------|------|----------|
-| **React Component** | Standard React component | ✅ Familiar<br>✅ Full ecosystem<br>✅ Easy integration | ❌ React-only<br>❌ Bundle size | React-based dashboards |
-| **Web Component** | Custom elements | ✅ Framework-agnostic<br>✅ Encapsulation<br>✅ Reusable | ❌ Less ecosystem<br>❌ Complexity | Multi-framework support |
-| **Plugin API** | Declarative config | ✅ Simple<br>✅ Safe<br>✅ Validated | ❌ Less flexible<br>❌ Limited features | Simple extensions |
-| **Render Function** | Function returning JSX/HTML | ✅ Flexible<br>✅ Lightweight<br>✅ Composable | ❌ No lifecycle<br>❌ Manual cleanup | Simple UI elements |
-
-**BI Dashboard Examples**:
-
-| Platform | Component System | Extension Method |
-|----------|-----------------|------------------|
-| **Observable** | Reactive cells | • Custom cells with JavaScript<br>• Import external libraries<br>• Inline HTML/SVG<br>• D3.js visualizations |
-| **Evidence** | Svelte components | • Custom Svelte components in /components<br>• Markdown with component tags<br>• SQL + component binding |
-| **Count.co** | Canvas components | • Custom visualization cells<br>• SQL-driven components<br>• React-based extensions<br>• Drag-and-drop integration |
-| **tldraw** | Shape components | • Custom shape definitions<br>• SVG-based rendering<br>• Tool components<br>• React shape API |
-
-**Recommended Architecture**:
-
-```typescript
-// Component extension API
-interface ComponentExtension {
-  id: string;
-  type: 'chart' | 'widget' | 'control' | 'container';
-  component: React.ComponentType<any>;
-  schema?: JSONSchema; // Props validation
-  defaultProps?: Record<string, any>;
-  icon?: string;
-  category?: string;
-}
-
-// Registration
-extensionAPI.registerComponent({
-  id: 'custom-heatmap',
-  type: 'chart',
-  component: CustomHeatmap,
-  schema: {
-    type: 'object',
-    properties: {
-      data: { type: 'array' },
-      colorScheme: { type: 'string', enum: ['viridis', 'plasma'] }
-    }
-  },
-  icon: 'grid',
-  category: 'Advanced Charts'
-});
-```
-
-*For component registry details, see Section 1.1. For React integration, see Section 8.1.*
-
-#### 4.2 Keybindings
-
-**Extension Capabilities**:
-- Custom keyboard shortcuts
-- Mode-specific bindings
-- Chord sequences (multi-key)
-- Macro recording and playback
-- Context-aware activation
-
-**Keybinding Extension Patterns**:
-
-| Approach | Implementation | Pros | Cons |
-|----------|---------------|------|------|
-| **Declarative** | JSON/YAML config | ✅ Simple<br>✅ Validated<br>✅ Safe | ❌ Limited logic<br>❌ No dynamic binding |
-| **Programmatic** | API calls | ✅ Flexible<br>✅ Dynamic<br>✅ Conditional | ❌ More complex<br>❌ Error-prone |
-| **Hybrid** | Config + API | ✅ Best of both<br>✅ Validated + flexible | ❌ Two systems | 
-
-**BI Dashboard Examples**:
-
-| Platform | Keybinding System | Extension Method |
-|----------|------------------|------------------|
-| **Observable** | Built-in shortcuts | • Limited customization<br>• Cell-level shortcuts<br>• Cmd+K command palette |
-| **Evidence** | Not extensible | • Fixed keybindings<br>• No custom shortcuts |
-| **Count.co** | Canvas shortcuts | • Cell navigation keys<br>• Query execution shortcuts<br>• Custom keybindings |
-| **tldraw** | Tool shortcuts | • Shape creation keys<br>• Canvas navigation<br>• Tool-specific bindings |
-| **VS Code** | Keybindings API | • keybindings.json<br>• when clauses<br>• Full customization |
-
-**Recommended API**:
-
-```typescript
-// Keybinding extension
-extensionAPI.registerKeybinding({
-  key: 'Ctrl+Shift+E',
-  command: 'export-dashboard',
-  when: 'dashboardActive && !editing',
-  description: 'Export current dashboard'
-});
-
-// Macro support
-extensionAPI.registerMacro({
-  name: 'refresh-all-panels',
-  keys: ['Ctrl+R', 'Ctrl+A'],
-  actions: [
-    { command: 'select-all-panels' },
-    { command: 'refresh-panels' }
-  ]
-});
-```
-
-*For keybinding architecture, see Section 2.2 and 9.1.2.*
-
-#### 4.3 Commands
-
-**Extension Capabilities**:
-- Custom actions and workflows
-- Data processing pipelines
-- External API integrations
-- Batch operations
-- Scheduled tasks
-
-**Command Extension Patterns**:
-
-| Pattern | Description | Use Case |
-|---------|-------------|----------|
-| **Simple Command** | Single action | Quick operations |
-| **Parameterized** | Accepts arguments | Flexible actions |
-| **Async Command** | Promise-based | API calls, long operations |
-| **Composite** | Multiple sub-commands | Complex workflows |
-| **Scheduled** | Cron-like execution | Periodic tasks |
-
-**BI Dashboard Examples**:
-
-| Platform | Command System | Extension Method |
-|----------|---------------|------------------|
-| **Observable** | Cell execution | • Cells as commands<br>• Function exports<br>• Import and call |
-| **Evidence** | Build commands | • npm scripts<br>• CLI commands<br>• No runtime commands |
-| **Count.co** | Canvas commands | • Cell execution commands<br>• Query commands<br>• Canvas actions |
-| **tldraw** | Tool commands | • Shape commands<br>• Canvas commands<br>• Tool actions |
-| **VS Code** | Commands API | • commands.registerCommand<br>• Command palette<br>• Keybinding integration |
-
-**Recommended API**:
-
-```typescript
-// Command registration
-extensionAPI.registerCommand({
-  id: 'export-to-pdf',
-  name: 'Export Dashboard to PDF',
-  category: 'Export',
-  execute: async (context) => {
-    const dashboard = context.getActiveDashboard();
-    const pdf = await generatePDF(dashboard);
-    await downloadFile(pdf, 'dashboard.pdf');
-  },
-  when: (context) => context.hasActiveDashboard(),
-  icon: 'download'
-});
-
-// Pipeline command
-extensionAPI.registerPipeline({
-  id: 'data-transform',
-  steps: [
-    { command: 'fetch-data', params: { source: 'api' } },
-    { command: 'transform-data', params: { type: 'aggregate' } },
-    { command: 'update-panel', params: { panelId: 'main' } }
-  ]
-});
-```
-
-*For command palette integration, see Section 2.3.*
-
-#### 4.4 Themes
-
-**Extension Capabilities**:
-- Color schemes and palettes
-- Typography systems
-- Component styling
-- Dark/light mode variants
-- Custom CSS variables
-
-**Theme Extension Patterns**:
-
-| Approach | Implementation | Pros | Cons |
-|----------|---------------|------|------|
-| **CSS Variables** | Override root variables | ✅ Simple<br>✅ Performant<br>✅ Dynamic | ❌ Limited scope<br>❌ No logic |
-| **Theme Object** | JavaScript config | ✅ Type-safe<br>✅ Validated<br>✅ Programmatic | ❌ Runtime overhead<br>❌ More complex |
-| **CSS File** | Separate stylesheet | ✅ Familiar<br>✅ Standard<br>✅ Cacheable | ❌ No dynamic<br>❌ Load overhead |
-| **Hybrid** | Variables + Object | ✅ Flexible<br>✅ Best of both | ❌ Complexity |
-
-**BI Dashboard Examples**:
-
-| Platform | Theme System | Extension Method |
-|----------|-------------|------------------|
-| **Observable** | CSS variables | • Custom CSS in cells<br>• Theme cells<br>• CSS imports |
-| **Evidence** | Tailwind config | • tailwind.config.js<br>• Custom CSS<br>• Component styling |
-| **Count.co** | Theme settings | • Color customization<br>• Canvas themes<br>• CSS variables |
-| **tldraw** | Theme system | • CSS variables<br>• Custom themes<br>• Dark/light mode<br>• Color overrides |
-
-**Recommended API**:
-
-```typescript
-// Theme registration
-extensionAPI.registerTheme({
-  id: 'ocean-blue',
-  name: 'Ocean Blue',
-  type: 'dark',
-  colors: {
-    primary: '#0077be',
-    background: '#001f3f',
-    text: '#ffffff',
-    // ... more colors
-  },
-  typography: {
-    fontFamily: 'Inter, sans-serif',
-    fontSize: {
-      base: '14px',
-      heading: '24px'
-    }
-  },
-  shadows: {
-    sm: '0 1px 2px rgba(0,0,0,0.1)',
-    md: '0 4px 6px rgba(0,0,0,0.1)'
-  }
-});
-```
-
-*For theme architecture, see Section 9.1.3.*
-
-#### 4.5 Layouts
-
-**Extension Capabilities**:
-- Window arrangements
-- Dashboard templates
-- Responsive breakpoints
-- Grid configurations
-- Split pane layouts
-
-**Layout Extension Patterns**:
-
-| Pattern | Description | Use Case |
-|---------|-------------|----------|
-| **Template** | Predefined layout | Quick start dashboards |
-| **Programmatic** | Code-defined layout | Dynamic layouts |
-| **Declarative** | JSON/YAML config | Shareable layouts |
-| **Interactive** | Drag-and-drop | User customization |
-
-**BI Dashboard Examples**:
-
-| Platform | Layout System | Extension Method |
-|----------|--------------|------------------|
-| **Observable** | Notebook flow | • Linear cell layout<br>• Custom layouts via HTML<br>• Grid layouts in cells |
-| **Evidence** | Page templates | • Markdown-based<br>• Component slots<br>• Fixed layouts |
-| **Count.co** | Canvas layout | • Free-form canvas<br>• Cell positioning<br>• Auto-layout options<br>• Responsive grids |
-| **tldraw** | Canvas system | • Infinite canvas<br>• Shape positioning<br>• Grouping and frames<br>• Custom layouts |
-
-**Recommended API**:
-
-```typescript
-// Layout template registration
-extensionAPI.registerLayoutTemplate({
-  id: 'analytics-dashboard',
-  name: 'Analytics Dashboard',
-  description: '3-column layout with header',
-  thumbnail: '/templates/analytics.png',
-  layout: {
-    type: 'grid',
-    cols: 12,
-    rows: 'auto',
-    items: [
-      { id: 'header', x: 0, y: 0, w: 12, h: 2, component: 'header' },
-      { id: 'sidebar', x: 0, y: 2, w: 3, h: 10, component: 'sidebar' },
-      { id: 'main', x: 3, y: 2, w: 9, h: 10, component: 'main' }
-    ]
-  },
-  responsive: {
-    mobile: { cols: 1 },
-    tablet: { cols: 6 },
-    desktop: { cols: 12 }
-  }
-});
-```
-
-*For layout architecture, see Section 9.1.4.*
-
----
-
-### 5. Hot Reloading
 
 **Overview**: Hot Module Replacement (HMR) enables developers to update extensions in real-time without losing application state, dramatically improving development velocity.
 
@@ -1488,15 +1530,18 @@ window.addEventListener('error', (event) => {
 - **State Inspector**: Visualize state changes
 - **Network Monitoring**: Track extension API calls
 
-*For build tool configuration, see Section 8. For plugin lifecycle, see Section 1.4.*
+*For build tool configuration, see Section 6. For plugin lifecycle, see Section 1.4.*
+
 
 ---
 
-## Security Model
+## 3. Security Model
+
+
 
 **Overview**: A comprehensive security model protects users from malicious extensions while enabling powerful customization capabilities.
 
-### 6. Sandboxing & Permissions
+### 3.1 Sandboxing & Permissions
 
 #### 6.1 Execution Environment
 
@@ -1636,7 +1681,7 @@ class PermissionManager {
 }
 ```
 
-*For permission UI patterns, see Section 4. For audit logging, see Section 6.3.*
+*For permission UI patterns, see Section 2.2. For audit logging, see Section 6.3.*
 
 #### 6.3 API Surface
 
@@ -1693,7 +1738,7 @@ class AuditLogger {
 }
 ```
 
-*For API design patterns, see Section 1. For versioning, see Section 8.*
+*For API design patterns, see Section 1. For versioning, see Section 6.*
 
 #### 6.4 Code Review & Signing
 
@@ -1802,145 +1847,434 @@ function getExtensionTrust(extension: Extension): ExtensionTrust {
 - **Monitoring**: Audit logs + anomaly detection
 - **Marketplace**: Manual review + automated scanning
 
-*For plugin architecture, see Section 1.4. For extension development, see Section 3.*
+*For plugin architecture, see Section 1.4. For extension development, see Section 2.1.*
+
+
+> **Note**: Security technologies (SES, CSP, Subresource Integrity) are detailed in Section 6.3.
 
 ---
 
-## Use Case: BI Dynamic Dashboards
+## 4. Advanced Features
 
-### 7. Primary Application
-
-#### 7.1 Dashboard Builder
-- **Drag-and-Drop**: Visual dashboard composition
-- **Data Binding**: Connect components to data sources
-- **Real-Time Updates**: Live data streaming and updates
-- **Responsive Design**: Adaptive layouts for different screen sizes
-
-#### 7.2 Data Visualization
-- **Chart Library**: Comprehensive set of chart types
-- **Custom Visualizations**: User-defined chart components
-- **Interactive Filters**: Cross-filtering between components
-- **Drill-Down**: Navigate from summary to detail views
-
-#### 7.3 Developer Workflows
-- **Version Control**: Dashboard configurations as code
-- **Collaboration**: Share and fork dashboards
-- **Testing**: Unit and integration tests for extensions
-- **Deployment**: CI/CD integration for dashboard updates
+Modern BI dashboard capabilities including canvas interfaces, SQL integration, real-time collaboration, and performance optimization.
 
 ---
 
-## Technical Stack
+### 4.1 Canvas Architecture
 
-### 8. Technology Choices
 
-#### 8.1 Frontend Framework & UI Libraries
 
-**Core Framework**:
-- **React**: Component-based UI library
-- **React Hooks**: Modern state and lifecycle management
-- **React Context**: Dependency injection and theming
+**Overview**: Canvas-based interfaces (inspired by Count.co and tldraw) provide infinite workspace for flexible data exploration and visualization.
 
-**UI Component Libraries**:
+**Infinite Canvas Pattern**:
 
-| Library | Type | Pros | Cons | Bundle Size | Use Case |
-|---------|------|------|------|-------------|----------|
-| **shadcn/ui** | Copy-paste components | ✅ Full control<br>✅ Customizable<br>✅ Radix-based<br>✅ TypeScript | ❌ Manual updates<br>❌ No npm package | Varies | Modern React apps, full customization |
-| **Radix UI** | Headless primitives | ✅ Accessible<br>✅ Unstyled<br>✅ Composable<br>✅ TypeScript | ❌ Requires styling<br>❌ More setup | ~5-10KB/component | Accessible, custom designs |
-| **Headless UI** | Unstyled components | ✅ Tailwind-friendly<br>✅ Accessible<br>✅ Simple API | ❌ Limited components<br>❌ Tailwind-focused | ~5KB | Tailwind projects |
-| **Mantine** | Full component library | ✅ 100+ components<br>✅ Hooks library<br>✅ Dark mode<br>✅ TypeScript | ❌ Large bundle<br>❌ Opinionated | ~50KB+ | Rapid development |
-| **Chakra UI** | Component library | ✅ Accessible<br>✅ Themeable<br>✅ Composable<br>✅ Good DX | ❌ Bundle size<br>❌ Performance | ~40KB+ | Accessible apps |
-| **Ant Design** | Enterprise UI | ✅ Comprehensive<br>✅ i18n support<br>✅ Design system | ❌ Very large<br>❌ Opinionated<br>❌ Chinese-focused | ~500KB+ | Enterprise dashboards |
-| **Material UI** | Material Design | ✅ Mature<br>✅ Comprehensive<br>✅ Customizable | ❌ Large bundle<br>❌ Material-only | ~300KB+ | Material Design apps |
+| Aspect | Implementation | Pros | Cons |
+|--------|---------------|------|------|
+| **Viewport Management** | Transform matrix | ✅ Smooth pan/zoom<br>✅ Efficient rendering | ❌ Complex math<br>❌ Coordinate transforms |
+| **Virtualization** | Render visible area only | ✅ Performance<br>✅ Scales to large canvases | ❌ Implementation complexity<br>❌ Edge cases |
+| **Spatial Indexing** | R-tree or Quadtree | ✅ Fast queries<br>✅ Collision detection | ❌ Memory overhead<br>❌ Update complexity |
+| **Layer System** | Separate canvas layers | ✅ Compositing<br>✅ Selective updates | ❌ More canvases<br>❌ Coordination |
 
-**Platform-Specific UI Libraries**:
+**Cell/Shape Positioning Systems**:
 
-| Platform | UI Stack | Components Used |
-|----------|----------|-----------------|
-| **Observable** | Custom React + D3 | • Custom React components<br>• D3.js for visualizations<br>• Observable Inputs (form controls)<br>• Custom notebook UI<br>• Inline HTML/SVG |
-| **Count.co** | React + Custom | • Custom React components<br>• Canvas-based UI<br>• SQL editor (Monaco/CodeMirror)<br>• Custom chart library<br>• Drag-and-drop system |
-| **Evidence** | Svelte + Tailwind | • Svelte components<br>• Tailwind CSS for styling<br>• Custom markdown renderer<br>• Built-in chart components<br>• SQL syntax highlighting |
-| **tldraw** | React + Radix | • Custom React components<br>• Radix UI primitives<br>• Custom canvas renderer<br>• Shape toolbars<br>• Context menus |
-| **Omni Docs** | React-based | • Custom documentation components<br>• Markdown renderer<br>• Code syntax highlighting<br>• Navigation components |
+| System | Description | Use Case |
+|--------|-------------|----------|
+| **Absolute Positioning** | Fixed x, y coordinates | Manual layout, precise control |
+| **Relative Positioning** | Position relative to parent | Nested components, groups |
+| **Auto-Layout** | Algorithm-based positioning | Automatic organization, graphs |
+| **Grid System** | Snap-to-grid alignment | Structured dashboards |
+| **Flow Layout** | Flexbox/Grid-like | Responsive arrangements |
 
-**Recommended Stack for BI Dashboards**:
+**Rendering Strategies**:
 
 ```typescript
-// Modern, performant UI stack
-{
-  framework: 'React 18+',
-  components: 'shadcn/ui + Radix UI', // Accessible, customizable
-  styling: 'Tailwind CSS',             // Utility-first
-  charts: 'Observable Plot + D3.js',   // Data visualization
-  editor: 'Monaco Editor',             // Code/SQL editing
-  forms: 'React Hook Form',            // Form management
-  tables: 'TanStack Table',            // Data tables
-  icons: 'Lucide React',               // Icon system
-  canvas: 'Konva.js or custom',        // Canvas rendering
+// Canvas rendering with virtualization
+class CanvasRenderer {
+  private viewport: Viewport;
+  private spatialIndex: RTree;
+  
+  render(ctx: CanvasRenderingContext2D) {
+    // Get visible bounds
+    const bounds = this.viewport.getVisibleBounds();
+    
+    // Query spatial index for visible items
+    const visibleItems = this.spatialIndex.query(bounds);
+    
+    // Render only visible items
+    for (const item of visibleItems) {
+      this.renderItem(ctx, item);
+    }
+  }
+  
+  renderItem(ctx: CanvasRenderingContext2D, item: CanvasItem) {
+    ctx.save();
+    
+    // Apply viewport transform
+    this.viewport.applyTransform(ctx);
+    
+    // Render item
+    item.render(ctx);
+    
+    ctx.restore();
+  }
 }
 ```
 
-**Component Categories for BI Dashboards**:
+**Platform Examples**:
 
-1. **Layout Components**:
-   - Resizable panels (react-resizable-panels)
-   - Grid layouts (react-grid-layout)
-   - Tabs and navigation
-   - Sidebar and header
+| Platform | Canvas Implementation | Key Features |
+|----------|---------------------|--------------|
+| **tldraw** | Custom canvas engine | • Infinite canvas<br>• Shape system<br>• Collaborative cursors<br>• History/undo |
+| **Count.co** | React + Canvas | • Cell-based layout<br>• Free-form positioning<br>• Auto-layout options<br>• SQL-driven cells |
+| **Observable** | HTML/SVG cells | • Linear notebook flow<br>• Custom layouts via HTML<br>• D3.js integration |
 
-2. **Data Input**:
-   - Form controls (shadcn/ui forms)
-   - SQL/Code editor (Monaco Editor)
-   - Date pickers (react-day-picker)
-   - Filters and search
+**Recommended Stack**:
+- **Canvas Library**: Konva.js, Fabric.js, or custom WebGL
+- **Spatial Index**: rbush (R-tree implementation)
+- **Transform**: gl-matrix or custom matrix math
+- **Gestures**: Hammer.js or custom touch handling
 
-3. **Data Display**:
-   - Charts (Observable Plot, Recharts, Victory)
-   - Tables (TanStack Table)
-   - Cards and metrics
-   - Lists and trees
+*For state management, see Section 1.3. For collaboration, see Section 4.3.*
 
-4. **Interaction**:
-   - Command palette (cmdk)
-   - Context menus (Radix UI)
-   - Tooltips and popovers
-   - Modals and dialogs
+### 4.2 SQL Integration
 
-5. **Feedback**:
-   - Toast notifications (sonner)
-   - Loading states
-   - Error boundaries
-   - Progress indicators
 
-#### 8.2 State Management
-- **Zustand** or **Jotai**: Lightweight, flexible state management
-- **Immer**: Immutable state updates
-- **IndexedDB**: Client-side persistence
 
-#### 8.3 Build System
-- **Vite**: Fast development server and build tool
-- **ESBuild**: Fast JavaScript bundler
-- **TypeScript**: Type-safe development
+**Overview**: SQL-driven dashboards (inspired by Count.co) enable powerful data analysis with familiar query syntax.
 
-#### 8.4 Extension System
-- **ES Modules**: Standard module format for extensions
-- **Dynamic Import**: Lazy loading of extensions
-- **Web Workers**: Isolated execution for heavy computations
+**Query Execution Architecture**:
 
-#### 8.5 Security
-- **SES (Secure ECMAScript)**: Hardened JavaScript environment
-- **Content Security Policy**: Browser-level security
-- **Subresource Integrity**: Verify external resources
+| Approach | Implementation | Pros | Cons |
+|----------|---------------|------|------|
+| **Client-Side SQL** | DuckDB WASM, SQLite WASM | ✅ No backend needed<br>✅ Fast queries<br>✅ Offline capable | ❌ Large bundle<br>❌ Memory limits<br>❌ Initial load time |
+| **Server-Side SQL** | PostgreSQL, MySQL | ✅ Unlimited data<br>✅ Mature ecosystem<br>✅ Security | ❌ Network latency<br>❌ Backend required<br>❌ Scaling costs |
+| **Hybrid** | Cache + server | ✅ Best of both<br>✅ Optimized | ❌ Complexity<br>❌ Sync issues |
+
+**DuckDB WASM Architecture**:
+
+```typescript
+// DuckDB WASM integration
+import * as duckdb from '@duckdb/duckdb-wasm';
+
+class SQLEngine {
+  private db: duckdb.AsyncDuckDB;
+  private conn: duckdb.AsyncDuckDBConnection;
+  
+  async initialize() {
+    const bundle = await duckdb.selectBundle({
+      mvp: {
+        mainModule: duckdb_wasm,
+        mainWorker: duckdb_wasm_worker
+      }
+    });
+    
+    const worker = new Worker(bundle.mainWorker!);
+    const logger = new duckdb.ConsoleLogger();
+    this.db = new duckdb.AsyncDuckDB(logger, worker);
+    await this.db.instantiate(bundle.mainModule);
+    this.conn = await this.db.connect();
+  }
+  
+  async query(sql: string, params?: any[]) {
+    // Parameterized query for security
+    const stmt = await this.conn.prepare(sql);
+    const result = await stmt.query(...(params || []));
+    return result.toArray();
+  }
+  
+  async loadData(tableName: string, data: any[]) {
+    // Load data into DuckDB
+    await this.conn.insertArrowTable(
+      tableName,
+      arrowTable(data)
+    );
+  }
+}
+```
+
+**Query Result Caching**:
+
+| Strategy | Implementation | Use Case |
+|----------|---------------|----------|
+| **In-Memory Cache** | Map/LRU cache | Fast repeated queries |
+| **IndexedDB Cache** | Persistent cache | Large result sets |
+| **Query Fingerprint** | Hash-based key | Cache invalidation |
+| **Incremental Updates** | Delta queries | Real-time data |
+
+**Data Binding Patterns**:
+
+```typescript
+// Reactive SQL queries
+import { useQuery } from './sql-hooks';
+
+function DataCell({ sql, params }) {
+  const { data, loading, error, refetch } = useQuery(sql, params);
+  
+  // Automatically re-execute when params change
+  useEffect(() => {
+    refetch();
+  }, [params]);
+  
+  if (loading) return <Spinner />;
+  if (error) return <Error message={error.message} />;
+  
+  return <DataTable data={data} />;
+}
+```
+
+**Platform Examples**:
+
+| Platform | SQL Implementation | Features |
+|----------|-------------------|----------|
+| **Count.co** | DuckDB + PostgreSQL | • SQL cells<br>• Query dependencies<br>• Result caching<br>• Parameterized queries |
+| **Observable** | SQL cells (via connectors) | • Database connectors<br>• SQL template literals<br>• Reactive queries |
+| **Evidence** | DuckDB + connectors | • SQL + Markdown<br>• Component binding<br>• Build-time queries |
+
+**Recommended Stack**:
+- **Client SQL**: DuckDB WASM (analytics), SQLite WASM (simple queries)
+- **Caching**: React Query or SWR with IndexedDB
+- **Parameterization**: Prepared statements, tagged templates
+- **Visualization**: Observable Plot, Vega-Lite
+
+*For data persistence, see Section 9.3. For component binding, see Section 4.1.*
+
+### 4.3 Real-Time Collaboration
+
+
+
+**Overview**: Multi-user collaboration (inspired by Count.co and tldraw) enables teams to work together in real-time.
+
+**CRDT (Conflict-free Replicated Data Type) Libraries**:
+
+| Library | Language | Pros | Cons | Bundle Size | Use Case |
+|---------|----------|------|------|-------------|----------|
+| **Yjs** | JavaScript | ✅ Mature<br>✅ Performant<br>✅ Rich ecosystem<br>✅ CRDT types | ❌ Learning curve<br>❌ Bundle size | ~50KB | Production apps |
+| **Automerge** | JavaScript/Rust | ✅ Pure CRDT<br>✅ Offline-first<br>✅ Time travel | ❌ Larger bundle<br>❌ Performance | ~200KB | Offline-first apps |
+| **Loro** | Rust (WASM) | ✅ High performance<br>✅ Small bundle<br>✅ Rich text | ❌ New/experimental<br>❌ Smaller ecosystem | ~100KB | Performance-critical |
+| **Fluid Framework** | TypeScript | ✅ Microsoft-backed<br>✅ Enterprise features | ❌ Complex<br>❌ Azure dependency | Large | Enterprise |
+
+**Yjs Integration Architecture**:
+
+```typescript
+// Yjs collaborative state
+import * as Y from 'yjs';
+import { WebrtcProvider } from 'y-webrtc';
+import { IndexeddbPersistence } from 'y-indexeddb';
+
+class CollaborationEngine {
+  private doc: Y.Doc;
+  private provider: WebrtcProvider;
+  private persistence: IndexeddbPersistence;
+  
+  constructor(roomId: string) {
+    this.doc = new Y.Doc();
+    
+    // WebRTC provider for P2P sync
+    this.provider = new WebrtcProvider(roomId, this.doc);
+    
+    // IndexedDB for offline persistence
+    this.persistence = new IndexeddbPersistence(roomId, this.doc);
+  }
+  
+  // Shared canvas state
+  getCanvas(): Y.Map<any> {
+    return this.doc.getMap('canvas');
+  }
+  
+  // Shared cells/shapes
+  getCells(): Y.Array<any> {
+    return this.doc.getArray('cells');
+  }
+  
+  // Awareness (presence)
+  getAwareness() {
+    return this.provider.awareness;
+  }
+}
+```
+
+**Presence System**:
+
+| Feature | Implementation | Use Case |
+|---------|---------------|----------|
+| **User Cursors** | Awareness state + SVG | Show where users are pointing |
+| **Active Selection** | Highlighted shapes/cells | Show what users are editing |
+| **User Avatars** | Avatar component | Identify collaborators |
+| **Activity Feed** | Event log | Show recent changes |
+| **Typing Indicators** | Awareness + debounce | Show who's typing |
+
+**Conflict Resolution Strategies**:
+
+| Strategy | Description | Pros | Cons |
+|----------|-------------|------|------|
+| **Last-Write-Wins** | Timestamp-based | ✅ Simple<br>✅ Fast | ❌ Data loss<br>❌ Not fair |
+| **CRDT** | Mathematically convergent | ✅ No conflicts<br>✅ Automatic | ❌ Complex<br>❌ Memory overhead |
+| **Operational Transform** | Transform operations | ✅ Proven<br>✅ Google Docs uses it | ❌ Very complex<br>❌ Hard to implement |
+| **Manual Resolution** | User chooses | ✅ User control<br>✅ Transparent | ❌ Interrupts flow<br>❌ User burden |
+
+**Platform Examples**:
+
+| Platform | Collaboration System | Implementation |
+|----------|---------------------|----------------|
+| **tldraw** | Yjs + WebRTC | • Real-time shape sync<br>• Presence cursors<br>• History preservation<br>• Offline support |
+| **Count.co** | Custom WebSocket | • Real-time cell updates<br>• Collaborative editing<br>• Presence indicators<br>• Comment threads |
+| **Observable** | Limited collaboration | • Notebook sharing<br>• Fork-based workflow<br>• No real-time sync |
+
+**Recommended Architecture**:
+
+```typescript
+// Collaborative canvas cell
+function CollaborativeCell({ cellId }) {
+  const collab = useCollaboration();
+  const cells = collab.getCells();
+  
+  // Subscribe to cell changes
+  const cell = useYArray(cells, cellId);
+  
+  // Update cell
+  const updateCell = (changes) => {
+    collab.doc.transact(() => {
+      const cellData = cells.get(cellId);
+      Object.assign(cellData, changes);
+    });
+  };
+  
+  // Show presence
+  const awareness = collab.getAwareness();
+  const users = useAwareness(awareness);
+  
+  return (
+    <Cell data={cell} onChange={updateCell}>
+      <PresenceCursors users={users} />
+    </Cell>
+  );
+}
+```
+
+**Recommended Stack**:
+- **CRDT**: Yjs (most mature and performant)
+- **Transport**: WebRTC (P2P) or WebSocket (server-based)
+- **Persistence**: IndexedDB (offline) + server backup
+- **Presence**: Yjs Awareness API
+- **Cursors**: Custom SVG overlay
+
+*For state management, see Section 1.3. For canvas architecture, see Section 4.1.*
+
+### 4.4 Performance Optimization
+
+
+
+**Overview**: Canvas-based and data-intensive applications require specific performance optimizations.
+
+**Canvas Rendering Optimizations**:
+
+| Technique | Description | Performance Gain | Complexity |
+|-----------|-------------|------------------|------------|
+| **Virtual Scrolling** | Render visible items only | 10-100x | Medium |
+| **Layer Separation** | Multiple canvas layers | 2-5x | Low |
+| **WebGL Rendering** | GPU-accelerated | 10-50x | High |
+| **Offscreen Canvas** | Background rendering | 2-3x | Medium |
+| **Request Animation Frame** | Batch updates | 2-5x | Low |
+| **Dirty Rectangle** | Partial redraws | 5-10x | Medium |
+
+**State Management Optimizations**:
+
+```typescript
+// Structural sharing with Immer
+import { produce } from 'immer';
+
+const updateCanvas = produce((draft, action) => {
+  // Immer creates efficient immutable updates
+  const cell = draft.cells.find(c => c.id === action.cellId);
+  if (cell) {
+    cell.position = action.position;
+  }
+});
+
+// Memoization for expensive computations
+import { useMemo } from 'react';
+
+function DataVisualization({ data, config }) {
+  const processedData = useMemo(() => {
+    // Expensive data transformation
+    return processLargeDataset(data, config);
+  }, [data, config]);
+  
+  return <Chart data={processedData} />;
+}
+
+// Lazy computation with computed values
+import { computed } from '@preact/signals-react';
+
+const visibleCells = computed(() => {
+  const viewport = canvasState.viewport.value;
+  return canvasState.cells.value.filter(cell =>
+    isInViewport(cell, viewport)
+  );
+});
+```
+
+**Data Loading Strategies**:
+
+| Strategy | Implementation | Use Case |
+|----------|---------------|----------|
+| **Lazy Loading** | Load on demand | Large datasets |
+| **Pagination** | Load in chunks | Infinite scroll |
+| **Streaming** | Progressive loading | Real-time data |
+| **Prefetching** | Load ahead | Predictable navigation |
+| **Caching** | Store results | Repeated queries |
+
+**Bundle Optimization**:
+
+```typescript
+// Code splitting for large features
+const AdvancedChart = lazy(() => import('./AdvancedChart'));
+
+// Tree shaking - import only what you need
+import { map, filter } from 'lodash-es';
+
+// Dynamic imports for optional features
+async function loadCollaboration() {
+  if (user.hasPremium) {
+    const { CollaborationEngine } = await import('./collaboration');
+    return new CollaborationEngine();
+  }
+}
+```
+
+**Platform Benchmarks**:
+
+| Platform | Initial Load | Canvas Render | Query Execution |
+|----------|-------------|---------------|-----------------|
+| **tldraw** | ~200KB | 60 FPS (1000 shapes) | N/A |
+| **Count.co** | ~500KB | 60 FPS (100 cells) | <100ms (DuckDB) |
+| **Observable** | ~300KB | 60 FPS (cells) | Varies |
+
+**Recommended Optimizations**:
+1. **Rendering**: Virtual scrolling + layer separation
+2. **State**: Immer for immutability + signals for reactivity
+3. **Data**: DuckDB WASM + IndexedDB caching
+4. **Bundle**: Code splitting + tree shaking
+5. **Network**: Service worker + prefetching
+
+*For canvas rendering, see Section 4.1. For state management, see Section 1.3.*
+
 
 ---
 
-## State Persistence
+## 5. Data Persistence
 
-### 9. Configuration & Data Persistence
+Configuration and data persistence strategies for the framework.
 
-#### 9.1 User Configurations
+---
 
-##### 9.1.1 Settings Management
+### 5.1 Storage Strategy & Configuration
+
+
+
+#### User Configurations
+
+#####.1 Settings Management
 
 **Concept**: Centralized system for user preferences and application options.
 
@@ -1997,7 +2331,7 @@ function getExtensionTrust(extension: Extension): ExtensionTrust {
 
 **Recommended Architecture**: Hierarchical structure with Zustand, Zod validation, hybrid persistence (critical settings eager, UI preferences debounced), IndexedDB storage.
 
-##### 9.1.2 Keybinding System
+#####.2 Keybinding System
 
 **Concept**: Customizable keyboard shortcuts for commands and actions.
 
@@ -2055,7 +2389,7 @@ function getExtensionTrust(extension: Extension): ExtensionTrust {
 
 **Recommended Architecture**: Command-based with keymap hierarchy, context-aware execution, chord support, and user customization. Use tinykeys for minimal apps, hotkeys-js for feature-rich needs.
 
-##### 9.1.3 Theme System
+#####.3 Theme System
 
 **Concept**: Visual styling and color schemes that can be switched dynamically.
 
@@ -2123,7 +2457,7 @@ function getExtensionTrust(extension: Extension): ExtensionTrust {
 
 **Recommended Architecture**: CSS Variables for tokens, Tailwind CSS for utility classes, system preference detection with manual override, persistent user choice in IndexedDB.
 
-##### 9.1.4 Layout System
+#####.4 Layout System
 
 **Concept**: Flexible, user-customizable arrangement of dashboard components and panels.
 
@@ -2392,12 +2726,12 @@ class ConfigManager {
 // Export/Import: JSON with schema validation
 ```
 
-#### 9.2 Extension State
+#### Extension State
 - **Plugin Configurations**: Extension-specific settings
 - **Installed Extensions**: List of active plugins
 - **Extension Data**: Plugin-managed data
 
-#### 9.3 Storage Options & Strategy
+#### Storage Options & Strategy
 
 ##### Client-Side Storage
 
@@ -2584,406 +2918,155 @@ class ConfigManager {
 - Building Web3 or P2P applications
 - Avoiding vendor lock-in is important
 
-#### 9.4 Migration & Versioning
+#### Migration & Versioning
 - **Schema Versioning**: Handle data format changes
 - **Automatic Migration**: Upgrade old configurations
 - **Rollback Support**: Revert to previous versions
 - **Cross-Storage Sync**: Coordinate data across storage layers
 
-#### 9.5 Canvas Architecture
 
-**Overview**: Canvas-based interfaces (inspired by Count.co and tldraw) provide infinite workspace for flexible data exploration and visualization.
-
-**Infinite Canvas Pattern**:
-
-| Aspect | Implementation | Pros | Cons |
-|--------|---------------|------|------|
-| **Viewport Management** | Transform matrix | ✅ Smooth pan/zoom<br>✅ Efficient rendering | ❌ Complex math<br>❌ Coordinate transforms |
-| **Virtualization** | Render visible area only | ✅ Performance<br>✅ Scales to large canvases | ❌ Implementation complexity<br>❌ Edge cases |
-| **Spatial Indexing** | R-tree or Quadtree | ✅ Fast queries<br>✅ Collision detection | ❌ Memory overhead<br>❌ Update complexity |
-| **Layer System** | Separate canvas layers | ✅ Compositing<br>✅ Selective updates | ❌ More canvases<br>❌ Coordination |
-
-**Cell/Shape Positioning Systems**:
-
-| System | Description | Use Case |
-|--------|-------------|----------|
-| **Absolute Positioning** | Fixed x, y coordinates | Manual layout, precise control |
-| **Relative Positioning** | Position relative to parent | Nested components, groups |
-| **Auto-Layout** | Algorithm-based positioning | Automatic organization, graphs |
-| **Grid System** | Snap-to-grid alignment | Structured dashboards |
-| **Flow Layout** | Flexbox/Grid-like | Responsive arrangements |
-
-**Rendering Strategies**:
-
-```typescript
-// Canvas rendering with virtualization
-class CanvasRenderer {
-  private viewport: Viewport;
-  private spatialIndex: RTree;
-  
-  render(ctx: CanvasRenderingContext2D) {
-    // Get visible bounds
-    const bounds = this.viewport.getVisibleBounds();
-    
-    // Query spatial index for visible items
-    const visibleItems = this.spatialIndex.query(bounds);
-    
-    // Render only visible items
-    for (const item of visibleItems) {
-      this.renderItem(ctx, item);
-    }
-  }
-  
-  renderItem(ctx: CanvasRenderingContext2D, item: CanvasItem) {
-    ctx.save();
-    
-    // Apply viewport transform
-    this.viewport.applyTransform(ctx);
-    
-    // Render item
-    item.render(ctx);
-    
-    ctx.restore();
-  }
-}
-```
-
-**Platform Examples**:
-
-| Platform | Canvas Implementation | Key Features |
-|----------|---------------------|--------------|
-| **tldraw** | Custom canvas engine | • Infinite canvas<br>• Shape system<br>• Collaborative cursors<br>• History/undo |
-| **Count.co** | React + Canvas | • Cell-based layout<br>• Free-form positioning<br>• Auto-layout options<br>• SQL-driven cells |
-| **Observable** | HTML/SVG cells | • Linear notebook flow<br>• Custom layouts via HTML<br>• D3.js integration |
-
-**Recommended Stack**:
-- **Canvas Library**: Konva.js, Fabric.js, or custom WebGL
-- **Spatial Index**: rbush (R-tree implementation)
-- **Transform**: gl-matrix or custom matrix math
-- **Gestures**: Hammer.js or custom touch handling
-
-*For state management, see Section 1.3. For collaboration, see Section 9.7.*
-
-#### 9.6 SQL Integration
-
-**Overview**: SQL-driven dashboards (inspired by Count.co) enable powerful data analysis with familiar query syntax.
-
-**Query Execution Architecture**:
-
-| Approach | Implementation | Pros | Cons |
-|----------|---------------|------|------|
-| **Client-Side SQL** | DuckDB WASM, SQLite WASM | ✅ No backend needed<br>✅ Fast queries<br>✅ Offline capable | ❌ Large bundle<br>❌ Memory limits<br>❌ Initial load time |
-| **Server-Side SQL** | PostgreSQL, MySQL | ✅ Unlimited data<br>✅ Mature ecosystem<br>✅ Security | ❌ Network latency<br>❌ Backend required<br>❌ Scaling costs |
-| **Hybrid** | Cache + server | ✅ Best of both<br>✅ Optimized | ❌ Complexity<br>❌ Sync issues |
-
-**DuckDB WASM Architecture**:
-
-```typescript
-// DuckDB WASM integration
-import * as duckdb from '@duckdb/duckdb-wasm';
-
-class SQLEngine {
-  private db: duckdb.AsyncDuckDB;
-  private conn: duckdb.AsyncDuckDBConnection;
-  
-  async initialize() {
-    const bundle = await duckdb.selectBundle({
-      mvp: {
-        mainModule: duckdb_wasm,
-        mainWorker: duckdb_wasm_worker
-      }
-    });
-    
-    const worker = new Worker(bundle.mainWorker!);
-    const logger = new duckdb.ConsoleLogger();
-    this.db = new duckdb.AsyncDuckDB(logger, worker);
-    await this.db.instantiate(bundle.mainModule);
-    this.conn = await this.db.connect();
-  }
-  
-  async query(sql: string, params?: any[]) {
-    // Parameterized query for security
-    const stmt = await this.conn.prepare(sql);
-    const result = await stmt.query(...(params || []));
-    return result.toArray();
-  }
-  
-  async loadData(tableName: string, data: any[]) {
-    // Load data into DuckDB
-    await this.conn.insertArrowTable(
-      tableName,
-      arrowTable(data)
-    );
-  }
-}
-```
-
-**Query Result Caching**:
-
-| Strategy | Implementation | Use Case |
-|----------|---------------|----------|
-| **In-Memory Cache** | Map/LRU cache | Fast repeated queries |
-| **IndexedDB Cache** | Persistent cache | Large result sets |
-| **Query Fingerprint** | Hash-based key | Cache invalidation |
-| **Incremental Updates** | Delta queries | Real-time data |
-
-**Data Binding Patterns**:
-
-```typescript
-// Reactive SQL queries
-import { useQuery } from './sql-hooks';
-
-function DataCell({ sql, params }) {
-  const { data, loading, error, refetch } = useQuery(sql, params);
-  
-  // Automatically re-execute when params change
-  useEffect(() => {
-    refetch();
-  }, [params]);
-  
-  if (loading) return <Spinner />;
-  if (error) return <Error message={error.message} />;
-  
-  return <DataTable data={data} />;
-}
-```
-
-**Platform Examples**:
-
-| Platform | SQL Implementation | Features |
-|----------|-------------------|----------|
-| **Count.co** | DuckDB + PostgreSQL | • SQL cells<br>• Query dependencies<br>• Result caching<br>• Parameterized queries |
-| **Observable** | SQL cells (via connectors) | • Database connectors<br>• SQL template literals<br>• Reactive queries |
-| **Evidence** | DuckDB + connectors | • SQL + Markdown<br>• Component binding<br>• Build-time queries |
-
-**Recommended Stack**:
-- **Client SQL**: DuckDB WASM (analytics), SQLite WASM (simple queries)
-- **Caching**: React Query or SWR with IndexedDB
-- **Parameterization**: Prepared statements, tagged templates
-- **Visualization**: Observable Plot, Vega-Lite
-
-*For data persistence, see Section 9.3. For component binding, see Section 4.1.*
-
-#### 9.7 Real-Time Collaboration
-
-**Overview**: Multi-user collaboration (inspired by Count.co and tldraw) enables teams to work together in real-time.
-
-**CRDT (Conflict-free Replicated Data Type) Libraries**:
-
-| Library | Language | Pros | Cons | Bundle Size | Use Case |
-|---------|----------|------|------|-------------|----------|
-| **Yjs** | JavaScript | ✅ Mature<br>✅ Performant<br>✅ Rich ecosystem<br>✅ CRDT types | ❌ Learning curve<br>❌ Bundle size | ~50KB | Production apps |
-| **Automerge** | JavaScript/Rust | ✅ Pure CRDT<br>✅ Offline-first<br>✅ Time travel | ❌ Larger bundle<br>❌ Performance | ~200KB | Offline-first apps |
-| **Loro** | Rust (WASM) | ✅ High performance<br>✅ Small bundle<br>✅ Rich text | ❌ New/experimental<br>❌ Smaller ecosystem | ~100KB | Performance-critical |
-| **Fluid Framework** | TypeScript | ✅ Microsoft-backed<br>✅ Enterprise features | ❌ Complex<br>❌ Azure dependency | Large | Enterprise |
-
-**Yjs Integration Architecture**:
-
-```typescript
-// Yjs collaborative state
-import * as Y from 'yjs';
-import { WebrtcProvider } from 'y-webrtc';
-import { IndexeddbPersistence } from 'y-indexeddb';
-
-class CollaborationEngine {
-  private doc: Y.Doc;
-  private provider: WebrtcProvider;
-  private persistence: IndexeddbPersistence;
-  
-  constructor(roomId: string) {
-    this.doc = new Y.Doc();
-    
-    // WebRTC provider for P2P sync
-    this.provider = new WebrtcProvider(roomId, this.doc);
-    
-    // IndexedDB for offline persistence
-    this.persistence = new IndexeddbPersistence(roomId, this.doc);
-  }
-  
-  // Shared canvas state
-  getCanvas(): Y.Map<any> {
-    return this.doc.getMap('canvas');
-  }
-  
-  // Shared cells/shapes
-  getCells(): Y.Array<any> {
-    return this.doc.getArray('cells');
-  }
-  
-  // Awareness (presence)
-  getAwareness() {
-    return this.provider.awareness;
-  }
-}
-```
-
-**Presence System**:
-
-| Feature | Implementation | Use Case |
-|---------|---------------|----------|
-| **User Cursors** | Awareness state + SVG | Show where users are pointing |
-| **Active Selection** | Highlighted shapes/cells | Show what users are editing |
-| **User Avatars** | Avatar component | Identify collaborators |
-| **Activity Feed** | Event log | Show recent changes |
-| **Typing Indicators** | Awareness + debounce | Show who's typing |
-
-**Conflict Resolution Strategies**:
-
-| Strategy | Description | Pros | Cons |
-|----------|-------------|------|------|
-| **Last-Write-Wins** | Timestamp-based | ✅ Simple<br>✅ Fast | ❌ Data loss<br>❌ Not fair |
-| **CRDT** | Mathematically convergent | ✅ No conflicts<br>✅ Automatic | ❌ Complex<br>❌ Memory overhead |
-| **Operational Transform** | Transform operations | ✅ Proven<br>✅ Google Docs uses it | ❌ Very complex<br>❌ Hard to implement |
-| **Manual Resolution** | User chooses | ✅ User control<br>✅ Transparent | ❌ Interrupts flow<br>❌ User burden |
-
-**Platform Examples**:
-
-| Platform | Collaboration System | Implementation |
-|----------|---------------------|----------------|
-| **tldraw** | Yjs + WebRTC | • Real-time shape sync<br>• Presence cursors<br>• History preservation<br>• Offline support |
-| **Count.co** | Custom WebSocket | • Real-time cell updates<br>• Collaborative editing<br>• Presence indicators<br>• Comment threads |
-| **Observable** | Limited collaboration | • Notebook sharing<br>• Fork-based workflow<br>• No real-time sync |
-
-**Recommended Architecture**:
-
-```typescript
-// Collaborative canvas cell
-function CollaborativeCell({ cellId }) {
-  const collab = useCollaboration();
-  const cells = collab.getCells();
-  
-  // Subscribe to cell changes
-  const cell = useYArray(cells, cellId);
-  
-  // Update cell
-  const updateCell = (changes) => {
-    collab.doc.transact(() => {
-      const cellData = cells.get(cellId);
-      Object.assign(cellData, changes);
-    });
-  };
-  
-  // Show presence
-  const awareness = collab.getAwareness();
-  const users = useAwareness(awareness);
-  
-  return (
-    <Cell data={cell} onChange={updateCell}>
-      <PresenceCursors users={users} />
-    </Cell>
-  );
-}
-```
-
-**Recommended Stack**:
-- **CRDT**: Yjs (most mature and performant)
-- **Transport**: WebRTC (P2P) or WebSocket (server-based)
-- **Persistence**: IndexedDB (offline) + server backup
-- **Presence**: Yjs Awareness API
-- **Cursors**: Custom SVG overlay
-
-*For state management, see Section 1.3. For canvas architecture, see Section 9.5.*
-
-#### 9.8 Performance Optimization
-
-**Overview**: Canvas-based and data-intensive applications require specific performance optimizations.
-
-**Canvas Rendering Optimizations**:
-
-| Technique | Description | Performance Gain | Complexity |
-|-----------|-------------|------------------|------------|
-| **Virtual Scrolling** | Render visible items only | 10-100x | Medium |
-| **Layer Separation** | Multiple canvas layers | 2-5x | Low |
-| **WebGL Rendering** | GPU-accelerated | 10-50x | High |
-| **Offscreen Canvas** | Background rendering | 2-3x | Medium |
-| **Request Animation Frame** | Batch updates | 2-5x | Low |
-| **Dirty Rectangle** | Partial redraws | 5-10x | Medium |
-
-**State Management Optimizations**:
-
-```typescript
-// Structural sharing with Immer
-import { produce } from 'immer';
-
-const updateCanvas = produce((draft, action) => {
-  // Immer creates efficient immutable updates
-  const cell = draft.cells.find(c => c.id === action.cellId);
-  if (cell) {
-    cell.position = action.position;
-  }
-});
-
-// Memoization for expensive computations
-import { useMemo } from 'react';
-
-function DataVisualization({ data, config }) {
-  const processedData = useMemo(() => {
-    // Expensive data transformation
-    return processLargeDataset(data, config);
-  }, [data, config]);
-  
-  return <Chart data={processedData} />;
-}
-
-// Lazy computation with computed values
-import { computed } from '@preact/signals-react';
-
-const visibleCells = computed(() => {
-  const viewport = canvasState.viewport.value;
-  return canvasState.cells.value.filter(cell =>
-    isInViewport(cell, viewport)
-  );
-});
-```
-
-**Data Loading Strategies**:
-
-| Strategy | Implementation | Use Case |
-|----------|---------------|----------|
-| **Lazy Loading** | Load on demand | Large datasets |
-| **Pagination** | Load in chunks | Infinite scroll |
-| **Streaming** | Progressive loading | Real-time data |
-| **Prefetching** | Load ahead | Predictable navigation |
-| **Caching** | Store results | Repeated queries |
-
-**Bundle Optimization**:
-
-```typescript
-// Code splitting for large features
-const AdvancedChart = lazy(() => import('./AdvancedChart'));
-
-// Tree shaking - import only what you need
-import { map, filter } from 'lodash-es';
-
-// Dynamic imports for optional features
-async function loadCollaboration() {
-  if (user.hasPremium) {
-    const { CollaborationEngine } = await import('./collaboration');
-    return new CollaborationEngine();
-  }
-}
-```
-
-**Platform Benchmarks**:
-
-| Platform | Initial Load | Canvas Render | Query Execution |
-|----------|-------------|---------------|-----------------|
-| **tldraw** | ~200KB | 60 FPS (1000 shapes) | N/A |
-| **Count.co** | ~500KB | 60 FPS (100 cells) | <100ms (DuckDB) |
-| **Observable** | ~300KB | 60 FPS (cells) | Varies |
-
-**Recommended Optimizations**:
-1. **Rendering**: Virtual scrolling + layer separation
-2. **State**: Immer for immutability + signals for reactivity
-3. **Data**: DuckDB WASM + IndexedDB caching
-4. **Bundle**: Code splitting + tree shaking
-5. **Network**: Service worker + prefetching
-
-*For canvas rendering, see Section 9.5. For state management, see Section 1.3.*
+> **Note**: Settings management, keybinding, theme, and layout configurations are detailed in Section 2.2.3.
 
 ---
 
-## References & Inspiration
+## 6. Technical Stack
+
+
+
+### 6.1 Technology Choices
+
+#### 8.1 Frontend Framework & UI Libraries
+
+**Core Framework**:
+- **React**: Component-based UI library
+- **React Hooks**: Modern state and lifecycle management
+- **React Context**: Dependency injection and theming
+
+**UI Component Libraries**:
+
+| Library | Type | Pros | Cons | Bundle Size | Use Case |
+|---------|------|------|------|-------------|----------|
+| **shadcn/ui** | Copy-paste components | ✅ Full control<br>✅ Customizable<br>✅ Radix-based<br>✅ TypeScript | ❌ Manual updates<br>❌ No npm package | Varies | Modern React apps, full customization |
+| **Radix UI** | Headless primitives | ✅ Accessible<br>✅ Unstyled<br>✅ Composable<br>✅ TypeScript | ❌ Requires styling<br>❌ More setup | ~5-10KB/component | Accessible, custom designs |
+| **Headless UI** | Unstyled components | ✅ Tailwind-friendly<br>✅ Accessible<br>✅ Simple API | ❌ Limited components<br>❌ Tailwind-focused | ~5KB | Tailwind projects |
+| **Mantine** | Full component library | ✅ 100+ components<br>✅ Hooks library<br>✅ Dark mode<br>✅ TypeScript | ❌ Large bundle<br>❌ Opinionated | ~50KB+ | Rapid development |
+| **Chakra UI** | Component library | ✅ Accessible<br>✅ Themeable<br>✅ Composable<br>✅ Good DX | ❌ Bundle size<br>❌ Performance | ~40KB+ | Accessible apps |
+| **Ant Design** | Enterprise UI | ✅ Comprehensive<br>✅ i18n support<br>✅ Design system | ❌ Very large<br>❌ Opinionated<br>❌ Chinese-focused | ~500KB+ | Enterprise dashboards |
+| **Material UI** | Material Design | ✅ Mature<br>✅ Comprehensive<br>✅ Customizable | ❌ Large bundle<br>❌ Material-only | ~300KB+ | Material Design apps |
+
+**Platform-Specific UI Libraries**:
+
+| Platform | UI Stack | Components Used |
+|----------|----------|-----------------|
+| **Observable** | Custom React + D3 | • Custom React components<br>• D3.js for visualizations<br>• Observable Inputs (form controls)<br>• Custom notebook UI<br>• Inline HTML/SVG |
+| **Count.co** | React + Custom | • Custom React components<br>• Canvas-based UI<br>• SQL editor (Monaco/CodeMirror)<br>• Custom chart library<br>• Drag-and-drop system |
+| **Evidence** | Svelte + Tailwind | • Svelte components<br>• Tailwind CSS for styling<br>• Custom markdown renderer<br>• Built-in chart components<br>• SQL syntax highlighting |
+| **tldraw** | React + Radix | • Custom React components<br>• Radix UI primitives<br>• Custom canvas renderer<br>• Shape toolbars<br>• Context menus |
+| **Omni Docs** | React-based | • Custom documentation components<br>• Markdown renderer<br>• Code syntax highlighting<br>• Navigation components |
+
+**Recommended Stack for BI Dashboards**:
+
+```typescript
+// Modern, performant UI stack
+{
+  framework: 'React 18+',
+  components: 'shadcn/ui + Radix UI', // Accessible, customizable
+  styling: 'Tailwind CSS',             // Utility-first
+  charts: 'Observable Plot + D3.js',   // Data visualization
+  editor: 'Monaco Editor',             // Code/SQL editing
+  forms: 'React Hook Form',            // Form management
+  tables: 'TanStack Table',            // Data tables
+  icons: 'Lucide React',               // Icon system
+  canvas: 'Konva.js or custom',        // Canvas rendering
+}
+```
+
+**Component Categories for BI Dashboards**:
+
+1. **Layout Components**:
+   - Resizable panels (react-resizable-panels)
+   - Grid layouts (react-grid-layout)
+   - Tabs and navigation
+   - Sidebar and header
+
+2. **Data Input**:
+   - Form controls (shadcn/ui forms)
+   - SQL/Code editor (Monaco Editor)
+   - Date pickers (react-day-picker)
+   - Filters and search
+
+3. **Data Display**:
+   - Charts (Observable Plot, Recharts, Victory)
+   - Tables (TanStack Table)
+   - Cards and metrics
+   - Lists and trees
+
+4. **Interaction**:
+   - Command palette (cmdk)
+   - Context menus (Radix UI)
+   - Tooltips and popovers
+   - Modals and dialogs
+
+5. **Feedback**:
+   - Toast notifications (sonner)
+   - Loading states
+   - Error boundaries
+   - Progress indicators
+
+#### 8.2 State Management
+- **Zustand** or **Jotai**: Lightweight, flexible state management
+- **Immer**: Immutable state updates
+- **IndexedDB**: Client-side persistence
+
+#### 8.3 Build System
+- **Vite**: Fast development server and build tool
+- **ESBuild**: Fast JavaScript bundler
+- **TypeScript**: Type-safe development
+
+#### 8.4 Extension System
+- **ES Modules**: Standard module format for extensions
+- **Dynamic Import**: Lazy loading of extensions
+- **Web Workers**: Isolated execution for heavy computations
+
+#### 8.5 Security
+- **SES (Secure ECMAScript)**: Hardened JavaScript environment
+- **Content Security Policy**: Browser-level security
+- **Subresource Integrity**: Verify external resources
+
+
+> **Note**: State management details are in Section 1.3. Security technologies are in Section 2.1.
+
+---
+
+## 7. Use Cases & Examples
+
+
+
+### 7.1 BI Dashboard Application
+
+#### 7.1 Dashboard Builder
+- **Drag-and-Drop**: Visual dashboard composition
+- **Data Binding**: Connect components to data sources
+- **Real-Time Updates**: Live data streaming and updates
+- **Responsive Design**: Adaptive layouts for different screen sizes
+
+#### 7.2 Data Visualization
+- **Chart Library**: Comprehensive set of chart types
+- **Custom Visualizations**: User-defined chart components
+- **Interactive Filters**: Cross-filtering between components
+- **Drill-Down**: Navigate from summary to detail views
+
+#### 7.3 Developer Workflows
+- **Version Control**: Dashboard configurations as code
+- **Collaboration**: Share and fork dashboards
+- **Testing**: Unit and integration tests for extensions
+- **Deployment**: CI/CD integration for dashboard updates
+
+---
+
+## 8. References & Inspiration
+
+
 
 ### Open Source Projects
 
@@ -3057,7 +3140,9 @@ async function loadCollaboration() {
 
 ---
 
-## Architecture Diagram
+## 9. Architecture Diagram
+
+
 
 **Updated Architecture** (reflects comprehensive system design):
 
@@ -3192,7 +3277,9 @@ User Action → UI Layer → Core System → Extension Layer
 
 ---
 
-## Implementation Roadmap
+## 10. Implementation Roadmap
+
+
 
 ### Phase 1: Core Foundation
 1. **Core Architecture**
@@ -3283,91 +3370,3 @@ User Action → UI Layer → Core System → Extension Layer
    - Lazy loading
    - Caching strategies
 
----
-
-## Key Design Decisions
-
-### 10. Critical Considerations
-
-#### 10.1 Security vs. Flexibility
-- **Challenge**: Balancing powerful extensibility with security
-- **Solution**: Layered security model with explicit permissions
-- **Trade-off**: Some flexibility sacrificed for safety
-
-#### 10.2 DSL Complexity
-- **Challenge**: Designing a DSL that's simple yet powerful
-- **Solution**: Start minimal, expand based on user feedback
-- **Trade-off**: May require JavaScript for advanced cases
-
-#### 10.3 Performance
-- **Challenge**: Hot reloading without performance degradation
-- **Solution**: Incremental updates, code splitting, lazy loading
-- **Trade-off**: Increased complexity in module system
-
-#### 10.4 State Management
-- **Challenge**: Maintaining state during hot reload
-- **Solution**: State serialization and hydration
-- **Trade-off**: Some state may be non-serializable
-
-#### 10.5 Backward Compatibility
-- **Challenge**: Evolving API without breaking extensions
-- **Solution**: Versioned API with deprecation warnings
-- **Trade-off**: Maintenance burden of multiple API versions
-
----
-
-## Similar Projects & Inspiration
-
-### 11. Reference Implementations
-
-#### 11.1 Extensible Web Apps
-- **Jupyter Notebook**: Cell-based editing with extensions
-- **Observable**: Reactive notebooks with live updates
-- **CodeMirror**: Extensible code editor
-
-#### 11.2 Extensible Dashboards
-- **Grafana**: Plugin-based dashboard system
-- **Apache Superset**: Extensible BI platform
-- **Metabase**: Customizable analytics
-
-#### 11.3 Plugin Architectures
-- **VS Code**: Extension marketplace and API
-- **Figma**: Plugin system for design tools
-- **Chrome Extensions**: Browser extension model
-
-#### 11.4 Security Models
-- **Agoric**: SES-based secure JavaScript
-- **Deno**: Permission-based runtime
-- **Salesforce Lightning**: Secure component framework
-
----
-
-## Success Metrics
-
-### 12. Project Goals
-
-#### 12.1 Technical Metrics
-- **Core Size**: < 50KB gzipped
-- **Extension Load Time**: < 100ms
-- **Hot Reload Time**: < 500ms
-- **Memory Footprint**: Efficient with 100+ extensions
-
-#### 12.2 Developer Experience
-- **Time to First Extension**: < 30 minutes
-- **Documentation Coverage**: 100% of public API
-- **Extension Ecosystem**: Active marketplace
-
-#### 12.3 Security
-- **Zero Critical Vulnerabilities**: Regular security audits
-- **Extension Review Time**: < 48 hours
-- **Incident Response**: < 24 hours for critical issues
-
----
-
-## Conclusion
-
-This framework represents an ambitious vision: bringing legendary extensibility to modern web-based BI dashboards. By combining a minimal core with comprehensive extension capabilities, dual language support (DSL + JavaScript), and a robust security model, the system empowers developers to build highly customized, dynamic dashboards while maintaining safety and performance.
-
-The architecture draws from proven patterns (VS Code, Grafana, extensible editors) while innovating in areas like hot reloading, capability-based permissions, and dual-language extensibility. The result is a platform that's both powerful for experts and approachable for developers building their first extension.
-
-**Next Steps**: Begin with Phase 1 implementation, focusing on core architecture and React integration. Iterate based on developer feedback, prioritizing security and performance from day one.
