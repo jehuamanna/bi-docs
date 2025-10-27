@@ -11,6 +11,118 @@ abstract: |
   - **Developer-First Design**: Prioritizes developer experience with hot reloading, debugging tools, and clear APIs
 ---
 
+
+
+
+
+# Architecture Diagram
+
+
+
+## Architecture (reflects comprehensive system design):
+
+**Layer 1**: User Interface Layer
+
+| | | | | |
+|:---:|:---:|:---:|:---:|:---:|
+| **Dashboard Builder** | **Command Palette** | **Extension Manager** | **Settings Panel** | **Theme Switcher** |
+| **Layout Manager** | **Keybinding Editor** | **Hooks Inspector** | **Advice Debugger** | |
+
+**↓**
+
+**Layer 2**: Core System Layer
+
+| | | |
+|:---:|:---:|:---:|
+| **Component Registry** (Lazy Load) | **Event System** (Typed Events) | **State Management** (Zustand) |
+| **Plugin Loader** (HMR + DI) | **Keybinding System** (Chord + Ctx) | **Command Registry** (Palette) |
+| **Hooks & Advice** (Priority) | **Theme System** (CSS Vars) | **Layout Engine** (Grid/Mosaic) |
+
+**↓**
+
+  **Layer 3**: Extension Layer
+
+| | | | | |
+|:---:|:---:|:---:|:---:|:---:|
+| **DSL Extensions** | **JavaScript Extensions** | **React Components** | **Web Components** | **Themes & Layouts** |
+| **Commands** | **Keybindings** | **Hooks** | **Macros** | |
+
+**↓**
+
+**Layer 4**: Security Layer
+
+| | | |
+|:---:|:---:|:---:|
+| **Sandboxed Execution** (SES/iframe) | **Capability Permissions** (Runtime) | **Code Signing** (Crypto API) |
+| **API Surface** (Versioned) | **Audit Log** (Tracking) | **Marketplace Review** |
+
+**↓**
+
+**Layer 5**: Persistence Layer
+
+| | | |
+|:---:|:---:|:---:|
+| **IndexedDB** (Warm Data) | **LocalStorage** (Hot Data) | **OPFS** (Cold Data) |
+| **Cloud Sync** (REST/GQL) | **DuckDB WASM** (Analytics) | **Time-Travel** (Zundo) |
+
+**↓**
+
+**Layer 6**: Development Layer
+
+| | | |
+|:---:|:---:|:---:|
+| **HMR** (Vite/WP) | **Source Maps** (Debugging) | **Error Overlay** (Dev Mode) |
+| **State Inspector** (DevTools) | **Performance Profiling** | **Network Monitoring** (Extension) |
+
+## Key Architecture Components
+
+1. **Core System Layer**:
+   - Added Hooks & Advice system for extensibility
+   - Theme System with CSS Variables
+   - Layout Engine (Grid/Mosaic patterns)
+   - Enhanced state management (Zustand with middleware)
+   - Typed event system with history/replay
+
+2. **Extension Layer**:
+   - Expanded to include Web Components
+   - Commands and Keybindings as first-class extensions
+   - Hooks and Macros support
+   - Theme and Layout templates
+
+3. **Security Layer**:
+   - Multiple sandboxing approaches (SES/iframe)
+   - Runtime permission validation
+   - Versioned API surface
+   - Audit logging system
+   - Marketplace review process
+
+4. **Persistence Layer**:
+   - Tiered storage strategy (Hot/Warm/Cold)
+   - DuckDB WASM for analytics
+   - Time-travel debugging (Zundo)
+   - OPFS for large file storage
+
+5. **Development Layer** (New):
+   - Hot Module Replacement
+   - Source maps and debugging tools
+   - Error overlay and recovery
+   - State inspector
+   - Performance profiling
+   - Network monitoring
+
+## Data Flow
+```
+User Action → UI Layer → Core System → Extension Layer
+                ↓              ↓              ↓
+          Security Check → Permission → Sandboxed Execution
+                                ↓
+                         Persistence Layer
+                                ↓
+                         Development Tools (Dev Mode)
+```
+
+---
+
 # Core System Architecture
 
 The minimal core provides essential infrastructure for the extensible framework.
@@ -19,15 +131,16 @@ The minimal core provides essential infrastructure for the extensible framework.
 
 ## Component Registry
 
-**Purpose**: Central registry for all UI components (built-in and user-defined)
+### Purpose
+Central registry for all UI components (built-in and user-defined)
 
-**Core Responsibilities**:
+### Core Responsibilities
 - Component registration and discovery
 - Lifecycle management (mount, unmount, update)
 - Dependency resolution
 - Version management
 
-**Architecture Patterns**:
+### Architecture Patterns
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
@@ -36,7 +149,7 @@ The minimal core provides essential infrastructure for the extensible framework.
 | **Module Federation** | Webpack 5 feature for runtime loading | True code splitting; Independent deployment; Version isolation | Webpack-specific; Complex config; Build complexity | Micro-frontends, large teams |
 | **Dynamic Import** | ES modules with import() | Native support; Code splitting; Simple | Limited metadata; No version control; Manual registry | Modern apps, simple plugins |
 
-**Library Comparison**:
+### Library Comparison
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
@@ -45,7 +158,7 @@ The minimal core provides essential infrastructure for the extensible framework.
 | **Awilix** | DI container | No decorators needed; Flexible; Good docs | Less type-safe; Manual setup | ~5KB | Node.js-style, flexible DI |
 | **Custom Registry** | DIY Map/Object | Full control; Minimal size; Simple | Manual implementation; No DI features | <1KB | Simple needs, full control |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Registry Pattern | Extension Method |
 |----------|-----------------|----------------|
@@ -55,7 +168,7 @@ The minimal core provides essential infrastructure for the extensible framework.
 | **tldraw** | Shape registry | • Shape definitions as components; • Tool registry pattern; • Custom shape API; • Runtime shape registration |
 | **Omni Docs** | Plugin registry | • Plugin-based documentation system; • Markdown-based content; • Custom plugin API; • Runtime plugin registration |
 
-**Recommended Architecture**:
+### Recommended Architecture
 
 ```typescript
 // Component registry with versioning and lifecycle
@@ -122,15 +235,16 @@ class ComponentRegistry {
 
 ## Event System
 
-**Purpose**: Pub/sub event bus for inter-component communication
+### Purpose
+Pub/sub event bus for inter-component communication
 
-**Core Features**:
+### Core Features
 - Global and scoped event channels
 - Event hooks and listeners
 - Async event handling
 - Event history and replay (for debugging)
 
-**Architecture Patterns**:
+### Architecture Patterns
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
@@ -139,7 +253,7 @@ class ComponentRegistry {
 | **Observable Streams** | RxJS-style | Powerful operators; Composable; Async-friendly | Learning curve; Large bundle; Overkill for simple cases | Complex async flows |
 | **Custom Events** | DOM CustomEvent | Native API; No dependencies; Bubbling support | DOM-only; Limited features; Verbose | DOM-centric apps |
 
-**Library Comparison**:
+### Library Comparison
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
@@ -149,7 +263,7 @@ class ComponentRegistry {
 | **Nano Events** | Event emitter | Very small; Simple; TypeScript | Minimal features | 200B | Size-constrained |
 | **EventEmitter2** | Enhanced emitter | Wildcards; Namespaces; Feature-rich | Larger; More complex | ~5KB | Complex event patterns |
 
-**Event System Patterns**:
+### Event System Patterns
 
 | Feature | Implementation | Pros | Cons |
 |---------|---------------|------|------|
@@ -158,7 +272,7 @@ class ComponentRegistry {
 | **Event Replay** | Store event history | Debugging; Time-travel | Memory usage; Complexity |
 | **Scoped Channels** | Separate buses per scope | Isolation; Less noise | More instances; Coordination |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Event Pattern | Implementation |
 |----------|-------------|----------------|
@@ -168,7 +282,7 @@ class ComponentRegistry {
 | **tldraw** | Shape events | • Shape change events; • Selection events; • Canvas interaction events; • History events (undo/redo) |
 | **Omni Docs** | Plugin events | • Plugin-based event system; • Custom event API; • Runtime event registration |
 
-**Recommended Architecture**:
+### Recommended Architecture
 
 ```typescript
 // Type-safe event system
@@ -222,16 +336,17 @@ class TypedEventBus {
 
 ## State Management
 
-**Purpose**: Centralized, reactive state management
+### Purpose
+Centralized, reactive state management
 
-**Core Features**:
+### Core Features
 - Immutable state updates
 - Time-travel debugging
 - State persistence and hydration
 - Computed/derived state
 - State snapshots and restoration
 
-**Architecture Patterns**:
+### Architecture Patterns
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
@@ -240,7 +355,7 @@ class TypedEventBus {
 | **Proxy-Based** | Mutable API with tracking | Simple API; Auto-tracking; Intuitive | Proxy overhead; Debugging harder | Rapid development |
 | **Observable** | RxJS/MobX style | Reactive; Powerful; Composable | Learning curve; Large bundle | Complex reactive flows |
 
-**Library Comparison**:
+### Library Comparison
 
 | Library | Pattern | Pros | Cons | Bundle Size | Use Case |
 |---------|---------|------|------|-------------|----------|
@@ -253,7 +368,7 @@ class TypedEventBus {
 | **XState** | State machines | Predictable; Visualizable; Complex flows | Learning curve; Verbose; Overkill for simple | ~10KB | Complex state machines |
 | **Signia** | Signals | Fine-grained reactivity; track() API; Fast; Framework-agnostic | New library; Smaller ecosystem; tldraw-specific | ~5KB | Canvas apps, fine-grained updates |
 
-**State Management Features**:
+### State Management Features
 
 | Feature | Implementation | Pros | Cons |
 |---------|---------------|------|------|
@@ -262,7 +377,7 @@ class TypedEventBus {
 | **Computed State** | Derived values/selectors | DRY principle; Performance | Memoization needed; Complexity |
 | **Middleware** | Intercept actions | Logging; Analytics; Side effects | Indirection; Debugging |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | State Pattern | Implementation |
 |----------|-----------------|----------------|
@@ -272,7 +387,7 @@ class TypedEventBus {
 | **tldraw** | Signia (signals) | • Fine-grained reactive signals; • Shape state management; • History state (undo/redo); • track() for reactive components |
 | **Omni Docs** | Plugin state | • Plugin-based state management; • Custom state API; • Runtime state registration |
 
-**Recommended Architecture**:
+### Recommended Architecture
 
 ```typescript
 // Zustand store with persistence and time-travel
@@ -342,16 +457,17 @@ const useDashboardStore = create<DashboardState>()(
 
 ## Plugin Loader
 
-**Purpose**: Dynamic loading and management of extensions
+### Purpose
+Dynamic loading and management of extensions
 
-**Core Features**:
+### Core Features
 - Hot module replacement (HMR)
 - Lazy loading of plugins
 - Plugin dependency management
 - Sandboxed execution context
 - Plugin lifecycle hooks (init, activate, deactivate, destroy)
 
-**Architecture Patterns**:
+### Architecture Patterns
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
@@ -361,7 +477,7 @@ const useDashboardStore = create<DashboardState>()(
 | **iframe Sandboxing** | Isolated execution | True isolation; Security; Separate context | Communication overhead; Performance; Complex | Untrusted plugins |
 | **Web Workers** | Background threads | Non-blocking; Isolated; Parallel | No DOM access; Message passing; Limited | CPU-intensive plugins |
 
-**Library Comparison**:
+### Library Comparison
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
@@ -371,7 +487,7 @@ const useDashboardStore = create<DashboardState>()(
 | **SystemJS** | Module loader | Format-agnostic; Import maps; Mature | Extra runtime; Less common | ~10KB | Legacy support |
 | **Custom Loader** | DIY | Full control; Tailored; Minimal | Development time; Testing | Varies | Specific requirements |
 
-**Plugin Lifecycle Patterns**:
+### Plugin Lifecycle Patterns
 
 | Phase | Purpose | Typical Actions |
 |-------|---------|-----------------|
@@ -382,7 +498,7 @@ const useDashboardStore = create<DashboardState>()(
 | **Destroy** | Cleanup plugin | Remove listeners, free resources, clear state |
 | **Update** | Hot reload | Preserve state, swap implementation |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Plugin System | Implementation |
 |----------|--------------|----------------|
@@ -392,7 +508,7 @@ const useDashboardStore = create<DashboardState>()(
 | **tldraw** | Shape plugins | • Custom shape definitions; • Tool plugins; • UI override plugins; • Runtime registration |
 | **Omni Docs** | Plugin system | • Markdown plugins; • Custom renderers; • Build-time and runtime plugins; • Plugin manifest |
 
-**Recommended Architecture**:
+### Recommended Architecture
 
 ```typescript
 // Plugin loader with lifecycle and sandboxing
@@ -498,16 +614,17 @@ The framework provides comprehensive extension capabilities through dual languag
 
 ## Custom DSL
 
+### Purpose
+Declarative, safe UI composition
 
-- **Purpose**: Declarative, safe UI composition
-- **Features**:
-  - Simple, readable syntax for common patterns
-  - Type-safe by design
-  - Limited to safe operations
-  - Compiles to React components
-  - Hot-reloadable
+### Features
+- Simple, readable syntax for common patterns
+- Type-safe by design
+- Limited to safe operations
+- Compiles to React components
+- Hot-reloadable
 
-**Example DSL Syntax** (conceptual):
+### Example DSL Syntax (conceptual)
 ```
 dashboard "Sales Overview" {
   layout: grid(2, 2)
@@ -527,14 +644,15 @@ dashboard "Sales Overview" {
 
 ## JavaScript Extensions
 
+### Purpose
+Full programmatic control for advanced use cases
 
-- **Purpose**: Full programmatic control for advanced use cases
-- **Features**:
-  - Access to extension API
-  - React component creation
-  - Custom data transformations
-  - Integration with external libraries
-  - Sandboxed execution
+### Features
+- Access to extension API
+- React component creation
+- Custom data transformations
+- Integration with external libraries
+- Sandboxed execution
 
 
 ## Extension Points
@@ -543,16 +661,14 @@ The framework provides multiple extension points for customizing every aspect of
 
 ## UI Components
 
-
-
-**Extension Capabilities**:
+### Extension Capabilities
 - Custom chart types and visualizations
 - Data widgets (tables, cards, metrics)
 - Input controls and forms
 - Layout containers and panels
 - Themes and styling systems
 
-**Component Extension Patterns**:
+### Component Extension Patterns
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
@@ -561,7 +677,7 @@ The framework provides multiple extension points for customizing every aspect of
 | **Plugin API** | Declarative config | Simple; Safe; Validated | Less flexible; Limited features | Simple extensions |
 | **Render Function** | Function returning JSX/HTML | Flexible; Lightweight; Composable | No lifecycle; Manual cleanup | Simple UI elements |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Component System | Extension Method |
 |----------|-----------------|------------------|
@@ -570,7 +686,7 @@ The framework provides multiple extension points for customizing every aspect of
 | **Count.co** | Canvas components | • Custom visualization cells; • SQL-driven components; • React-based extensions; • Drag-and-drop integration |
 | **tldraw** | Shape components | • Custom shape definitions; • SVG-based rendering; • Tool components; • React shape API |
 
-**Recommended Architecture**:
+### Recommended Architecture
 
 ```typescript
 // Component extension API
@@ -605,16 +721,14 @@ extensionAPI.registerComponent({
 
 ## Commands & Command Palette
 
-
-
-**Core Concepts**:
+### Core Concepts
 - **Command Registry**: All actions exposed as named commands
 - **Fuzzy Search**: Quick command discovery with intelligent matching
 - **Command History**: Recently used commands for quick access
 - **Parameterized Commands**: Commands that accept arguments
 - **Keyboard-First**: Fully navigable via keyboard
 
-**Architecture Overview**:
+### Architecture Overview
 
 A command palette is a **searchable command interface** that provides:
 1. Unified access point for all application actions
@@ -623,7 +737,7 @@ A command palette is a **searchable command interface** that provides:
 4. Context-aware command filtering
 5. Command execution with optional parameters
 
-**Key Design Decisions**:
+### Key Design Decisions
 
 | Aspect | Recommended Approach | Rationale |
 |--------|---------------------|-----------|
@@ -634,7 +748,7 @@ A command palette is a **searchable command interface** that provides:
 | **Performance** | Virtual scrolling for large lists | Handles 1000+ commands without lag |
 | **Extensibility** | Plugin-contributed commands | Extensions can register custom commands |
 
-**Architecture Patterns**:
+### Architecture Patterns
 
 1. **Command Registration Pattern**
    ```typescript
@@ -665,7 +779,7 @@ A command palette is a **searchable command interface** that provides:
    - Filtered & ranked results
    - Command history
 
-**Library Comparison**:
+### Library Comparison
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
@@ -676,7 +790,7 @@ A command palette is a **searchable command interface** that provides:
 | **Fuse.js** | Fuzzy search | Powerful search; Configurable; Framework-agnostic; Mature | No UI; Larger bundle; Overkill for simple cases | ~20KB | Complex search requirements |
 | **Custom Build** | DIY | Full control; Minimal bundle; Tailored features; No dependencies | Development time; Maintenance burden; Reinventing wheel | Varies | Unique requirements, learning |
 
-**Fuzzy Search Algorithm Comparison**:
+### Fuzzy Search Algorithm Comparison
 
 | Algorithm | Approach | Pros | Cons | Best For |
 |-----------|----------|------|------|----------|
@@ -685,7 +799,7 @@ A command palette is a **searchable command interface** that provides:
 | **Fuzzy Matching** (fzy, fzf-style) | Character sequence | Fast; Position-aware; Intuitive results; Handles abbreviations | More complex; Tuning needed | Command palettes, file search |
 | **N-gram Based** | Token matching | Language-aware; Good for text; Handles word order | Slower; More memory; Complex setup | Full-text search, documents |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Implementation | Features | Activation |
 |----------|---------------|----------|------------|
@@ -695,7 +809,7 @@ A command palette is a **searchable command interface** that provides:
 | **tldraw** | Custom implementation | • Shape search; • Tool selection; • Canvas actions; • Quick commands; • Keyboard shortcuts | Cmd/Ctrl+K |
 | **Linear** (inspiration) | cmdk-based | • Issue search; • Project navigation; • Quick actions; • Nested commands; • Beautiful animations | Cmd/Ctrl+K |
 
-**Recommended Architecture for BI Dashboards**:
+### Recommended Architecture for BI Dashboards
 
 ```typescript
 // Command palette architecture
@@ -729,7 +843,7 @@ const modes = {
 };
 ```
 
-**Performance Optimization Strategies**:
+### Performance Optimization Strategies
 
 | Strategy | Technique | Impact |
 |----------|-----------|--------|
@@ -740,7 +854,7 @@ const modes = {
 | **Indexed Commands** | Pre-build search index | Sub-millisecond lookups |
 | **Lazy Loading** | Load command metadata on-demand | Faster initial load |
 
-**Accessibility Considerations**:
+### Accessibility Considerations
 
 - **ARIA Labels**: Proper roles and labels for screen readers
 - **Keyboard Navigation**: Arrow keys, Enter, Escape, Tab
@@ -749,7 +863,7 @@ const modes = {
 - **High Contrast**: Support for high contrast themes
 - **Reduced Motion**: Respect `prefers-reduced-motion`
 
-**Advanced Features**:
+### Advanced Features
 
 1. **Nested Commands** (Breadcrumb navigation)
    - Parent command opens sub-menu
@@ -771,7 +885,7 @@ const modes = {
    - Macro recording
    - Batch operations
 
-**Recommended Stack for Your Framework**:
+### Recommended Stack for Your Framework
 
 - **React Apps**: `cmdk` (headless) or `kbar` (styled)
 - **Framework-Agnostic**: `ninja-keys` or custom build
@@ -781,7 +895,7 @@ const modes = {
 - **Persistence**: Recent commands in LocalStorage, frecency in IndexedDB
 - **Activation**: Cmd/Ctrl+K (global), with mode switching support
 
-**Implementation Checklist**:
+### Implementation Checklist
 
 - [ ] Command registration system
 - [ ] Fuzzy search with ranking
@@ -797,7 +911,7 @@ const modes = {
 *For integration with keybindings, see Section 2.2.3. For state management patterns, see Section 9.1.1.*
 
 
-**Extension Capabilities**:
+### Extension Capabilities
 
 
 - Custom actions and workflows
@@ -806,7 +920,7 @@ const modes = {
 - Batch operations
 - Scheduled tasks
 
-**Command Extension Patterns**:
+### Command Extension Patterns
 
 | Pattern | Description | Use Case |
 |---------|-------------|----------|
@@ -816,7 +930,7 @@ const modes = {
 | **Composite** | Multiple sub-commands | Complex workflows |
 | **Scheduled** | Cron-like execution | Periodic tasks |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Command System | Extension Method |
 |----------|---------------|------------------|
@@ -826,7 +940,7 @@ const modes = {
 | **tldraw** | Tool commands | • Shape commands; • Canvas commands; • Tool actions |
 | **VS Code** | Commands API | • commands.registerCommand; • Command palette; • Keybinding integration |
 
-**Recommended API**:
+### Recommended API
 
 ```typescript
 // Command registration
@@ -858,16 +972,15 @@ extensionAPI.registerPipeline({
 
 ## Keybindings
 
+### Core Concepts
 
-
-**Core Concepts**:
 - **Global Keybindings**: System-wide keyboard shortcuts (always active)
 - **Mode-Specific Keybindings**: Context-aware shortcuts based on active component
 - **Keymaps**: Hierarchical keybinding definitions with priority resolution
 - **Chord Support**: Multi-key sequences (e.g., `Ctrl+x Ctrl+s`)
 - **Customizable**: Users can rebind any key combination
 
-**Architecture Overview**:
+### Architecture Overview
 
 The keybinding system follows a **command-based architecture** where:
 1. Commands are first-class entities with unique IDs
@@ -875,7 +988,7 @@ The keybinding system follows a **command-based architecture** where:
 3. Context evaluation determines which bindings are active
 4. Priority hierarchy resolves conflicts (Local → Mode → Global)
 
-**Key Design Decisions**:
+### Key Design Decisions
 
 | Aspect | Recommended Approach | Rationale |
 |--------|---------------------|-----------|
@@ -885,14 +998,14 @@ The keybinding system follows a **command-based architecture** where:
 | **Chord Sequences** | Support multi-key sequences with timeout | Expands available key combinations for power users |
 | **Persistence** | Store custom bindings in IndexedDB | User customizations persist across sessions |
 
-**Library Recommendations by Use Case**:
+### Library Recommendations by Use Case
 
 - **Minimal Bundle Size** (<1KB): `tinykeys` - 400 bytes, chord support, zero dependencies
 - **Feature-Rich** (~3KB): `hotkeys-js` - scope support, filtering, mature ecosystem
 - **React Integration** (~2KB): `react-hotkeys-hook` - hooks-based, component-scoped
 - **Full Control**: Custom implementation - tailored to exact needs, no dependencies
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 - **Observable**: Command palette (Cmd+K) with fuzzy search, cell-specific shortcuts, notebook-level keybindings
 - **Evidence**: Vim-like modal keybindings for power users, context-aware navigation
@@ -903,7 +1016,7 @@ The keybinding system follows a **command-based architecture** where:
 *See Section 9.1.2 for detailed architectural analysis, pros/cons comparison, and implementation strategies.*
 
 
-**Extension Capabilities**:
+### Extension Capabilities
 
 
 - Custom keyboard shortcuts
@@ -912,7 +1025,7 @@ The keybinding system follows a **command-based architecture** where:
 - Macro recording and playback
 - Context-aware activation
 
-**Keybinding Extension Patterns**:
+### Keybinding Extension Patterns
 
 | Approach | Implementation | Pros | Cons |
 |----------|---------------|------|------|
@@ -920,7 +1033,7 @@ The keybinding system follows a **command-based architecture** where:
 | **Programmatic** | API calls | Flexible; Dynamic; Conditional | More complex; Error-prone |
 | **Hybrid** | Config + API | Best of both; Validated + flexible | Two systems | 
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Keybinding System | Extension Method |
 |----------|------------------|------------------|
@@ -930,7 +1043,7 @@ The keybinding system follows a **command-based architecture** where:
 | **tldraw** | Tool shortcuts | • Shape creation keys; • Canvas navigation; • Tool-specific bindings |
 | **VS Code** | Keybindings API | • keybindings.json; • when clauses; • Full customization |
 
-**Recommended API**:
+### Recommended API
 
 ```typescript
 // Keybinding extension
@@ -961,14 +1074,15 @@ extensionAPI.registerMacro({
 
 
 
-**Extension Capabilities**:
+### Extension Capabilities
+
 - Color schemes and palettes
 - Typography systems
 - Component styling
 - Dark/light mode variants
 - Custom CSS variables
 
-**Theme Extension Patterns**:
+### Theme Extension Patterns
 
 | Approach | Implementation | Pros | Cons |
 |----------|---------------|------|------|
@@ -977,7 +1091,7 @@ extensionAPI.registerMacro({
 | **CSS File** | Separate stylesheet | Familiar; Standard; Cacheable | No dynamic; Load overhead |
 | **Hybrid** | Variables + Object | Flexible; Best of both | Complexity |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Theme System | Extension Method |
 |----------|-------------|------------------|
@@ -986,7 +1100,7 @@ extensionAPI.registerMacro({
 | **Count.co** | Theme settings | • Color customization; • Canvas themes; • CSS variables |
 | **tldraw** | Theme system | • CSS variables; • Custom themes; • Dark/light mode; • Color overrides |
 
-**Recommended API**:
+### Recommended API
 
 ```typescript
 // Theme registration
@@ -1018,17 +1132,14 @@ extensionAPI.registerTheme({
 
 ## Layouts
 
-**Buffer/Window Model**:
-
+### Buffer/Window Model
 
 - **Buffers**: Logical content containers (data views, charts, tables)
 - **Windows**: Visual panes that display buffers
 - **Layout Management**: Split, resize, and arrange windows dynamically
 - **Buffer Switching**: Quick navigation between different data views
 
-
-**Extension Capabilities**:
-
+### Extension Capabilities
 
 - Window arrangements
 - Dashboard templates
@@ -1036,7 +1147,7 @@ extensionAPI.registerTheme({
 - Grid configurations
 - Split pane layouts
 
-**Layout Extension Patterns**:
+### Layout Extension Patterns
 
 | Pattern | Description | Use Case |
 |---------|-------------|----------|
@@ -1045,7 +1156,7 @@ extensionAPI.registerTheme({
 | **Declarative** | JSON/YAML config | Shareable layouts |
 | **Interactive** | Drag-and-drop | User customization |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Layout System | Extension Method |
 |----------|--------------|------------------|
@@ -1054,7 +1165,7 @@ extensionAPI.registerTheme({
 | **Count.co** | Canvas layout | • Free-form canvas; • Cell positioning; • Auto-layout options; • Responsive grids |
 | **tldraw** | Canvas system | • Infinite canvas; • Shape positioning; • Grouping and frames; • Custom layouts |
 
-**Recommended API**:
+### Recommended API
 
 ```typescript
 // Layout template registration
@@ -1087,13 +1198,13 @@ extensionAPI.registerLayoutTemplate({
 
 
 
-**Core Concepts**:
+### Core Concepts
 
 **Hooks** are extension points that allow plugins to inject custom behavior at specific lifecycle events without modifying core code.
 
 **Advice** is a technique to wrap or modify existing functions, enabling plugins to intercept, augment, or replace behavior.
 
-**Architecture Overview**:
+### Architecture Overview
 
 The hooks and advice system provides a **plugin architecture** that enables:
 1. Decoupled extension points throughout the application
@@ -1102,7 +1213,7 @@ The hooks and advice system provides a **plugin architecture** that enables:
 4. Plugin lifecycle management
 5. Predictable execution order
 
-**Key Design Decisions**:
+### Key Design Decisions
 
 | Aspect | Recommended Approach | Rationale |
 |--------|---------------------|-----------|
@@ -1113,7 +1224,7 @@ The hooks and advice system provides a **plugin architecture** that enables:
 | **Advice Pattern** | Middleware/decorator pattern | Composable, chainable, familiar to developers |
 | **Unsubscribe** | Return cleanup function | Prevents memory leaks, follows React patterns |
 
-**Hook Types & Use Cases**:
+### Hook Types & Use Cases
 
 | Hook Category | Examples | Use Cases |
 |---------------|----------|-----------|
@@ -1125,7 +1236,7 @@ The hooks and advice system provides a **plugin architecture** that enables:
 | **Navigation Hooks** | `before-navigate`, `after-navigate`, `route-change` | Analytics, guards, breadcrumbs |
 | **User Action Hooks** | `command-execute`, `keybinding-trigger`, `menu-click` | Analytics, macros, automation |
 
-**Architecture Patterns**:
+### Architecture Patterns
 
 1. **Event Emitter Pattern** (Hooks)
    ```typescript
@@ -1170,7 +1281,7 @@ The hooks and advice system provides a **plugin architecture** that enables:
    }
    ```
 
-**Library Comparison**:
+### Library Comparison
 
 | Library | Type | Pros | Cons | Bundle Size | Use Case |
 |---------|------|------|------|-------------|----------|
@@ -1181,7 +1292,7 @@ The hooks and advice system provides a **plugin architecture** that enables:
 | **Tapable** | Hook system | Webpack's hook system; Very powerful; Multiple hook types; Battle-tested | Complex API; Large bundle; Steep learning curve | ~10KB | Complex plugin systems, Webpack-like |
 | **Custom Build** | DIY | Tailored features; Minimal size; Full control | Development time; Testing needed; Maintenance | Varies | Specific requirements |
 
-**Hook System Implementation Patterns**:
+### Hook System Implementation Patterns
 
 | Pattern | Description | Pros | Cons |
 |---------|-------------|------|------|
@@ -1191,7 +1302,7 @@ The hooks and advice system provides a **plugin architecture** that enables:
 | **Async Parallel** | Concurrent execution | Fast; Independent handlers | No ordering; Race conditions |
 | **Async Series** | Sequential with results | Ordered; Result aggregation | Slower; Blocking |
 
-**Advice Pattern Comparison**:
+### Advice Pattern Comparison
 
 | Pattern | Implementation | Pros | Cons | Best For |
 |---------|---------------|------|------|----------|
@@ -1200,7 +1311,7 @@ The hooks and advice system provides a **plugin architecture** that enables:
 | **Middleware Chain** | Express-style | Familiar pattern; Composable; Async-friendly | More setup; Context passing | Request/response flows |
 | **AOP Framework** | AspectJ-style | Powerful; Declarative; Cross-cutting | Complex; Large bundle; Learning curve | Enterprise apps |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Hook System | Advice System | Implementation Details |
 |----------|-------------|---------------|------------------------|
@@ -1211,7 +1322,7 @@ The hooks and advice system provides a **plugin architecture** that enables:
 | **VS Code** | Extension API | Command/menu contribution | • Activation events; • Language server hooks; • Workspace events; • Decoration providers |
 | **Webpack** | Tapable hooks | Compilation hooks | • Compiler hooks; • Compilation hooks; • Module hooks; • Asset optimization |
 
-**Recommended Architecture for BI Dashboards**:
+### Recommended Architecture for BI Dashboards
 
 ```typescript
 // Hook system with priority and async support
@@ -1305,7 +1416,7 @@ class AdviceSystem {
 }
 ```
 
-**Common Hook Patterns**:
+### Common Hook Patterns
 
 1. **Data Transformation Pipeline**
    ```typescript
@@ -1346,7 +1457,7 @@ class AdviceSystem {
    });
    ```
 
-**Performance Considerations**:
+### Performance Considerations
 
 | Concern | Strategy | Impact |
 |---------|----------|--------|
@@ -1356,7 +1467,7 @@ class AdviceSystem {
 | **Error Propagation** | Isolated execution with try/catch | Stability |
 | **Async Coordination** | Promise.all for parallel, sequential for order | Performance vs order |
 
-**Security Considerations**:
+### Security Considerations
 
 - **Sandboxing**: Execute plugin hooks in isolated context
 - **Capability Checks**: Verify plugin has permission for hook
@@ -1364,7 +1475,7 @@ class AdviceSystem {
 - **Timeout Enforcement**: Prevent infinite loops
 - **Resource Limits**: Cap memory/CPU usage per hook
 
-**Advanced Features**:
+### Advanced Features
 
 1. **Hook Composition**
    - Combine multiple hooks into one
@@ -1386,7 +1497,7 @@ class AdviceSystem {
    - Deprecation warnings
    - Migration helpers
 
-**Recommended Stack**:
+### Recommended Stack
 
 - **Simple Hooks**: `mitt` (200B) or `eventemitter3` (~2KB)
 - **Complex Plugin System**: `Tapable` or custom implementation
@@ -1395,7 +1506,7 @@ class AdviceSystem {
 - **Error Handling**: Isolated execution with error boundaries
 - **Async**: Promise-based with timeout enforcement
 
-**Implementation Checklist**:
+### Implementation Checklist
 
 - [ ] Hook registration system with priority
 - [ ] Event emitter with typed events
@@ -1413,17 +1524,18 @@ class AdviceSystem {
 
 ## Hot Reloading
 
+### Overview
 
+Hot Module Replacement (HMR) enables developers to update extensions in real-time without losing application state, dramatically improving development velocity.
 
-**Overview**: Hot Module Replacement (HMR) enables developers to update extensions in real-time without losing application state, dramatically improving development velocity.
+### Core Capabilities
 
-**Core Capabilities**:
 - Live code updates without page refresh
 - State preservation across reloads
 - Error recovery and isolation
 - Enhanced debugging and error reporting
 
-**HMR Architecture Patterns**:
+### HMR Architecture Patterns
 
 | Pattern | Description | Pros | Cons | Best For |
 |---------|-------------|------|------|----------|
@@ -1432,7 +1544,7 @@ class AdviceSystem {
 | **Component HMR** | Replace React components | Very fast; Preserves local state; Best DX | React-specific; Requires setup | React development |
 | **Live Reload** | Watch files, auto-refresh | Simple; Universal; Reliable | Loses state; Slower; Full reload | Simple development |
 
-**HMR Library Comparison**:
+### HMR Library Comparison
 
 | Tool | Type | Pros | Cons | Use Case |
 |------|------|------|------|----------|
@@ -1442,7 +1554,7 @@ class AdviceSystem {
 | **React Fast Refresh** | React HMR | Preserves state; Error recovery; Best DX | React-only; Requires setup | React development |
 | **Custom HMR** | DIY | Full control; Tailored | Complex; Maintenance | Unique requirements |
 
-**State Preservation Strategies**:
+### State Preservation Strategies
 
 | Strategy | Implementation | Pros | Cons |
 |----------|---------------|------|------|
@@ -1451,7 +1563,7 @@ class AdviceSystem {
 | **Snapshot** | Save/restore state | Complete; Flexible | Complex; Performance |
 | **Hybrid** | Critical state persisted | Balanced; Optimized | More logic | 
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | HMR System | Implementation |
 |----------|-----------|----------------|
@@ -1460,7 +1572,7 @@ class AdviceSystem {
 | **Count.co** | Vite HMR | • React Fast Refresh; • Canvas state preservation; • Cell hot reload; • Query result caching |
 | **tldraw** | Vite HMR | • Shape state preservation; • Canvas hot reload; • Tool hot swap; • History preservation |
 
-**Error Recovery Patterns**:
+### Error Recovery Patterns
 
 | Pattern | Description | Use Case |
 |---------|-------------|----------|
@@ -1469,7 +1581,7 @@ class AdviceSystem {
 | **Auto-Retry** | Retry failed reload | Transient errors |
 | **Rollback** | Revert to last working | Critical failures |
 
-**Recommended Architecture**:
+### Recommended Architecture
 
 ```typescript
 // HMR integration for extensions
@@ -1506,7 +1618,7 @@ window.addEventListener('error', (event) => {
 });
 ```
 
-**Development Mode Features**:
+### Development Mode Features
 
 - **Source Maps**: Map compiled code to source for debugging
 - **Error Overlay**: Full-screen error display with stack traces
@@ -1517,20 +1629,506 @@ window.addEventListener('error', (event) => {
 
 *For build tool configuration, see Section 6. For plugin lifecycle, see Section 1.4.*
 
+## Live Evaluation of DSL & JavaScript
+
+### Overview
+
+The framework supports live evaluation and hot reloading of both DSL and JavaScript code blocks within dashboards, enabling rapid development and interactive data exploration.
+
+### Core Capabilities
+
+- Real-time DSL compilation and component rendering
+- Sandboxed JavaScript execution with reactive dependencies
+- State preservation across code changes
+- Cell-based evaluation with dependency tracking
+- Incremental compilation for performance
+
+### JavaScript Live Evaluation
+
+#### Architecture Pattern
+
+Observable-style reactive cells with sandboxed execution
+
+#### Implementation
+
+```typescript
+// Cell-based JavaScript evaluator
+interface Cell {
+  id: string;
+  type: 'dsl' | 'javascript';
+  code: string;
+  dependencies: string[];
+  output?: any;
+  error?: Error;
+}
+
+class LiveJSEvaluator {
+  private cells = new Map<string, Cell>();
+  private graph = new DependencyGraph();
+  
+  // Evaluate JavaScript in sandboxed context
+  async evaluateCell(cellId: string, context: Record<string, any>) {
+    const cell = this.cells.get(cellId);
+    if (!cell) throw new Error(`Cell not found: ${cellId}`);
+    
+    try {
+      // Create sandboxed function
+      const fn = new Function(...Object.keys(context), cell.code);
+      cell.output = await fn(...Object.values(context));
+      cell.error = undefined;
+      
+      // Re-evaluate dependent cells
+      const dependents = this.graph.getDependents(cellId);
+      for (const depId of dependents) {
+        await this.evaluateCell(depId, context);
+      }
+    } catch (error) {
+      cell.error = error as Error;
+      throw error;
+    }
+  }
+  
+  // Watch for code changes and auto-evaluate
+  watch(cellId: string, context: Record<string, any>) {
+    this.on(`cell:${cellId}:change`, () => {
+      this.evaluateCell(cellId, context);
+    });
+  }
+  
+  // HMR integration
+  enableHMR(cellId: string) {
+    if (import.meta.hot) {
+      import.meta.hot.accept(() => {
+        const cell = this.cells.get(cellId);
+        if (cell) {
+          this.evaluateCell(cellId, this.getContext());
+        }
+      });
+    }
+  }
+}
+```
+
+#### Security Integration
+
+```typescript
+// Safe evaluation with permission checks
+class SecureJSEvaluator extends LiveJSEvaluator {
+  constructor(private permissionManager: PermissionManager) {
+    super();
+  }
+  
+  async evaluateCell(cellId: string, context: Record<string, any>) {
+    const cell = this.cells.get(cellId);
+    
+    // Check permissions
+    if (!this.permissionManager.check(cellId, 'system:eval')) {
+      throw new Error('Permission denied: system:eval required for JavaScript execution');
+    }
+    
+    // Create restricted context
+    const sandbox = this.createSandbox(cellId);
+    const restrictedContext = this.filterContext(context, cellId);
+    
+    return super.evaluateCell(cellId, restrictedContext);
+  }
+  
+  private createSandbox(cellId: string): SandboxContext {
+    const permissions = this.permissionManager.getPermissions(cellId);
+    return createSandboxedAPI(cellId, permissions);
+  }
+}
+```
+
+### DSL Live Compilation
+
+#### Architecture Pattern
+
+Compile-to-React with Vite HMR integration
+
+#### Implementation
+
+```typescript
+// DSL live compiler with hot reload
+class DSLLiveCompiler {
+  private cache = new Map<string, CompiledComponent>();
+  private parser = new DSLParser();
+  private compiler = new DSLToReactCompiler();
+  
+  // Compile DSL to React component
+  compile(dslCode: string, moduleId: string): React.ComponentType {
+    // Check cache
+    if (this.cache.has(moduleId)) {
+      return this.cache.get(moduleId)!.component;
+    }
+    
+    // 1. Parse DSL
+    const ast = this.parser.parse(dslCode);
+    
+    // 2. Compile to React
+    const component = this.compiler.toReact(ast);
+    
+    // 3. Cache result
+    this.cache.set(moduleId, { ast, component, code: dslCode });
+    
+    // 4. Enable HMR
+    this.enableHMR(moduleId, dslCode);
+    
+    return component;
+  }
+  
+  // Incremental compilation for performance
+  recompile(moduleId: string, newCode: string): React.ComponentType {
+    const cached = this.cache.get(moduleId);
+    
+    if (cached) {
+      // Parse new code
+      const newAST = this.parser.parse(newCode);
+      
+      // Compute diff
+      const diff = this.differ.diff(cached.ast, newAST);
+      
+      // Only recompile changed parts
+      if (diff.isMinimal) {
+        const component = this.compiler.partialCompile(cached.component, diff);
+        this.cache.set(moduleId, { ast: newAST, component, code: newCode });
+        return component;
+      }
+    }
+    
+    // Full recompile
+    return this.compile(newCode, moduleId);
+  }
+  
+  // HMR integration
+  private enableHMR(moduleId: string, dslCode: string) {
+    if (import.meta.hot) {
+      import.meta.hot.accept(moduleId, (newModule) => {
+        // Preserve component state
+        const state = this.getComponentState(moduleId);
+        
+        // Recompile
+        const newComponent = this.recompile(moduleId, newModule.code);
+        
+        // Restore state
+        this.setComponentState(moduleId, state);
+        
+        console.log(`DSL hot reloaded: ${moduleId}`);
+      });
+    }
+  }
+  
+  // Watch file system for changes
+  watch(dslFile: string) {
+    const watcher = fs.watch(dslFile, (eventType) => {
+      if (eventType === 'change') {
+        const code = fs.readFileSync(dslFile, 'utf-8');
+        this.recompile(dslFile, code);
+      }
+    });
+    
+    return () => watcher.close();
+  }
+}
+```
+
+### Hybrid Cell-Based System
+
+#### Recommended Architecture
+
+Combines DSL and JavaScript evaluation with unified state management
+
+#### Implementation
+
+```typescript
+// Unified live dashboard engine
+class LiveDashboardEngine {
+  private dslCompiler = new DSLLiveCompiler();
+  private jsEvaluator = new SecureJSEvaluator(permissionManager);
+  private stateManager = useDashboardStore();
+  
+  // Evaluate any cell type
+  async evaluateCell(cell: Cell) {
+    if (cell.type === 'dsl') {
+      return this.evaluateDSL(cell);
+    } else if (cell.type === 'javascript') {
+      return this.evaluateJS(cell);
+    }
+    throw new Error(`Unknown cell type: ${cell.type}`);
+  }
+  
+  // DSL evaluation
+  private async evaluateDSL(cell: Cell) {
+    const component = this.dslCompiler.compile(cell.code, cell.id);
+    
+    // Register component
+    componentRegistry.register({
+      id: cell.id,
+      component,
+      metadata: { type: 'dsl-generated' }
+    });
+    
+    return component;
+  }
+  
+  // JS evaluation (sandboxed)
+  private async evaluateJS(cell: Cell) {
+    // Build context from dependencies
+    const context = this.buildContext(cell.dependencies);
+    
+    // Evaluate with security checks
+    const result = await this.jsEvaluator.evaluateCell(cell.id, context);
+    
+    // Update state
+    this.stateManager.setCellOutput(cell.id, result);
+    
+    return result;
+  }
+  
+  // Build execution context from cell dependencies
+  private buildContext(dependencies: string[]): Record<string, any> {
+    const context: Record<string, any> = {
+      // Core APIs
+      data: dataAPI,
+      ui: uiAPI,
+      state: this.stateManager,
+      
+      // Extension APIs
+      registerComponent: componentRegistry.register,
+      registerCommand: commandRegistry.register,
+      
+      // Utility functions
+      query: (sql: string) => this.executeQuery(sql),
+      fetch: (url: string) => this.secureFetch(url),
+    };
+    
+    // Add dependency outputs
+    for (const depId of dependencies) {
+      const output = this.stateManager.getCellOutput(depId);
+      context[depId] = output;
+    }
+    
+    return context;
+  }
+  
+  // Debounced evaluation for performance
+  evaluateDebounced = debounce((cell: Cell) => {
+    this.evaluateCell(cell);
+  }, 300);
+}
+```
+
+### Performance Optimization
+
+#### Debounced Evaluation
+
+```typescript
+// Wait for user to stop typing before evaluating
+const debouncedEval = debounce((code: string, cellId: string) => {
+  engine.evaluateCell({ id: cellId, code, type: 'javascript', dependencies: [] });
+}, 300); // 300ms delay
+```
+
+#### Incremental Compilation
+
+```typescript
+class IncrementalDSLCompiler {
+  compile(code: string, previousAST?: AST): CompiledComponent {
+    const newAST = this.parser.parse(code);
+    
+    if (previousAST) {
+      // Compute minimal diff
+      const diff = this.differ.diff(previousAST, newAST);
+      
+      // Only recompile changed nodes
+      if (diff.changedNodes.length < newAST.nodes.length * 0.3) {
+        return this.partialCompile(diff);
+      }
+    }
+    
+    // Full compilation
+    return this.fullCompile(newAST);
+  }
+}
+```
+
+#### Virtual Scrolling for Large Outputs
+
+```typescript
+// Render only visible cells
+import { useVirtualizer } from '@tanstack/react-virtual';
+
+function CellList({ cells }: { cells: Cell[] }) {
+  const parentRef = useRef<HTMLDivElement>(null);
+  
+  const virtualizer = useVirtualizer({
+    count: cells.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 200,
+  });
+  
+  return (
+    <div ref={parentRef} style={{ height: '100vh', overflow: 'auto' }}>
+      {virtualizer.getVirtualItems().map((virtualRow) => (
+        <CellRenderer key={virtualRow.key} cell={cells[virtualRow.index]} />
+      ))}
+    </div>
+  );
+}
+```
+
+### Real-World Pattern Comparison
+
+| Platform | DSL Support | JS Evaluation | State Preservation | Dependency Tracking |
+|----------|-------------|---------------|-------------------|---------------------|
+| **Observable** | No DSL | Live cells | Cell state | Automatic |
+| **Evidence** | Markdown + Components | Build-time only | Svelte stores | Manual |
+| **Count.co** | No DSL | SQL + JS | Canvas state | Query deps |
+| **tldraw** | No DSL | Shape code | History state | Shape deps |
+| **Your Framework** | Custom DSL | Sandboxed JS | Zustand + HMR | Cell graph |
+
+### Usage Examples
+
+#### DSL Cell with Live Reload
+
+```dsl
+// dashboard.dsl - auto-reloads on save
+dashboard "Sales Analytics" {
+  layout: grid(3, 2)
+  theme: "ocean-blue"
+  
+  panel chart {
+    id: "revenue-chart"
+    type: line
+    data: query("SELECT date, revenue FROM sales")
+    position: (0, 0, 2, 1)
+    
+    options {
+      title: "Monthly Revenue"
+      colors: ["#0077be", "#00a8e8"]
+    }
+  }
+  
+  panel metric {
+    id: "total-revenue"
+    data: query("SELECT SUM(revenue) as total FROM sales")
+    position: (2, 0, 1, 1)
+    format: "currency"
+  }
+}
+```
+
+#### JavaScript Cell with Dependencies
+
+```javascript
+// Cell 1: Fetch data
+const salesData = await query(`
+  SELECT date, revenue, region 
+  FROM sales 
+  WHERE date >= '2024-01-01'
+`);
+
+// Cell 2: Transform data (depends on Cell 1)
+const aggregated = salesData.reduce((acc, row) => {
+  acc[row.region] = (acc[row.region] || 0) + row.revenue;
+  return acc;
+}, {});
+
+// Cell 3: Visualize (depends on Cell 2)
+registerComponent({
+  id: 'region-chart',
+  component: () => (
+    <BarChart data={Object.entries(aggregated).map(([region, revenue]) => ({
+      region,
+      revenue
+    }))} />
+  )
+});
+```
+
+#### Mixed DSL + JS Dashboard
+
+```typescript
+// Combine DSL layout with JS logic
+const dashboard = {
+  // DSL for structure
+  layout: compileDSL(`
+    dashboard "Interactive Dashboard" {
+      layout: grid(2, 2)
+      panel container { id: "chart-container", position: (0, 0, 2, 1) }
+      panel container { id: "controls", position: (0, 1, 1, 1) }
+      panel container { id: "metrics", position: (1, 1, 1, 1) }
+    }
+  `),
+  
+  // JS for interactivity
+  cells: [
+    {
+      id: 'data-fetch',
+      type: 'javascript',
+      code: 'const data = await fetch("/api/sales").then(r => r.json());'
+    },
+    {
+      id: 'chart-render',
+      type: 'javascript',
+      dependencies: ['data-fetch'],
+      code: 'ui.render("chart-container", <LineChart data={data} />);'
+    }
+  ]
+};
+```
+
+#### Error Handling & Recovery
+
+```typescript
+// Error boundary for cell evaluation
+class CellErrorBoundary extends React.Component<Props, State> {
+  state = { hasError: false, error: null };
+  
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+  
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    // Log to error tracking
+    console.error('Cell evaluation error:', error, errorInfo);
+    
+    // Attempt recovery
+    if (this.props.cell.type === 'javascript') {
+      // Rollback to last working version
+      this.props.onRollback(this.props.cell.id);
+    }
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return (
+        <ErrorDisplay 
+          error={this.state.error} 
+          onRetry={() => this.setState({ hasError: false })}
+        />
+      );
+    }
+    
+    return this.props.children;
+  }
+}
+```
+
+*For security considerations, see Section 7. For state management, see Section 1.3. For HMR configuration, see Section 2.2.6.*
+
 
 ---
 
 # Security Model
 
+## Overview
 
-
-**Overview**: A comprehensive security model protects users from malicious extensions while enabling powerful customization capabilities.
-
-## Sandboxing & Permissions
+A comprehensive security model protects users from malicious extensions while enabling powerful customization capabilities. The security model is based on a combination of sandboxing, permissions, and code review.
 
 ## Execution Environment
 
-**Sandboxing Approaches**:
+### Sandboxing Approaches
 
 | Approach | Description | Pros | Cons | Best For |
 |----------|-------------|------|------|----------|
@@ -1540,7 +2138,7 @@ window.addEventListener('error', (event) => {
 | **Proxy-Based** | Intercept API calls | Flexible; Fine-grained; Auditable | Performance overhead; Complex; Bypassable | API control |
 | **VM Isolation** | Separate JavaScript VM | Complete isolation; Resource limits | Large overhead; Complex; Limited browser support | Maximum security |
 
-**Sandboxing Library Comparison**:
+### Sandboxing Library Comparison
 
 | Library | Type | Pros | Cons | Use Case |
 |---------|------|------|------|----------|
@@ -1550,7 +2148,7 @@ window.addEventListener('error', (event) => {
 | **Sandboxed iframe** | Native browser | Built-in; Strong isolation; CSP | Communication overhead; Complex | Untrusted content |
 | **Custom Proxy** | DIY | Full control; Tailored | Development time; Security risks | Specific needs |
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
 
 | Platform | Security Model | Implementation |
 |----------|---------------|----------------|
@@ -1559,7 +2157,7 @@ window.addEventListener('error', (event) => {
 | **Count.co** | SQL sandboxing | • Parameterized queries; • Query validation; • Permission-based access; • Audit logging |
 | **tldraw** | Client-side validation | • Shape validation; • Canvas bounds checking; • User permissions; • Collaboration security |
 
-**DOM Access Control**:
+### DOM Access Control
 
 ```typescript
 // Controlled DOM API
@@ -1593,7 +2191,7 @@ const createSandboxedAPI = (extensionId: string, permissions: string[]) => {
 
 ## Capability-Based Permissions
 
-**Permission Model**:
+### Permission Model
 
 Extensions declare required capabilities in manifest:
 
@@ -1610,7 +2208,7 @@ Extensions declare required capabilities in manifest:
 }
 ```
 
-**Permission Categories**:
+### Permission Categories
 
 | Permission | Description | Risk Level | Use Cases |
 |------------|-------------|------------|----------|
@@ -1625,7 +2223,7 @@ Extensions declare required capabilities in manifest:
 | `system:keybindings` | Register keybindings | Low | Keyboard shortcuts |
 | `system:eval` | Execute arbitrary code | Critical | Advanced extensions (rarely granted) |
 
-**Permission Grant Patterns**:
+### Permission Grant Patterns
 
 | Pattern | Description | Pros | Cons |
 |---------|-------------|------|------|
@@ -1634,7 +2232,7 @@ Extensions declare required capabilities in manifest:
 | **Tiered** | Basic vs advanced permissions | Balanced; Progressive | More complex |
 | **Automatic** | Based on extension type | No prompts; Simple | Less control; Security risk |
 
-**Runtime Permission Validation**:
+### Runtime Permission Validation
 
 ```typescript
 class PermissionManager {
@@ -1670,7 +2268,7 @@ class PermissionManager {
 
 ## API Surface
 
-**API Design Principles**:
+### API Design Principles
 
 - **Minimal Surface**: Only expose necessary functions
 - **Explicit Over Implicit**: Clear, documented behavior
@@ -1678,7 +2276,7 @@ class PermissionManager {
 - **Type-Safe**: TypeScript definitions
 - **Auditable**: Log all sensitive operations
 
-**API Versioning Strategies**:
+### API Versioning Strategies
 
 | Strategy | Description | Pros | Cons |
 |----------|-------------|------|------|
@@ -1687,7 +2285,7 @@ class PermissionManager {
 | **Feature Flags** | Opt-in features | Gradual rollout; A/B testing | Complexity; State explosion |
 | **Parallel APIs** | v1, v2 coexist | No breaking changes; Smooth migration | Maintenance burden; Code duplication |
 
-**Audit Logging**:
+### Audit Logging
 
 ```typescript
 interface AuditEvent {
@@ -1727,7 +2325,7 @@ class AuditLogger {
 
 ## Code Review & Signing
 
-**Extension Marketplace Security**:
+### Extension Marketplace Security
 
 | Layer | Mechanism | Purpose |
 |-------|-----------|----------|
@@ -1738,7 +2336,7 @@ class AuditLogger {
 | **Monitoring** | Usage analytics | Detect abuse |
 | **Reporting** | User feedback | Community oversight |
 
-**Code Signing Implementation**:
+### Code Signing Implementation
 
 ```typescript
 // Extension signing
@@ -1774,7 +2372,7 @@ async function verifyExtension(
 }
 ```
 
-**Security Scanning Tools**:
+### Security Scanning Tools
 
 | Tool | Type | Detects | Use Case |
 |------|------|---------|----------|
@@ -1784,7 +2382,7 @@ async function verifyExtension(
 | **SonarQube** | Code quality | Security hotspots | Enterprise |
 | **Custom Rules** | Domain-specific | Extension-specific risks | Marketplace |
 
-**User Warning System**:
+### User Warning System
 
 ```typescript
 interface ExtensionTrust {
@@ -1822,7 +2420,7 @@ function getExtensionTrust(extension: Extension): ExtensionTrust {
 }
 ```
 
-**Recommended Security Stack**:
+### Recommended Security Stack
 
 - **Sandboxing**: SES (Secure ECMAScript) for high-security
 - **Permissions**: Capability-based with runtime checks
@@ -1847,11 +2445,11 @@ Modern BI dashboard capabilities including canvas interfaces, SQL integration, r
 
 ## Canvas Architecture
 
+### Overview
 
+Canvas-based interfaces (inspired by Count.co and tldraw) provide infinite workspace for flexible data exploration and visualization.
 
-**Overview**: Canvas-based interfaces (inspired by Count.co and tldraw) provide infinite workspace for flexible data exploration and visualization.
-
-**Infinite Canvas Pattern**:
+### Infinite Canvas Pattern
 
 | Aspect | Implementation | Pros | Cons |
 |--------|---------------|------|------|
@@ -1860,7 +2458,7 @@ Modern BI dashboard capabilities including canvas interfaces, SQL integration, r
 | **Spatial Indexing** | R-tree or Quadtree | Fast queries; Collision detection | Memory overhead; Update complexity |
 | **Layer System** | Separate canvas layers | Compositing; Selective updates | More canvases; Coordination |
 
-**Cell/Shape Positioning Systems**:
+### Cell/Shape Positioning Systems
 
 | System | Description | Use Case |
 |--------|-------------|----------|
@@ -1870,7 +2468,7 @@ Modern BI dashboard capabilities including canvas interfaces, SQL integration, r
 | **Grid System** | Snap-to-grid alignment | Structured dashboards |
 | **Flow Layout** | Flexbox/Grid-like | Responsive arrangements |
 
-**Rendering Strategies**:
+### Rendering Strategies
 
 ```typescript
 // Canvas rendering with virtualization
@@ -1905,7 +2503,7 @@ class CanvasRenderer {
 }
 ```
 
-**Platform Examples**:
+### Platform Examples
 
 | Platform | Canvas Implementation | Key Features |
 |----------|---------------------|--------------|
@@ -1913,7 +2511,8 @@ class CanvasRenderer {
 | **Count.co** | React + Canvas | • Cell-based layout; • Free-form positioning; • Auto-layout options; • SQL-driven cells |
 | **Observable** | HTML/SVG cells | • Linear notebook flow; • Custom layouts via HTML; • D3.js integration |
 
-**Recommended Stack**:
+### Recommended Stack
+
 - **Canvas Library**: Konva.js, Fabric.js, or custom WebGL
 - **Spatial Index**: rbush (R-tree implementation)
 - **Transform**: gl-matrix or custom matrix math
@@ -1923,11 +2522,11 @@ class CanvasRenderer {
 
 ## SQL Integration
 
+### Overview
 
+SQL-driven dashboards (inspired by Count.co) enable powerful data analysis with familiar query syntax.
 
-**Overview**: SQL-driven dashboards (inspired by Count.co) enable powerful data analysis with familiar query syntax.
-
-**Query Execution Architecture**:
+### Query Execution Architecture
 
 | Approach | Implementation | Pros | Cons |
 |----------|---------------|------|------|
@@ -1935,7 +2534,7 @@ class CanvasRenderer {
 | **Server-Side SQL** | PostgreSQL, MySQL | Unlimited data; Mature ecosystem; Security | Network latency; Backend required; Scaling costs |
 | **Hybrid** | Cache + server | Best of both; Optimized | Complexity; Sync issues |
 
-**DuckDB WASM Architecture**:
+### DuckDB WASM Architecture
 
 ```typescript
 // DuckDB WASM integration
@@ -1977,7 +2576,7 @@ class SQLEngine {
 }
 ```
 
-**Query Result Caching**:
+### Query Result Caching
 
 | Strategy | Implementation | Use Case |
 |----------|---------------|----------|
@@ -1986,7 +2585,7 @@ class SQLEngine {
 | **Query Fingerprint** | Hash-based key | Cache invalidation |
 | **Incremental Updates** | Delta queries | Real-time data |
 
-**Data Binding Patterns**:
+### Data Binding Patterns
 
 ```typescript
 // Reactive SQL queries
@@ -2007,7 +2606,7 @@ function DataCell({ sql, params }) {
 }
 ```
 
-**Platform Examples**:
+### Platform Examples
 
 | Platform | SQL Implementation | Features |
 |----------|-------------------|----------|
@@ -2015,7 +2614,8 @@ function DataCell({ sql, params }) {
 | **Observable** | SQL cells (via connectors) | • Database connectors; • SQL template literals; • Reactive queries |
 | **Evidence** | DuckDB + connectors | • SQL + Markdown; • Component binding; • Build-time queries |
 
-**Recommended Stack**:
+### Recommended Stack
+
 - **Client SQL**: DuckDB WASM (analytics), SQLite WASM (simple queries)
 - **Caching**: React Query or SWR with IndexedDB
 - **Parameterization**: Prepared statements, tagged templates
@@ -2025,11 +2625,11 @@ function DataCell({ sql, params }) {
 
 ## Real-Time Collaboration
 
+### Overview
 
+Multi-user collaboration (inspired by Count.co and tldraw) enables teams to work together in real-time.
 
-**Overview**: Multi-user collaboration (inspired by Count.co and tldraw) enables teams to work together in real-time.
-
-**CRDT (Conflict-free Replicated Data Type) Libraries**:
+### CRDT (Conflict-free Replicated Data Type) Libraries
 
 | Library | Language | Pros | Cons | Bundle Size | Use Case |
 |---------|----------|------|------|-------------|----------|
@@ -2038,7 +2638,7 @@ function DataCell({ sql, params }) {
 | **Loro** | Rust (WASM) | High performance; Small bundle; Rich text | New/experimental; Smaller ecosystem | ~100KB | Performance-critical |
 | **Fluid Framework** | TypeScript | Microsoft-backed; Enterprise features | Complex; Azure dependency | Large | Enterprise |
 
-**Yjs Integration Architecture**:
+### Yjs Integration Architecture
 
 ```typescript
 // Yjs collaborative state
@@ -2078,7 +2678,7 @@ class CollaborationEngine {
 }
 ```
 
-**Presence System**:
+### Presence System
 
 | Feature | Implementation | Use Case |
 |---------|---------------|----------|
@@ -2088,7 +2688,7 @@ class CollaborationEngine {
 | **Activity Feed** | Event log | Show recent changes |
 | **Typing Indicators** | Awareness + debounce | Show who's typing |
 
-**Conflict Resolution Strategies**:
+### Conflict Resolution Strategies
 
 | Strategy | Description | Pros | Cons |
 |----------|-------------|------|------|
@@ -2097,7 +2697,7 @@ class CollaborationEngine {
 | **Operational Transform** | Transform operations | Proven; Google Docs uses it | Very complex; Hard to implement |
 | **Manual Resolution** | User chooses | User control; Transparent | Interrupts flow; User burden |
 
-**Platform Examples**:
+### Platform Examples
 
 | Platform | Collaboration System | Implementation |
 |----------|---------------------|----------------|
@@ -2105,7 +2705,7 @@ class CollaborationEngine {
 | **Count.co** | Custom WebSocket | • Real-time cell updates; • Collaborative editing; • Presence indicators; • Comment threads |
 | **Observable** | Limited collaboration | • Notebook sharing; • Fork-based workflow; • No real-time sync |
 
-**Recommended Architecture**:
+### Recommended Architecture
 
 ```typescript
 // Collaborative canvas cell
@@ -2136,7 +2736,8 @@ function CollaborativeCell({ cellId }) {
 }
 ```
 
-**Recommended Stack**:
+### Recommended Stack
+
 - **CRDT**: Yjs (most mature and performant)
 - **Transport**: WebRTC (P2P) or WebSocket (server-based)
 - **Persistence**: IndexedDB (offline) + server backup
@@ -2147,11 +2748,11 @@ function CollaborativeCell({ cellId }) {
 
 ## Performance Optimization
 
+### Overview
 
+Canvas-based and data-intensive applications require specific performance optimizations.
 
-**Overview**: Canvas-based and data-intensive applications require specific performance optimizations.
-
-**Canvas Rendering Optimizations**:
+### Canvas Rendering Optimizations
 
 | Technique | Description | Performance Gain | Complexity |
 |-----------|-------------|------------------|------------|
@@ -2162,7 +2763,7 @@ function CollaborativeCell({ cellId }) {
 | **Request Animation Frame** | Batch updates | 2-5x | Low |
 | **Dirty Rectangle** | Partial redraws | 5-10x | Medium |
 
-**State Management Optimizations**:
+### State Management Optimizations
 
 ```typescript
 // Structural sharing with Immer
@@ -2199,7 +2800,7 @@ const visibleCells = computed(() => {
 });
 ```
 
-**Data Loading Strategies**:
+### Data Loading Strategies
 
 | Strategy | Implementation | Use Case |
 |----------|---------------|----------|
@@ -2209,7 +2810,7 @@ const visibleCells = computed(() => {
 | **Prefetching** | Load ahead | Predictable navigation |
 | **Caching** | Store results | Repeated queries |
 
-**Bundle Optimization**:
+### Bundle Optimization
 
 ```typescript
 // Code splitting for large features
@@ -2227,7 +2828,7 @@ async function loadCollaboration() {
 }
 ```
 
-**Platform Benchmarks**:
+### Platform Benchmarks
 
 | Platform | Initial Load | Canvas Render | Query Execution |
 |----------|-------------|---------------|-----------------|
@@ -2235,7 +2836,8 @@ async function loadCollaboration() {
 | **Count.co** | ~500KB | 60 FPS (100 cells) | <100ms (DuckDB) |
 | **Observable** | ~300KB | 60 FPS (cells) | Varies |
 
-**Recommended Optimizations**:
+### Recommended Optimizations
+
 1. **Rendering**: Virtual scrolling + layer separation
 2. **State**: Immer for immutability + signals for reactivity
 3. **Data**: DuckDB WASM + IndexedDB caching
@@ -2261,9 +2863,11 @@ Configuration and data persistence strategies for the framework.
 
 ## Settings Management
 
-**Concept**: Centralized system for user preferences and application options.
+### Concept
 
-**Architecture Approaches**:
+Centralized system for user preferences and application options.
+
+### Architecture Approaches
 
 1. **Hierarchical Settings Structure**
    - Nested configuration organized by domain (general, dashboard, visualization, performance)
@@ -2280,7 +2884,7 @@ Configuration and data persistence strategies for the framework.
    - Flat storage for persistence
    - Best of both worlds
 
-**Pros & Cons Analysis**:
+### Pros & Cons Analysis
 
 | Approach | Pros | Cons | Best For |
 |----------|------|------|----------|
@@ -2288,7 +2892,7 @@ Configuration and data persistence strategies for the framework.
 | **Flat Key-Value** | Simple implementation; Easy persistence; Dynamic queries; Minimal overhead | No structure enforcement; Harder to validate; No type safety; Namespace collisions | Small to medium apps, simple preferences |
 | **Hybrid** | Structured in code; Simple persistence; Type-safe + flexible; Best performance | Transformation overhead; Two representations to maintain; More complex architecture | Production BI dashboards requiring both structure and flexibility |
 
-**State Management Library Comparison**:
+### State Management Library Comparison
 
 | Library | Architecture | Pros | Cons | Use Case |
 |---------|-------------|------|------|----------|
@@ -2297,7 +2901,7 @@ Configuration and data persistence strategies for the framework.
 | **Valtio** | Proxy-based | Mutable API; Automatic tracking; Minimal boilerplate; Intuitive | Proxy limitations; Debugging harder; Less ecosystem | Rapid development, simple state |
 | **Redux Toolkit** | Redux pattern | Mature ecosystem; DevTools; Predictable; Time-travel | Verbose; Boilerplate; Learning curve; Larger bundle | Enterprise apps, complex workflows |
 
-**Schema Validation Approaches**:
+### Schema Validation Approaches
 
 | Approach | Pros | Cons |
 |----------|------|------|
@@ -2305,7 +2909,7 @@ Configuration and data persistence strategies for the framework.
 | **TypeScript Only** | Zero runtime cost; Compile-time safety; No bundle impact; IDE support | No runtime protection; Can't validate external data; Type erasure at runtime |
 | **Hybrid (TS + Runtime)** | Best safety; Validates external data; Type-safe in code; Comprehensive | Maintenance overhead; Schema duplication; Larger bundle |
 
-**Persistence Strategy Comparison**:
+### Persistence Strategy Comparison
 
 | Strategy | Pros | Cons | Recommended For |
 |----------|------|------|-----------------|
@@ -2314,13 +2918,17 @@ Configuration and data persistence strategies for the framework.
 | **Manual Persistence** (Save on action) | User control; Minimal writes; Predictable | User must remember; Data loss risk; Poor UX | Power user tools, explicit saves |
 | **Hybrid** (Critical eager, others debounced) | Balanced approach; Optimized performance; Data safety | Complex logic; More code; Configuration needed | Production BI dashboards |
 
-**Recommended Architecture**: Hierarchical structure with Zustand, Zod validation, hybrid persistence (critical settings eager, UI preferences debounced), IndexedDB storage.
+### Recommended Architecture
+
+Hierarchical structure with Zustand, Zod validation, hybrid persistence (critical settings eager, UI preferences debounced), IndexedDB storage.
 
 ## Keybinding System
 
-**Concept**: Customizable keyboard shortcuts for commands and actions.
+### Concept
 
-**Architecture Approaches**:
+Customizable keyboard shortcuts for commands and actions.
+
+### Architecture Approaches
 
 1. **Command-Based Architecture**
    - Commands are first-class entities with IDs, names, and execution logic
@@ -2339,7 +2947,7 @@ Configuration and data persistence strategies for the framework.
    - Component-local keybindings (scoped)
    - Priority-based resolution
 
-**Pros & Cons Analysis**:
+### Pros & Cons Analysis
 
 | Approach | Pros | Cons | Best For |
 |----------|------|------|----------|
@@ -2347,7 +2955,7 @@ Configuration and data persistence strategies for the framework.
 | **Direct Binding** | Simple implementation; Minimal overhead; Easy to understand; Fast execution | Hard to customize; No command palette; Tight coupling; Difficult to document | Simple apps, fixed keybindings, prototypes |
 | **Keymap Hierarchy** | Context-aware; Scoped bindings; Priority resolution; Flexible | Complexity in resolution; Potential conflicts; Debugging difficulty; State management | Multi-mode applications, context-sensitive UIs |
 
-**Keybinding Library Comparison**:
+### Keybinding Library Comparison
 
 | Library | Size | Pros | Cons | Use Case |
 |---------|------|------|------|----------|
@@ -2357,7 +2965,7 @@ Configuration and data persistence strategies for the framework.
 | **react-hotkeys-hook** | ~2KB | React hooks; Component-scoped; TypeScript support; Modern | React-only; Re-render considerations; Hook limitations | React applications, component-local bindings |
 | **Custom Solution** | Varies | Full control; Tailored features; No dependencies; Optimized | Development time; Maintenance burden; Testing overhead; Edge cases | Unique requirements, full control needed |
 
-**Key Conflict Resolution Strategies**:
+### Key Conflict Resolution Strategies
 
 | Strategy | Pros | Cons |
 |----------|------|------|
@@ -2365,20 +2973,24 @@ Configuration and data persistence strategies for the framework.
 | **Context-Aware** (When clauses) | Flexible; Expressive; Handles complex cases; Fine-grained control | Complex to implement; Harder to debug; Performance overhead |
 | **User-Defined Priority** | User control; Flexible; Handles edge cases | Complex UI; User confusion; Maintenance burden |
 
-**Chord Sequence Considerations**:
+### Chord Sequence Considerations
 
 | Aspect | Pros | Cons |
 |--------|------|------|
 | **Multi-Key Sequences** (e.g., Ctrl+K Ctrl+S) | More key combinations; Familiar to power users; Namespace expansion | Discoverability issues; Timing complexity; Harder for beginners |
 | **Single Keys Only** | Simple; Fast; Easy to learn | Limited combinations; Conflicts more likely; Less powerful |
 
-**Recommended Architecture**: Command-based with keymap hierarchy, context-aware execution, chord support, and user customization. Use tinykeys for minimal apps, hotkeys-js for feature-rich needs.
+### Recommended Architecture
+
+Command-based with keymap hierarchy, context-aware execution, chord support, and user customization. Use tinykeys for minimal apps, hotkeys-js for feature-rich needs.
 
 ## Theme System
 
-**Concept**: Visual styling and color schemes that can be switched dynamically.
+### Concept
 
-**Architecture Approaches**:
+Visual styling and color schemes that can be switched dynamically.
+
+### Architecture Approaches
 
 1. **CSS Variables Approach**
    - Define theme tokens as CSS custom properties
@@ -2403,7 +3015,7 @@ Configuration and data persistence strategies for the framework.
    - CSS-in-JS for complex dynamic styles
    - Best of both worlds
 
-**Pros & Cons Analysis**:
+### Pros & Cons Analysis
 
 | Approach | Pros | Cons | Best For |
 |----------|------|------|----------|
@@ -2412,7 +3024,7 @@ Configuration and data persistence strategies for the framework.
 | **Build-Time** | Zero runtime cost; Optimal performance; Static analysis; Type-safe; Small bundle | No runtime switching; Build complexity; Less flexible; Requires rebuild | Static themes, maximum performance |
 | **Hybrid** | Balanced performance; Flexible; Type-safe; Best of both | More complex; Two systems to maintain; Learning curve | Production BI dashboards |
 
-**Styling Library Comparison**:
+### Styling Library Comparison
 
 | Library | Approach | Pros | Cons | Use Case |
 |---------|----------|------|------|----------|
@@ -2423,7 +3035,7 @@ Configuration and data persistence strategies for the framework.
 | **Emotion** | Runtime CSS-in-JS | Flexible; Framework-agnostic; Good performance; Popular | Runtime cost; Bundle size; Complexity | Framework-agnostic, flexible theming |
 | **CSS Modules** | Build-time | Simple; Scoped styles; Zero runtime; Familiar CSS | No dynamic theming; Verbose; Limited features | Simple apps, traditional CSS |
 
-**Theme Switching Strategies**:
+### Theme Switching Strategies
 
 | Strategy | Pros | Cons |
 |----------|------|------|
@@ -2432,7 +3044,7 @@ Configuration and data persistence strategies for the framework.
 | **Context-Based** (React Context) | JavaScript access; Dynamic values; Type-safe | Runtime overhead; Re-render cost; Complexity |
 | **CSS Variable Injection** | Dynamic; Performant; Flexible | JavaScript required; FOUC potential |
 
-**System Preference Integration**:
+### System Preference Integration
 
 | Aspect | Pros | Cons |
 |--------|------|------|
@@ -2440,13 +3052,17 @@ Configuration and data persistence strategies for the framework.
 | **Manual Selection** | User control; Predictable; Simple | Ignores system preference; Extra UI needed |
 | **Hybrid** (Auto + Manual Override) | Best UX; Respects preference; User control | More complex; State management needed |
 
-**Recommended Architecture**: CSS Variables for tokens, Tailwind CSS for utility classes, system preference detection with manual override, persistent user choice in IndexedDB.
+### Recommended Architecture
+
+CSS Variables for tokens, Tailwind CSS for utility classes, system preference detection with manual override, persistent user choice in IndexedDB.
 
 ## Layout System
 
-**Concept**: Flexible, user-customizable arrangement of dashboard components and panels.
+### Concept
 
-**Architecture Patterns**:
+Flexible, user-customizable arrangement of dashboard components and panels.
+
+### Architecture Patterns
 
 1. **Grid-Based Layout**
    ```typescript
@@ -2483,7 +3099,7 @@ Configuration and data persistence strategies for the framework.
    }
    ```
 
-**Best Libraries & Tools**:
+### Best Libraries & Tools
 
 1. **react-grid-layout** (Most popular)
    - Drag-and-drop grid
@@ -2536,7 +3152,8 @@ Configuration and data persistence strategies for the framework.
    - Persistent layouts
    - Used by: Modern React apps
 
-**BI Dashboard Examples**:
+### BI Dashboard Examples
+
 - **Observable**: Notebook-style (vertical flow) + custom layouts
 - **Evidence**: Page-based layouts with component slots
 - **Grafana**: react-grid-layout for dashboard panels
@@ -2544,7 +3161,8 @@ Configuration and data persistence strategies for the framework.
 - **Apache Superset**: react-grid-layout with custom extensions
 - **Tableau**: Proprietary grid system with containers
 
-**Implementation Pattern**:
+### Implementation Pattern
+
 ```typescript
 // Layout manager with persistence
 import { create } from 'zustand';
@@ -2605,7 +3223,7 @@ const layoutPresets = {
 };
 ```
 
-**Advanced Layout Features**:
+### Advanced Layout Features
 
 1. **Responsive Breakpoints**
    ```typescript
@@ -2631,7 +3249,7 @@ const layoutPresets = {
    - Version history
    - Restore previous layouts
 
-**Recommended Architecture for BI Dashboards**:
+### Recommended Architecture for BI Dashboards
 
 ```typescript
 // Unified configuration system
@@ -2678,7 +3296,7 @@ class ConfigManager {
 }
 ```
 
-**Best Practices from Leading BI Platforms**:
+### Best Practices from Leading BI Platforms
 
 1. **Observable**:
    - Reactive configuration (changes propagate automatically)
@@ -2700,7 +3318,7 @@ class ConfigManager {
    - Admin UI for system settings
    - User preferences in browser storage
 
-**Recommended Stack for Your Framework**:
+### Recommended Stack for Your Framework
 
 ```typescript
 // Settings: Zustand + Zod + IndexedDB
@@ -2720,7 +3338,7 @@ class ConfigManager {
 
 ### Client-Side Storage
 
-**Primary Storage**
+### Primary Storage
 - **IndexedDB**: Large, structured data (dashboards, datasets, extension state)
   - Capacity: 50MB+ (typically unlimited with user prompt at ~50MB, can reach GBs)
   - Advantages: Large capacity, structured queries, transactions, async API
@@ -2732,7 +3350,7 @@ class ConfigManager {
   - Limitations: Small size limit, string-only storage, synchronous (blocks UI)
   - Use Case: Basic preferences, feature flags
 
-**Advanced Client Storage**
+### Advanced Client Storage
 - **Cache API**: HTTP responses, assets, and API data
   - Capacity: Similar to IndexedDB (typically unlimited with prompt)
   - Advantages: Built for PWAs, offline-first, versioned caches
@@ -2749,7 +3367,7 @@ class ConfigManager {
   - Limitations: Requires user permission, limited browser support
   - Use Case: Export/import dashboard configs, large dataset files
 
-**Memory-Based Storage**
+### Memory-Based Storage
 - **In-Memory State (Zustand/Jotai)**: Session-only volatile state
   - Capacity: Limited by browser's available RAM (typically hundreds of MBs)
   - Advantages: Fastest access, no serialization overhead
@@ -2764,7 +3382,7 @@ class ConfigManager {
 
 ### Server-Side/Hybrid Storage
 
-**Backend Integration**
+#### Backend Integration
 - **REST/GraphQL API**: Centralized data storage
   - Capacity: Unlimited (depends on server infrastructure)
   - Advantages: Scalable, secure, multi-user collaboration
@@ -2781,7 +3399,7 @@ class ConfigManager {
   - Advantages: Automatic sync, conflict resolution, works offline
   - Use Case: Offline-capable dashboards with eventual consistency
 
-**Peer-to-Peer**
+#### Peer-to-Peer
 - **WebRTC Data Channels**: Direct peer-to-peer data sharing
   - Capacity: Limited by network bandwidth (not storage-based)
   - Advantages: No server required, direct user-to-user sync
@@ -2790,7 +3408,7 @@ class ConfigManager {
 
 ### Specialized Storage
 
-**Database Engines**
+#### Database Engines
 - **SQLite WASM (sql.js)**: Full SQL database in browser
   - Capacity: Limited by available RAM (typically 100s of MBs)
   - Advantages: SQL queries, relational data, transactions
@@ -2807,7 +3425,7 @@ class ConfigManager {
   - Advantages: Observable queries, multi-tab sync, encryption
   - Use Case: Reactive dashboards, multi-tab coordination
 
-**Decentralized Storage**
+#### Decentralized Storage
 - **Gun.js**: Decentralized graph database
   - Capacity: Limited by IndexedDB locally, distributed across peers
   - Advantages: P2P sync, offline-first, decentralized
@@ -2921,40 +3539,40 @@ class ConfigManager {
 
 ## Open Source Projects
 
-**Observable Ecosystem**:
+### Observable Ecosystem
 - [Observable Runtime](https://github.com/observablehq/runtime) - Reactive notebook runtime with dependency resolution
 - [Observable Plot](https://github.com/observablehq/plot) - Declarative visualization grammar
 - [Observable Inputs](https://github.com/observablehq/inputs) - Interactive form controls and widgets
 - [Observable Framework](https://github.com/observablehq/framework) - Static site generator for data apps
 
-**tldraw Ecosystem**:
+### tldraw Ecosystem
 - [tldraw](https://github.com/tldraw/tldraw) - Infinite canvas SDK with collaborative features
 - [Signia](https://github.com/tldraw/signia) - Fine-grained reactive state management
 - [tldraw-yjs](https://github.com/tldraw/tldraw-yjs) - Yjs integration for collaboration
 
-**Data & SQL**:
+### Data & SQL:
 - [DuckDB WASM](https://github.com/duckdb/duckdb-wasm) - In-browser analytical SQL database
 - [SQLite WASM](https://github.com/sql-js/sql.js) - SQLite compiled to WebAssembly
 - [Arquero](https://github.com/uwdata/arquero) - Query processing and transformation library
 
-**Collaboration**:
+### Collaboration:
 - [Yjs](https://github.com/yjs/yjs) - CRDT framework for building collaborative applications
 - [Automerge](https://github.com/automerge/automerge) - JSON-like data structure for collaboration
 - [Loro](https://github.com/loro-dev/loro) - High-performance CRDT library
 
-**State Management**:
+### State Management:
 - [Zustand](https://github.com/pmndrs/zustand) - Lightweight state management
 - [Jotai](https://github.com/pmndrs/jotai) - Primitive and flexible state management
 - [Valtio](https://github.com/pmndrs/valtio) - Proxy-based state management
 - [Signals](https://github.com/preactjs/signals) - Fine-grained reactivity
 
-**Canvas & Rendering**:
+### Canvas & Rendering
 - [Konva.js](https://github.com/konvajs/konva) - 2D canvas framework
 - [Fabric.js](https://github.com/fabricjs/fabric.js) - Canvas library with SVG support
 - [PixiJS](https://github.com/pixijs/pixijs) - WebGL rendering engine
 - [rbush](https://github.com/mourner/rbush) - R-tree spatial indexing
 
-**UI Component Libraries**:
+### UI Component Libraries
 - [shadcn/ui](https://ui.shadcn.com/) - Copy-paste components built on Radix UI
 - [Radix UI](https://www.radix-ui.com/) - Unstyled, accessible component primitives
 - [Headless UI](https://headlessui.com/) - Unstyled, accessible UI components
@@ -2972,21 +3590,21 @@ class ConfigManager {
 
 ## Technical Articles & Resources
 
-**Observable**:
+### Observable
 - [How Observable Runs](https://observablehq.com/@observablehq/how-observable-runs) - Runtime architecture
 - [Observable's Not JavaScript](https://observablehq.com/@observablehq/observables-not-javascript) - Reactive semantics
 - [Introduction to Data](https://observablehq.com/@observablehq/introduction-to-data) - Data loading patterns
 
-**tldraw**:
+### tldraw
 - [Building a Collaborative Canvas](https://tldraw.dev/blog/building-a-collaborative-canvas) - Collaboration architecture
 - [How tldraw Works](https://tldraw.dev/docs/introduction) - Shape system and state management
 - [Performance Optimization](https://tldraw.dev/docs/performance) - Rendering optimizations
 
-**DuckDB WASM**:
+### DuckDB WASM
 - [DuckDB WASM Performance](https://duckdb.org/2021/10/29/duckdb-wasm.html) - Benchmarks and architecture
 - [In-Browser Analytics](https://duckdb.org/docs/api/wasm/overview) - WASM integration guide
 
-**Collaboration**:
+### Collaboration
 - [Yjs Documentation](https://docs.yjs.dev/) - CRDT concepts and API
 - [CRDT Explained](https://crdt.tech/) - Conflict-free replicated data types
 - [Real-time Collaboration Patterns](https://www.figma.com/blog/how-figmas-multiplayer-technology-works/) - Figma's approach
@@ -3000,113 +3618,6 @@ class ConfigManager {
 
 ---
 
-# Architecture Diagram
-
-
-
-**Updated Architecture** (reflects comprehensive system design):
-
-### Layer 1: User Interface Layer
-
-| | | | | |
-|:---:|:---:|:---:|:---:|:---:|
-| **Dashboard Builder** | **Command Palette** | **Extension Manager** | **Settings Panel** | **Theme Switcher** |
-| **Layout Manager** | **Keybinding Editor** | **Hooks Inspector** | **Advice Debugger** | |
-
-**↓**
-
-### Layer 2: Core System Layer
-
-| | | |
-|:---:|:---:|:---:|
-| **Component Registry** (Lazy Load) | **Event System** (Typed Events) | **State Management** (Zustand) |
-| **Plugin Loader** (HMR + DI) | **Keybinding System** (Chord + Ctx) | **Command Registry** (Palette) |
-| **Hooks & Advice** (Priority) | **Theme System** (CSS Vars) | **Layout Engine** (Grid/Mosaic) |
-
-**↓**
-
-### Layer 3: Extension Layer
-
-| | | | | |
-|:---:|:---:|:---:|:---:|:---:|
-| **DSL Extensions** | **JavaScript Extensions** | **React Components** | **Web Components** | **Themes & Layouts** |
-| **Commands** | **Keybindings** | **Hooks** | **Macros** | |
-
-**↓**
-
-### Layer 4: Security Layer
-
-| | | |
-|:---:|:---:|:---:|
-| **Sandboxed Execution** (SES/iframe) | **Capability Permissions** (Runtime) | **Code Signing** (Crypto API) |
-| **API Surface** (Versioned) | **Audit Log** (Tracking) | **Marketplace Review** |
-
-**↓**
-
-### Layer 5: Persistence Layer
-
-| | | |
-|:---:|:---:|:---:|
-| **IndexedDB** (Warm Data) | **LocalStorage** (Hot Data) | **OPFS** (Cold Data) |
-| **Cloud Sync** (REST/GQL) | **DuckDB WASM** (Analytics) | **Time-Travel** (Zundo) |
-
-**↓**
-
-### Layer 6: Development Layer
-
-| | | |
-|:---:|:---:|:---:|
-| **HMR** (Vite/WP) | **Source Maps** (Debugging) | **Error Overlay** (Dev Mode) |
-| **State Inspector** (DevTools) | **Performance Profiling** | **Network Monitoring** (Extension) |
-
-### **Key Architecture Components**
-
-1. **Core System Layer**:
-   - Added Hooks & Advice system for extensibility
-   - Theme System with CSS Variables
-   - Layout Engine (Grid/Mosaic patterns)
-   - Enhanced state management (Zustand with middleware)
-   - Typed event system with history/replay
-
-2. **Extension Layer**:
-   - Expanded to include Web Components
-   - Commands and Keybindings as first-class extensions
-   - Hooks and Macros support
-   - Theme and Layout templates
-
-3. **Security Layer**:
-   - Multiple sandboxing approaches (SES/iframe)
-   - Runtime permission validation
-   - Versioned API surface
-   - Audit logging system
-   - Marketplace review process
-
-4. **Persistence Layer**:
-   - Tiered storage strategy (Hot/Warm/Cold)
-   - DuckDB WASM for analytics
-   - Time-travel debugging (Zundo)
-   - OPFS for large file storage
-
-5. **Development Layer** (New):
-   - Hot Module Replacement
-   - Source maps and debugging tools
-   - Error overlay and recovery
-   - State inspector
-   - Performance profiling
-   - Network monitoring
-
-### **Data Flow**
-```
-User Action → UI Layer → Core System → Extension Layer
-                ↓              ↓              ↓
-          Security Check → Permission → Sandboxed Execution
-                                ↓
-                         Persistence Layer
-                                ↓
-                         Development Tools (Dev Mode)
-```
-
----
 
 # Implementation Roadmap
 

@@ -9,11 +9,11 @@ pandoc docs.md \
   -o docs.pdf \
   --pdf-engine=lualatex \
   --toc \
-  --toc-depth=3 \
+  --toc-depth=5 \
   --number-sections \
   --highlight-style=tango \
   --variable geometry:margin=0.6in \
-  --variable fontsize=8pt \
+  --variable fontsize=3pt \
   --variable linestretch=1.15 \
   --variable pagestyle=plain \
   --variable documentclass=report \

@@ -1,0 +1,75 @@
+\documentclass[11pt,a4paper]{report}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tocloft}
+
+% Colors
+\definecolor{primaryblue}{RGB}{0,102,204}
+\definecolor{codegray}{RGB}{245,245,245}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=primaryblue,
+    pdftitle={Extensible BI Dashboard Framework},
+    pdfauthor={Technical Architecture Team}
+}
+
+% Code listing style
+\lstset{
+    backgroundcolor=\color{codegray},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny
+}
+
+% Headers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textit{Extensible BI Dashboard Framework}}
+\fancyhead[R]{\small\textit{Technical Documentation}}
+\fancyfoot[C]{\thepage}
+
+% Title formatting
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{primaryblue}}
+  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+
+\title{\textbf{Extensible BI Dashboard Framework}\\[0.5cm]
+\Large Technical Architecture Documentation}
+\author{Technical Architecture Team}
+\date{\today}
+
+% Pandoc compatibility
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+$body$
+
+\end{document}
