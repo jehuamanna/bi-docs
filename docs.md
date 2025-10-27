@@ -2753,6 +2753,206 @@ function createDebouncedExecutor(delay = 500) {
 }
 ```
 
+---
+
+## Real-World Implementation Examples
+
+The following examples demonstrate how leading platforms implement similar sandboxing architectures for their canvas-based and notebook-style applications.
+
+### BI Dashboard Security Comparison
+
+| Platform | Security Model | Implementation |
+|----------|---------------|----------------|
+| **Observable** | Runtime sandboxing | Restricted global scope; No direct DOM access; Controlled imports; Rate limiting |
+| **Evidence** | Build-time validation | Component validation; SQL parameterization; No runtime eval; Static analysis |
+| **Count.co** | SQL sandboxing | Parameterized queries; Query validation; Permission-based access; Audit logging |
+| **tldraw** | Client-side validation | Shape validation; Canvas bounds checking; User permissions; Collaboration security |
+
+### Observable-Style Reactive Cells
+
+Observable uses reactive cell execution with automatic dependency tracking and iframe isolation for untrusted code.
+
+```typescript
+// Observable-inspired reactive cell system
+class ReactiveCellSystem {
+  private cells: Map<string, Cell> = new Map();
+  private dependencies: Map<string, Set<string>> = new Map();
+  private executor: CellExecutor;
+  
+  constructor() {
+    this.executor = new CellExecutor();
+  }
+  
+  // Define a cell with dependencies
+  defineCell(id: string, code: string, dependencies: string[] = []) {
+    const cell: Cell = {
+      id,
+      type: 'custom-js',
+      language: 'javascript',
+      code,
+      dependencies,
+      value: undefined,
+      status: 'pending'
+    };
+    
+    this.cells.set(id, cell);
+    this.dependencies.set(id, new Set(dependencies));
+    this.maybeExecute(id);
+  }
+  
+  private async maybeExecute(cellId: string) {
+    const cell = this.cells.get(cellId);
+    if (!cell) return;
+    
+    // Check if all dependencies are resolved
+    const deps = this.dependencies.get(cellId) || new Set();
+    const allResolved = Array.from(deps).every(depId => {
+      const depCell = this.cells.get(depId);
+      return depCell && depCell.status === 'fulfilled';
+    });
+    
+    if (!allResolved) return;
+    
+    // Gather dependency values
+    const context = {};
+    deps.forEach(depId => {
+      const depCell = this.cells.get(depId);
+      if (depCell) context[depId] = depCell.value;
+    });
+    
+    // Execute cell
+    cell.status = 'pending';
+    try {
+      const result = await this.executor.executeCell({ ...cell, context });
+      cell.value = result.output;
+      cell.status = 'fulfilled';
+      this.triggerDependents(cellId);
+    } catch (error) {
+      cell.status = 'rejected';
+      cell.error = error.message;
+    }
+  }
+  
+  private triggerDependents(cellId: string) {
+    this.dependencies.forEach((deps, id) => {
+      if (deps.has(cellId)) this.maybeExecute(id);
+    });
+  }
+}
+```
+
+### Jupyter-Style Kernel Architecture
+
+Jupyter separates execution (kernel) from UI (frontend) with message-based communication.
+
+```typescript
+// Jupyter-inspired kernel architecture
+class ExecutionKernel {
+  private worker: Worker;
+  private messageQueue: Map<string, {resolve: Function, reject: Function}> = new Map();
+  
+  constructor() {
+    this.worker = new Worker('execution-kernel.js');
+    this.worker.addEventListener('message', this.handleMessage.bind(this));
+  }
+  
+  async execute(code: string, cellId: string): Promise<ExecutionResult> {
+    const messageId = `${cellId}-${Date.now()}`;
+    
+    return new Promise((resolve, reject) => {
+      this.messageQueue.set(messageId, { resolve, reject });
+      
+      this.worker.postMessage({
+        type: 'execute_request',
+        messageId,
+        cellId,
+        code
+      });
+      
+      setTimeout(() => {
+        if (this.messageQueue.has(messageId)) {
+          this.messageQueue.delete(messageId);
+          reject(new Error('Execution timeout'));
+        }
+      }, 30000);
+    });
+  }
+  
+  private handleMessage(event: MessageEvent) {
+    const { type, messageId, status, data, error } = event.data;
+    
+    if (type === 'execute_reply') {
+      const handler = this.messageQueue.get(messageId);
+      if (handler) {
+        this.messageQueue.delete(messageId);
+        status === 'ok' ? handler.resolve(data) : handler.reject(new Error(error));
+      }
+    }
+  }
+}
+```
+
+### Figma-Style Plugin Isolation
+
+Figma runs plugins in isolated contexts with a controlled API surface based on declared permissions.
+
+```typescript
+// Figma-inspired plugin system
+class PluginHost {
+  private plugins: Map<string, PluginInstance> = new Map();
+  
+  loadPlugin(manifest: PluginManifest, code: string) {
+    const iframe = document.createElement('iframe');
+    iframe.sandbox = 'allow-scripts';
+    
+    const pluginAPI = this.createPluginAPI(manifest.id, manifest.permissions);
+    
+    iframe.srcdoc = `
+      <!DOCTYPE html>
+      <html>
+        <body>
+          <script>
+            window.figma = ${JSON.stringify(pluginAPI)};
+            ${code}
+          </script>
+        </body>
+      </html>
+    `;
+    
+    document.body.appendChild(iframe);
+    this.plugins.set(manifest.id, { id: manifest.id, iframe, manifest, api: pluginAPI });
+  }
+  
+  private createPluginAPI(pluginId: string, permissions: string[]) {
+    const api: any = {
+      ui: {
+        show: () => this.showPluginUI(pluginId),
+        postMessage: (msg: any) => this.sendToPlugin(pluginId, msg)
+      }
+    };
+    
+    if (permissions.includes('read:canvas')) {
+      api.currentPage = {
+        selection: () => this.getSelection(),
+        findAll: (selector: string) => this.findNodes(selector)
+      };
+    }
+    
+    if (permissions.includes('write:canvas')) {
+      api.createRectangle = () => this.createNode('rectangle');
+    }
+    
+    if (permissions.includes('network')) {
+      api.fetch = (url: string, options: any) => this.proxyFetch(pluginId, url, options);
+    }
+    
+    return api;
+  }
+}
+```
+
+---
+
 ### Sandboxing Approaches
 
 | Approach | Description | Pros | Cons | Best For |
@@ -3349,26 +3549,204 @@ This defense-in-depth approach provides:
 - **Proxy**: Fine-grained API control and auditing
 - **Web Worker**: Parallel execution without DOM access
 
-### Sandboxing Library Comparison
+---
 
-| Library | Type | Pros | Cons | Use Case |
-|---------|------|------|------|----------|
-| **SES (Agoric)** | Hardened JS | Strong security; Deterministic; Well-designed | Limited ecosystem; Learning curve | High-security extensions |
-| **Realms API** | TC39 proposal | Native; Isolated globals; Standard | Not widely supported; Experimental | Future-proof |
-| **vm2** | Node.js VM | Powerful; Mature | Node-only; Not browser | Server-side only |
-| **Sandboxed iframe** | Native browser | Built-in; Strong isolation; CSP | Communication overhead; Complex | Untrusted content |
-| **Custom Proxy** | DIY | Full control; Tailored | Development time; Security risks | Specific needs |
+## Security Considerations
 
-### BI Dashboard Examples
+### Message Origin Validation
 
-| Platform | Security Model | Implementation |
-|----------|---------------|----------------|
-| **Observable** | Runtime sandboxing | • Restricted global scope; • No direct DOM access; • Controlled imports; • Rate limiting |
-| **Evidence** | Build-time validation | • Component validation; • SQL parameterization; • No runtime eval; • Static analysis |
-| **Count.co** | SQL sandboxing | • Parameterized queries; • Query validation; • Permission-based access; • Audit logging |
-| **tldraw** | Client-side validation | • Shape validation; • Canvas bounds checking; • User permissions; • Collaboration security |
+Always validate the origin of messages from iframes to prevent unauthorized communication.
+
+```typescript
+class SecureMessageBus {
+  private iframeRegistry: Map<string, HTMLIFrameElement> = new Map();
+  
+  constructor() {
+    window.addEventListener('message', this.handleMessage.bind(this));
+  }
+  
+  private handleMessage(event: MessageEvent) {
+    // Step 1: Validate origin (sandboxed iframes have "null" origin)
+    if (event.origin !== 'null' && !this.isAllowedOrigin(event.origin)) {
+      console.warn('[Security] Unauthorized origin:', event.origin);
+      return;
+    }
+    
+    // Step 2: Validate source
+    const iframe = this.findIframeBySource(event.source);
+    if (!iframe) {
+      console.warn('[Security] Unknown iframe source');
+      return;
+    }
+    
+    // Step 3: Validate message structure
+    if (!this.isValidMessage(event.data)) {
+      console.warn('[Security] Invalid message structure');
+      return;
+    }
+    
+    // Step 4: Rate limiting
+    if (!this.checkMessageRateLimit(iframe.cellId)) {
+      console.warn('[Security] Rate limit exceeded');
+      return;
+    }
+    
+    // Step 5: Process message
+    this.processMessage(iframe.cellId, event.data);
+  }
+  
+  private findIframeBySource(source: WindowProxy) {
+    for (const [cellId, iframe] of this.iframeRegistry) {
+      if (iframe.contentWindow === source) {
+        return { cellId, iframe };
+      }
+    }
+    return null;
+  }
+  
+  private isValidMessage(data: any): boolean {
+    return (
+      data &&
+      typeof data === 'object' &&
+      typeof data.type === 'string' &&
+      ['result', 'error', 'log', 'ready'].includes(data.type)
+    );
+  }
+}
+```
+
+### Content Security Policy (CSP)
+
+Implement strict CSP for iframe sandboxes to prevent XSS and data exfiltration.
+
+```typescript
+class SecureIframeFactory {
+  createSandboxedIframe(cellId: string, options: IframeOptions = {}): HTMLIFrameElement {
+    const iframe = document.createElement('iframe');
+    
+    // Minimal sandbox permissions
+    iframe.sandbox.add('allow-scripts');
+    
+    // NEVER add both allow-scripts and allow-same-origin together!
+    // This would allow sandbox escape
+    
+    // Set strict CSP via meta tag
+    const csp = this.buildCSP(options);
+    
+    iframe.srcdoc = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="Content-Security-Policy" content="${csp}">
+        </head>
+        <body>
+          <div id="output"></div>
+          <script>
+            // Prevent common escape attempts
+            delete window.parent;
+            delete window.top;
+            delete window.frameElement;
+            
+            // Execution environment code here
+          </script>
+        </body>
+      </html>
+    `;
+    
+    iframe.setAttribute('referrerpolicy', 'no-referrer');
+    return iframe;
+  }
+  
+  private buildCSP(options: IframeOptions): string {
+    const directives = [
+      "default-src 'none'",
+      "script-src 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'unsafe-inline'",
+      "img-src data: blob:",
+      "connect-src 'none'", // Block all network requests by default
+      "frame-src 'none'",
+      "object-src 'none'"
+    ];
+    
+    if (options.allowedDomains?.length) {
+      directives[4] = `connect-src ${options.allowedDomains.join(' ')}`;
+    }
+    
+    return directives.join('; ');
+  }
+}
+```
+
+### Resource Limits and Monitoring
+
+Implement resource limits to prevent denial-of-service attacks.
+
+```typescript
+class ResourceMonitor {
+  private cellResources: Map<string, CellResources> = new Map();
+  
+  private readonly LIMITS = {
+    maxExecutionTime: 30000, // 30 seconds
+    maxMemory: 50 * 1024 * 1024, // 50MB
+    maxOutputSize: 1024 * 1024, // 1MB
+    maxConcurrentCells: 10,
+    maxMessagesPerSecond: 100
+  };
+  
+  startMonitoring(cellId: string) {
+    const resources: CellResources = {
+      cellId,
+      startTime: Date.now(),
+      messageCount: 0,
+      outputSize: 0
+    };
+    
+    // Set execution timeout
+    resources.timeoutId = setTimeout(() => {
+      this.terminateCell(cellId, 'Execution timeout exceeded');
+    }, this.LIMITS.maxExecutionTime);
+    
+    this.cellResources.set(cellId, resources);
+  }
+  
+  recordMessage(cellId: string) {
+    const resources = this.cellResources.get(cellId);
+    if (!resources) return;
+    
+    resources.messageCount++;
+    const messagesPerSecond = resources.messageCount / 
+      ((Date.now() - resources.startTime) / 1000);
+    
+    if (messagesPerSecond > this.LIMITS.maxMessagesPerSecond) {
+      this.terminateCell(cellId, 'Message rate limit exceeded');
+    }
+  }
+  
+  recordOutput(cellId: string, output: string) {
+    const resources = this.cellResources.get(cellId);
+    if (!resources) return;
+    
+    resources.outputSize += output.length;
+    if (resources.outputSize > this.LIMITS.maxOutputSize) {
+      this.terminateCell(cellId, 'Output size limit exceeded');
+    }
+  }
+  
+  private terminateCell(cellId: string, reason: string) {
+    console.warn(`[Security] Terminating cell ${cellId}: ${reason}`);
+    const resources = this.cellResources.get(cellId);
+    if (resources?.timeoutId) {
+      clearTimeout(resources.timeoutId);
+    }
+    this.cellResources.delete(cellId);
+  }
+}
+```
 
 ### DOM Access Control
+
+Provide controlled DOM access through a sandboxed API with permission-based restrictions.
 
 ```typescript
 // Controlled DOM API
@@ -3376,21 +3754,52 @@ const createSandboxedAPI = (extensionId: string, permissions: string[]) => {
   const allowedAPIs: any = {};
   
   if (permissions.includes('ui:render')) {
-    // Limited DOM access
+    // Limited DOM access - only safe tags allowed
     allowedAPIs.createElement = (tag: string) => {
-      if (!['div', 'span', 'p', 'button'].includes(tag)) {
+      const allowedTags = ['div', 'span', 'p', 'button', 'h1', 'h2', 'h3', 'ul', 'li', 'table', 'tr', 'td'];
+      if (!allowedTags.includes(tag)) {
         throw new Error(`Tag ${tag} not allowed`);
       }
       return document.createElement(tag);
     };
+    
+    allowedAPIs.querySelector = (selector: string) => {
+      // Only allow querying within cell's own container
+      const cellContainer = document.querySelector(`[data-cell-id="${extensionId}"]`);
+      return cellContainer?.querySelector(selector);
+    };
   }
   
   if (permissions.includes('storage:local')) {
-    // Namespaced storage
+    // Namespaced storage to prevent conflicts
     allowedAPIs.storage = {
       get: (key: string) => localStorage.getItem(`ext_${extensionId}_${key}`),
-      set: (key: string, value: string) => 
-        localStorage.setItem(`ext_${extensionId}_${key}`, value)
+      set: (key: string, value: string) => {
+        // Limit storage size per extension
+        const maxSize = 1024 * 1024; // 1MB
+        if (value.length > maxSize) {
+          throw new Error('Storage quota exceeded');
+        }
+        localStorage.setItem(`ext_${extensionId}_${key}`, value);
+      },
+      remove: (key: string) => localStorage.removeItem(`ext_${extensionId}_${key}`)
+    };
+  }
+  
+  if (permissions.includes('network:fetch')) {
+    // Proxied fetch with URL whitelist
+    allowedAPIs.fetch = async (url: string, options?: RequestInit) => {
+      // Check against allowed domains
+      const allowedDomains = ['api.example.com', 'data.example.com'];
+      const urlObj = new URL(url);
+      
+      if (!allowedDomains.some(domain => urlObj.hostname.endsWith(domain))) {
+        throw new Error(`Domain ${urlObj.hostname} not allowed`);
+      }
+      
+      // Add rate limiting
+      // Add audit logging
+      return fetch(url, options);
     };
   }
   
@@ -3398,7 +3807,160 @@ const createSandboxedAPI = (extensionId: string, permissions: string[]) => {
 };
 ```
 
-*For DOM access patterns, see Section 4.1. For API design, see Section 6.3.*
+---
+
+## Performance Optimizations
+
+### iframe Pooling
+
+Reuse iframes to reduce creation overhead and improve performance.
+
+```typescript
+class IframePool {
+  private available: HTMLIFrameElement[] = [];
+  private inUse: Map<string, HTMLIFrameElement> = new Map();
+  private readonly maxPoolSize = 10;
+  
+  acquire(cellId: string): HTMLIFrameElement {
+    let iframe = this.available.pop();
+    if (!iframe) {
+      iframe = this.createIframe();
+    }
+    this.inUse.set(cellId, iframe);
+    return iframe;
+  }
+  
+  release(cellId: string) {
+    const iframe = this.inUse.get(cellId);
+    if (!iframe) return;
+    
+    this.inUse.delete(cellId);
+    this.resetIframe(iframe);
+    
+    if (this.available.length < this.maxPoolSize) {
+      this.available.push(iframe);
+    } else {
+      iframe.remove();
+    }
+  }
+  
+  private createIframe(): HTMLIFrameElement {
+    const iframe = document.createElement('iframe');
+    iframe.sandbox.add('allow-scripts');
+    iframe.style.cssText = 'position: absolute; border: none; visibility: hidden;';
+    document.body.appendChild(iframe);
+    return iframe;
+  }
+  
+  private resetIframe(iframe: HTMLIFrameElement) {
+    iframe.srcdoc = '';
+    iframe.style.visibility = 'hidden';
+  }
+}
+```
+
+### Lazy Execution with Intersection Observer
+
+Only execute cells that are visible in the viewport.
+
+```typescript
+class LazyExecutionManager {
+  private observer: IntersectionObserver;
+  private pendingCells: Map<string, Cell> = new Map();
+  
+  constructor(private executor: CellExecutor) {
+    this.observer = new IntersectionObserver(
+      (entries) => this.handleIntersection(entries),
+      {
+        root: null,
+        rootMargin: '100px', // Start loading 100px before visible
+        threshold: 0.1
+      }
+    );
+  }
+  
+  registerCell(cellElement: HTMLElement, cell: Cell) {
+    cellElement.setAttribute('data-cell-id', cell.id);
+    this.pendingCells.set(cell.id, cell);
+    this.observer.observe(cellElement);
+  }
+  
+  private handleIntersection(entries: IntersectionObserverEntry[]) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const cellId = entry.target.getAttribute('data-cell-id');
+        if (!cellId) return;
+        
+        const cell = this.pendingCells.get(cellId);
+        if (!cell) return;
+        
+        this.executeCell(cell, entry.target as HTMLElement);
+        this.observer.unobserve(entry.target);
+        this.pendingCells.delete(cellId);
+      }
+    });
+  }
+  
+  private async executeCell(cell: Cell, element: HTMLElement) {
+    element.classList.add('cell-loading');
+    try {
+      const result = await this.executor.executeCell(cell);
+      element.classList.remove('cell-loading');
+      element.classList.add('cell-success');
+      this.renderOutput(element, result);
+    } catch (error) {
+      element.classList.add('cell-error');
+      this.renderError(element, error);
+    }
+  }
+}
+```
+
+### Debounced Execution for Code Editors
+
+Prevent excessive executions while user is typing.
+
+```typescript
+class DebouncedExecutor {
+  private timeouts: Map<string, number> = new Map();
+  private readonly defaultDelay = 500; // ms
+  
+  constructor(private executor: CellExecutor) {}
+  
+  execute(cell: Cell, delay: number = this.defaultDelay): Promise<CellResult> {
+    return new Promise((resolve, reject) => {
+      const existingTimeout = this.timeouts.get(cell.id);
+      if (existingTimeout) {
+        clearTimeout(existingTimeout);
+      }
+      
+      const timeoutId = setTimeout(async () => {
+        this.timeouts.delete(cell.id);
+        try {
+          const result = await this.executor.executeCell(cell);
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      }, delay);
+      
+      this.timeouts.set(cell.id, timeoutId);
+    });
+  }
+}
+
+// Usage with CodeMirror
+editor.on('change', () => {
+  const code = editor.getValue();
+  const cell: Cell = { id: 'editor-cell', type: 'custom-js', language: 'javascript', code };
+  
+  debouncedExecutor.execute(cell, 500)
+    .then(result => updateOutput(result))
+    .catch(error => showError(error));
+});
+```
+
+---
 
 ## Capability-Based Permissions
 
@@ -5815,473 +6377,400 @@ const useConfigStore = create(
 
 ### Migration Strategy
 
-Configuration schema migration is a critical capability for maintaining backward compatibility as the application evolves, enabling seamless upgrades that preserve user data while adapting to new schema requirements. As features are added, removed, or refactored, configuration structures inevitably change—new fields are introduced with default values, deprecated fields are removed, field names are renamed for clarity, nested structures are flattened or reorganized, and data types are converted to more appropriate formats. Without proper migration strategies, these schema changes would force users to reconfigure their settings from scratch after each upgrade, resulting in poor user experience, data loss, and support burden. The framework implements a robust migration system that automatically detects schema version mismatches, applies sequential transformations to bring old configurations up to date, validates migrated data against new schemas, maintains rollback capabilities for failed migrations, and logs migration events for debugging and auditing. Migration strategies must balance several concerns: ensuring data integrity (no data loss during migration), maintaining performance (migrations run synchronously on startup), providing clear error messages (when migrations fail), and supporting rollback (reverting to previous versions if needed).
+As the infinite canvas dashboard evolves, data schemas for cells, dashboards, and configurations will change. A migration strategy ensures existing user data remains compatible with new versions while enabling feature improvements. This section addresses key migration concerns specific to canvas-based dashboards with dynamic cell execution.
 
-#### Migration Architecture
+#### Key Migration Questions and Solutions
 
-**Version-Based Migration System**
+##### 1. Canvas State Evolution
+
+**Question**: When you add new features to cells (e.g., new cell types, new properties), how should existing saved dashboards be handled?
+
+**Solution**: Graceful degradation with automatic schema enrichment
 
 ```typescript
-interface ConfigVersion {
+interface Dashboard {
   version: number;
-  config: any;
+  cells: Cell[];
+  metadata: DashboardMetadata;
+}
+
+interface Cell {
+  id: string;
+  type: string;
+  position: { x: number; y: number; width: number; height: number };
+  data: any;
+  // New fields added over time
+  permissions?: string[]; // Added in v2
+  cachePolicy?: CachePolicy; // Added in v3
+}
+
+class DashboardLoader {
+  private currentVersion = 3;
+  
+  async loadDashboard(dashboardId: string): Promise<Dashboard> {
+    const raw = await this.storage.get(dashboardId);
+    
+    // No version = v1 (legacy)
+    const version = raw.version || 1;
+    
+    if (version === this.currentVersion) {
+      return raw;
+    }
+    
+    // Auto-migrate with sensible defaults
+    return this.migrateDashboard(raw, version);
+  }
+  
+  private migrateDashboard(dashboard: any, fromVersion: number): Dashboard {
+    let migrated = { ...dashboard };
+    
+    // v1 -> v2: Add permissions to cells
+    if (fromVersion < 2) {
+      migrated.cells = migrated.cells.map(cell => ({
+        ...cell,
+        permissions: ['execute', 'edit'] // Default permissions
+      }));
+      migrated.version = 2;
+    }
+    
+    // v2 -> v3: Add cache policy
+    if (fromVersion < 3) {
+      migrated.cells = migrated.cells.map(cell => ({
+        ...cell,
+        cachePolicy: { enabled: true, ttl: 300000 } // 5 min default
+      }));
+      migrated.version = 3;
+    }
+    
+    return migrated;
+  }
+}
+```
+
+**Approach**: Silent auto-migration with defaults for missing fields. No user intervention required.
+
+##### 2. Cell Data Schema Changes
+
+**Question**: If cell data structure changes (e.g., rename `cell.config` to `cell.settings`), how should old data be transformed?
+
+**Solution**: Field mapping with backward compatibility layer
+
+```typescript
+class CellMigrator {
+  migrateCell(cell: any, fromVersion: number): Cell {
+    let migrated = { ...cell };
+    
+    // v1 -> v2: Rename config to settings
+    if (fromVersion < 2 && migrated.config) {
+      migrated.settings = migrated.config;
+      delete migrated.config;
+    }
+    
+    // v2 -> v3: Restructure nested data
+    if (fromVersion < 3 && migrated.settings?.display) {
+      migrated.appearance = {
+        ...migrated.settings.display,
+        theme: migrated.settings.theme
+      };
+      delete migrated.settings.display;
+      delete migrated.settings.theme;
+    }
+    
+    return migrated;
+  }
+  
+  // Backward compatibility: Support old field names in read operations
+  getCellConfig(cell: Cell): any {
+    // Try new field first, fall back to old
+    return cell.settings || cell.config || {};
+  }
+}
+```
+
+**Approach**: Transform data on load, maintain backward-compatible getters during transition period.
+
+##### 3. Breaking Changes
+
+**Question**: When removing a cell type or feature, how should existing cells be handled?
+
+**Solution**: Deprecation with fallback rendering
+
+```typescript
+class CellRenderer {
+  private deprecatedTypes = new Map<string, string>([
+    ['legacy-chart', 'chart'], // Map to replacement
+    ['old-table', 'table'],
+  ]);
+  
+  renderCell(cell: Cell): HTMLElement {
+    // Check if cell type is deprecated
+    if (this.deprecatedTypes.has(cell.type)) {
+      const replacement = this.deprecatedTypes.get(cell.type)!;
+      
+      // Show deprecation warning
+      this.showDeprecationWarning(cell.id, cell.type, replacement);
+      
+      // Attempt to render with replacement type
+      return this.renderWithType({ ...cell, type: replacement });
+    }
+    
+    // Check if cell type no longer exists
+    if (!this.cellRegistry.has(cell.type)) {
+      return this.renderUnsupportedCell(cell);
+    }
+    
+    return this.renderWithType(cell);
+  }
+  
+  private renderUnsupportedCell(cell: Cell): HTMLElement {
+    const container = document.createElement('div');
+    container.className = 'cell-unsupported';
+    container.innerHTML = `
+      <div class="warning">
+        <h3>Unsupported Cell Type: ${cell.type}</h3>
+        <p>This cell type is no longer supported.</p>
+        <button onclick="convertCell('${cell.id}')">Convert to Text</button>
+        <button onclick="deleteCell('${cell.id}')">Delete Cell</button>
+      </div>
+      <details>
+        <summary>View Raw Data</summary>
+        <pre>${JSON.stringify(cell.data, null, 2)}</pre>
+      </details>
+    `;
+    return container;
+  }
+}
+```
+
+**Approach**: Preserve data, show warnings, offer conversion options. Never silently delete user data.
+
+##### 4. Version Tracking
+
+**Question**: Should dashboards track schema versions?
+
+**Solution**: Yes, with metadata for debugging and migration tracking
+
+```typescript
+interface DashboardMetadata {
+  version: number;
+  createdAt: number;
+  updatedAt: number;
+  createdWith: string; // App version that created it
+  lastMigratedAt?: number;
+  lastMigratedFrom?: number;
+  migrationHistory?: MigrationRecord[];
+}
+
+interface MigrationRecord {
+  from: number;
+  to: number;
   timestamp: number;
+  success: boolean;
+  error?: string;
 }
 
-class MigrationManager {
-  private currentVersion = 5; // Latest schema version
-  private migrations: Map<number, Migration> = new Map();
-  
-  constructor() {
-    this.registerMigrations();
-  }
-  
-  /**
-   * Register all migration functions
-   */
-  private registerMigrations() {
-    // Migration 1: Add gridDensity field
-    this.migrations.set(1, {
-      version: 1,
-      description: 'Add gridDensity field to appearance settings',
-      up: (config: any) => ({
-        ...config,
-        appearance: {
-          ...config.appearance,
-          gridDensity: 'normal',
-        },
-      }),
-      down: (config: any) => {
-        const { gridDensity, ...appearance } = config.appearance;
-        return { ...config, appearance };
-      },
-    });
+class DashboardVersionManager {
+  async saveDashboard(dashboard: Dashboard) {
+    const metadata: DashboardMetadata = {
+      version: this.currentVersion,
+      createdAt: dashboard.metadata.createdAt || Date.now(),
+      updatedAt: Date.now(),
+      createdWith: dashboard.metadata.createdWith || APP_VERSION,
+      lastMigratedAt: dashboard.metadata.lastMigratedAt,
+      lastMigratedFrom: dashboard.metadata.lastMigratedFrom,
+      migrationHistory: dashboard.metadata.migrationHistory || []
+    };
     
-    // Migration 2: Rename autoSaveInterval to autoSaveDelay
-    this.migrations.set(2, {
-      version: 2,
-      description: 'Rename autoSaveInterval to autoSaveDelay',
-      up: (config: any) => {
-        const { autoSaveInterval, ...rest } = config.behavior;
-        return {
-          ...config,
-          behavior: {
-            ...rest,
-            autoSaveDelay: autoSaveInterval || 30000,
-          },
-        };
-      },
-      down: (config: any) => {
-        const { autoSaveDelay, ...rest } = config.behavior;
-        return {
-          ...config,
-          behavior: {
-            ...rest,
-            autoSaveInterval: autoSaveDelay,
-          },
-        };
-      },
-    });
-    
-    // Migration 3: Flatten nested theme settings
-    this.migrations.set(3, {
-      version: 3,
-      description: 'Flatten nested theme settings',
-      up: (config: any) => {
-        const { theme } = config.appearance;
-        return {
-          ...config,
-          appearance: {
-            ...config.appearance,
-            themeMode: theme?.mode || 'light',
-            themeColors: theme?.colors || {},
-          },
-        };
-      },
-      down: (config: any) => {
-        const { themeMode, themeColors, ...appearance } = config.appearance;
-        return {
-          ...config,
-          appearance: {
-            ...appearance,
-            theme: {
-              mode: themeMode,
-              colors: themeColors,
-            },
-          },
-        };
-      },
-    });
-    
-    // Migration 4: Convert string IDs to numbers
-    this.migrations.set(4, {
-      version: 4,
-      description: 'Convert dashboard IDs from strings to numbers',
-      up: (config: any) => ({
-        ...config,
-        dashboards: config.dashboards?.map((d: any) => ({
-          ...d,
-          id: parseInt(d.id, 10),
-        })) || [],
-      }),
-      down: (config: any) => ({
-        ...config,
-        dashboards: config.dashboards?.map((d: any) => ({
-          ...d,
-          id: String(d.id),
-        })) || [],
-      }),
-    });
-    
-    // Migration 5: Add security settings
-    this.migrations.set(5, {
-      version: 5,
-      description: 'Add security settings category',
-      up: (config: any) => ({
-        ...config,
-        security: {
-          sessionTimeout: 3600000, // 1 hour
-          twoFactorEnabled: false,
-          encryptionEnabled: true,
-        },
-      }),
-      down: (config: any) => {
-        const { security, ...rest } = config;
-        return rest;
-      },
+    await this.storage.set(dashboard.id, {
+      ...dashboard,
+      metadata
     });
   }
   
-  /**
-   * Migrate configuration from old version to current version
-   */
-  async migrate(config: any, fromVersion: number): Promise<any> {
-    if (fromVersion === this.currentVersion) {
-      console.log('[Migration] Config already at current version');
-      return config;
-    }
-    
-    if (fromVersion > this.currentVersion) {
-      throw new Error(`Config version ${fromVersion} is newer than current version ${this.currentVersion}`);
-    }
-    
-    console.log(`[Migration] Migrating from v${fromVersion} to v${this.currentVersion}`);
-    
-    // Backup original config
-    await this.backupConfig(config, fromVersion);
-    
-    let migrated = { ...config };
-    const appliedMigrations: number[] = [];
-    
-    try {
-      // Apply migrations sequentially
-      for (let v = fromVersion + 1; v <= this.currentVersion; v++) {
-        const migration = this.migrations.get(v);
-        
-        if (!migration) {
-          throw new Error(`Migration ${v} not found`);
-        }
-        
-        console.log(`[Migration] Applying migration ${v}: ${migration.description}`);
-        migrated = migration.up(migrated);
-        appliedMigrations.push(v);
-        
-        // Validate after each migration
-        await this.validateConfig(migrated, v);
-      }
-      
-      // Add version metadata
-      migrated._version = this.currentVersion;
-      migrated._migratedAt = Date.now();
-      migrated._migratedFrom = fromVersion;
-      
-      console.log(`[Migration] Successfully migrated to v${this.currentVersion}`);
-      
-      // Log migration event
-      await this.logMigration(fromVersion, this.currentVersion, appliedMigrations);
-      
-      return migrated;
-    } catch (error) {
-      console.error('[Migration] Migration failed:', error);
-      
-      // Attempt rollback
-      await this.rollback(config, fromVersion, appliedMigrations);
-      
-      throw new Error(`Migration failed: ${error.message}`);
-    }
-  }
-  
-  /**
-   * Rollback to previous version
-   */
-  async rollback(originalConfig: any, fromVersion: number, appliedMigrations: number[]) {
-    console.warn(`[Migration] Rolling back ${appliedMigrations.length} migrations`);
-    
-    let config = { ...originalConfig };
-    
-    // Apply migrations up to the point of failure
-    for (const v of appliedMigrations) {
-      const migration = this.migrations.get(v);
-      if (migration) {
-        config = migration.up(config);
-      }
-    }
-    
-    // Now rollback in reverse order
-    for (let i = appliedMigrations.length - 1; i >= 0; i--) {
-      const v = appliedMigrations[i];
-      const migration = this.migrations.get(v);
-      
-      if (migration && migration.down) {
-        console.log(`[Migration] Rolling back migration ${v}`);
-        config = migration.down(config);
-      }
-    }
-    
-    return config;
-  }
-  
-  /**
-   * Backup configuration before migration
-   */
-  private async backupConfig(config: any, version: number) {
-    const backup = {
-      config,
-      version,
+  recordMigration(dashboard: Dashboard, from: number, to: number, success: boolean, error?: string) {
+    dashboard.metadata.migrationHistory = dashboard.metadata.migrationHistory || [];
+    dashboard.metadata.migrationHistory.push({
+      from,
+      to,
       timestamp: Date.now(),
-    };
+      success,
+      error
+    });
     
-    const db = await openDB('config-backups');
-    await db.add('backups', backup);
+    if (success) {
+      dashboard.metadata.lastMigratedAt = Date.now();
+      dashboard.metadata.lastMigratedFrom = from;
+    }
+  }
+}
+```
+
+**Approach**: Track versions and migration history for debugging and rollback capabilities.
+
+##### 5. User Experience
+
+**Question**: How should users be notified during migration?
+
+**Solution**: Progressive disclosure with optional backup
+
+```typescript
+class MigrationUI {
+  async loadDashboardWithMigration(dashboardId: string): Promise<Dashboard> {
+    const raw = await this.storage.get(dashboardId);
+    const version = raw.version || 1;
     
-    // Keep only last 10 backups
-    const backups = await db.getAll('backups');
-    if (backups.length > 10) {
-      const toDelete = backups
-        .sort((a, b) => a.timestamp - b.timestamp)
-        .slice(0, backups.length - 10);
+    if (version === this.currentVersion) {
+      return raw;
+    }
+    
+    // Check if migration is significant
+    const isSignificant = this.isSignificantMigration(version, this.currentVersion);
+    
+    if (isSignificant) {
+      // Show migration dialog
+      const userConsent = await this.showMigrationDialog(version, this.currentVersion);
       
-      for (const backup of toDelete) {
-        await db.delete('backups', backup.id);
+      if (!userConsent) {
+        throw new Error('Migration cancelled by user');
       }
+      
+      // Create backup
+      await this.createBackup(dashboardId, raw);
     }
-  }
-  
-  /**
-   * Validate configuration against schema
-   */
-  private async validateConfig(config: any, version: number) {
-    const schema = this.getSchemaForVersion(version);
     
-    try {
-      schema.parse(config);
-    } catch (error) {
-      throw new Error(`Validation failed for version ${version}: ${error.message}`);
-    }
-  }
-  
-  /**
-   * Log migration event for debugging
-   */
-  private async logMigration(fromVersion: number, toVersion: number, appliedMigrations: number[]) {
-    const event = {
-      fromVersion,
-      toVersion,
-      appliedMigrations,
-      timestamp: Date.now(),
-      userAgent: navigator.userAgent,
-    };
+    // Show progress for long migrations
+    const migrated = await this.migrateWithProgress(raw, version);
     
-    const db = await openDB('migration-log');
-    await db.add('events', event);
+    // Show success notification
+    this.showMigrationSuccess(version, this.currentVersion);
+    
+    return migrated;
   }
   
-  /**
-   * Get schema for specific version
-   */
-  private getSchemaForVersion(version: number): any {
-    // Return appropriate Zod schema for version
-    // Simplified for demonstration
-    return z.object({
-      appearance: z.object({}),
-      behavior: z.object({}),
-      // ... other fields
+  private async showMigrationDialog(from: number, to: number): Promise<boolean> {
+    return new Promise(resolve => {
+      const dialog = document.createElement('div');
+      dialog.className = 'migration-dialog';
+      dialog.innerHTML = `
+        <h2>Dashboard Update Required</h2>
+        <p>This dashboard was created with an older version (v${from}).</p>
+        <p>It will be upgraded to v${to} to support new features.</p>
+        <p><strong>A backup will be created automatically.</strong></p>
+        <div class="actions">
+          <button id="migrate-yes">Update Dashboard</button>
+          <button id="migrate-no">Cancel</button>
+        </div>
+      `;
+      
+      document.body.appendChild(dialog);
+      
+      dialog.querySelector('#migrate-yes')?.addEventListener('click', () => {
+        dialog.remove();
+        resolve(true);
+      });
+      
+      dialog.querySelector('#migrate-no')?.addEventListener('click', () => {
+        dialog.remove();
+        resolve(false);
+      });
     });
   }
+  
+  private async createBackup(dashboardId: string, dashboard: any) {
+    const backupId = `${dashboardId}_backup_${Date.now()}`;
+    await this.storage.set(backupId, {
+      ...dashboard,
+      _isBackup: true,
+      _originalId: dashboardId
+    });
+    
+    this.showNotification(`Backup created: ${backupId}`);
+  }
+}
+```
+
+**Approach**: Silent migration for minor changes, user consent + backup for major changes.
+
+##### 6. Scope of Migration
+
+**Question**: What data needs migration?
+
+**Solution**: Tiered migration strategy based on data type
+
+```typescript
+interface MigrationScope {
+  dashboards: boolean;      // Canvas state, cell positions
+  cellData: boolean;         // Cell-specific data
+  executionResults: boolean; // Cached execution outputs
+  userPreferences: boolean;  // Settings and preferences
+  queryCache: boolean;       // Cached query results
 }
 
-interface Migration {
-  version: number;
-  description: string;
-  up: (config: any) => any;
-  down?: (config: any) => any;
-}
-```
-
-#### Migration Patterns
-
-**1. Adding New Fields**
-
-```typescript
-// Add new field with default value
-const addFieldMigration: Migration = {
-  version: 6,
-  description: 'Add notification preferences',
-  up: (config) => ({
-    ...config,
-    notifications: {
-      email: true,
-      push: false,
-      inApp: true,
-    },
-  }),
-  down: (config) => {
-    const { notifications, ...rest } = config;
-    return rest;
-  },
-};
-```
-
-**2. Renaming Fields**
-
-```typescript
-// Rename field while preserving value
-const renameFieldMigration: Migration = {
-  version: 7,
-  description: 'Rename refreshRate to refreshInterval',
-  up: (config) => {
-    const { refreshRate, ...rest } = config.data;
-    return {
-      ...config,
-      data: {
-        ...rest,
-        refreshInterval: refreshRate,
-      },
-    };
-  },
-  down: (config) => {
-    const { refreshInterval, ...rest } = config.data;
-    return {
-      ...config,
-      data: {
-        ...rest,
-        refreshRate: refreshInterval,
-      },
-    };
-  },
-};
-```
-
-**3. Type Conversions**
-
-```typescript
-// Convert data type
-const typeConversionMigration: Migration = {
-  version: 8,
-  description: 'Convert timeout from seconds to milliseconds',
-  up: (config) => ({
-    ...config,
-    behavior: {
-      ...config.behavior,
-      timeout: config.behavior.timeout * 1000,
-    },
-  }),
-  down: (config) => ({
-    ...config,
-    behavior: {
-      ...config.behavior,
-      timeout: config.behavior.timeout / 1000,
-    },
-  }),
-};
-```
-
-**4. Restructuring Data**
-
-```typescript
-// Flatten or nest structures
-const restructureMigration: Migration = {
-  version: 9,
-  description: 'Flatten user profile structure',
-  up: (config) => {
-    const { profile } = config.user;
-    return {
-      ...config,
-      user: {
-        ...config.user,
-        firstName: profile.name.first,
-        lastName: profile.name.last,
-        email: profile.contact.email,
-      },
-    };
-  },
-  down: (config) => {
-    const { firstName, lastName, email, ...user } = config.user;
-    return {
-      ...config,
-      user: {
-        ...user,
-        profile: {
-          name: { first: firstName, last: lastName },
-          contact: { email },
-        },
-      },
-    };
-  },
-};
-```
-
-#### Migration Testing
-
-```typescript
-class MigrationTester {
-  async testMigration(migration: Migration, testCases: TestCase[]) {
-    for (const testCase of testCases) {
-      console.log(`Testing migration ${migration.version}: ${testCase.name}`);
-      
-      // Test forward migration
-      const migrated = migration.up(testCase.input);
-      expect(migrated).toEqual(testCase.expectedOutput);
-      
-      // Test backward migration (if exists)
-      if (migration.down) {
-        const rolledBack = migration.down(migrated);
-        expect(rolledBack).toEqual(testCase.input);
+class ScopedMigrationManager {
+  async migrateAll(scope: MigrationScope = { dashboards: true, cellData: true, executionResults: false, userPreferences: true, queryCache: false }) {
+    const migrations: Promise<void>[] = [];
+    
+    if (scope.dashboards) {
+      migrations.push(this.migrateDashboards());
+    }
+    
+    if (scope.cellData) {
+      migrations.push(this.migrateCellData());
+    }
+    
+    if (scope.userPreferences) {
+      migrations.push(this.migrateUserPreferences());
+    }
+    
+    // Execution results and query cache are ephemeral - just clear them
+    if (scope.executionResults) {
+      await this.clearExecutionResults();
+    }
+    
+    if (scope.queryCache) {
+      await this.clearQueryCache();
+    }
+    
+    await Promise.all(migrations);
+  }
+  
+  private async migrateDashboards() {
+    const dashboards = await this.storage.getAllDashboards();
+    
+    for (const dashboard of dashboards) {
+      const version = dashboard.version || 1;
+      if (version < this.currentVersion) {
+        const migrated = await this.dashboardMigrator.migrate(dashboard, version);
+        await this.storage.saveDashboard(migrated);
       }
     }
   }
+  
+  private async clearExecutionResults() {
+    // Execution results are tied to code versions - safer to regenerate
+    await this.storage.clearNamespace('execution-results');
+  }
+  
+  private async clearQueryCache() {
+    // Query cache may have schema changes - safer to regenerate
+    await this.storage.clearNamespace('query-cache');
+  }
 }
-
-interface TestCase {
-  name: string;
-  input: any;
-  expectedOutput: any;
-}
-
-// Example test
-const testCases: TestCase[] = [
-  {
-    name: 'Add gridDensity with default value',
-    input: {
-      appearance: { theme: 'dark' },
-    },
-    expectedOutput: {
-      appearance: { theme: 'dark', gridDensity: 'normal' },
-    },
-  },
-];
 ```
 
-#### Best Practices
+**Approach**: 
+- **Migrate**: Dashboards, cell data, user preferences (persistent, user-created)
+- **Clear & regenerate**: Execution results, query cache (ephemeral, derived data)
 
-1. **Always provide rollback (down) migrations** for safety
-2. **Validate data after each migration** to catch errors early
-3. **Backup configurations before migrating** to enable recovery
-4. **Test migrations thoroughly** with real-world data
-5. **Log migration events** for debugging and auditing
-6. **Keep migrations idempotent** (safe to run multiple times)
-7. **Document breaking changes** in migration descriptions
-8. **Version schemas explicitly** to track evolution
+#### Migration Best Practices
+
+1. **Never delete user data** - Always preserve or offer conversion
+2. **Provide sensible defaults** for new fields
+3. **Create backups** before significant migrations
+4. **Track migration history** for debugging
+5. **Test with real data** from production
+6. **Make migrations idempotent** (safe to run multiple times)
+7. **Version everything** - dashboards, cells, configurations
 
 ## Settings Management
 
