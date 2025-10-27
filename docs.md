@@ -2718,7 +2718,7 @@ class ConfigManager {
 
 ## Storage Options & Strategy
 
-##### Client-Side Storage
+### Client-Side Storage
 
 **Primary Storage**
 - **IndexedDB**: Large, structured data (dashboards, datasets, extension state)
@@ -2762,7 +2762,7 @@ class ConfigManager {
   - Limitations: Small size, string-only storage
   - Use Case: Temporary filters, session-specific preferences
 
-##### Server-Side/Hybrid Storage
+### Server-Side/Hybrid Storage
 
 **Backend Integration**
 - **REST/GraphQL API**: Centralized data storage
@@ -2788,7 +2788,7 @@ class ConfigManager {
   - Limitations: Complex setup, requires signaling server, ephemeral
   - Use Case: Collaborative editing without central server
 
-##### Specialized Storage
+### Specialized Storage
 
 **Database Engines**
 - **SQLite WASM (sql.js)**: Full SQL database in browser
@@ -2825,7 +2825,7 @@ class ConfigManager {
   - Limitations: Emerging tech, requires infrastructure
   - Use Case: User-owned dashboard configurations
 
-##### Recommended Tiered Strategy
+### Recommended Tiered Strategy
 
 **Tier 1: Hot Data (Active)**
 - In-Memory State → Current dashboard state, UI state
@@ -2843,7 +2843,7 @@ class ConfigManager {
 - DuckDB WASM → In-browser analytics on large datasets
 - SQLite WASM → Complex relational queries
 
-##### Comparative Analysis: Pros & Cons
+### Comparative Analysis: Pros & Cons
 
 | Storage Type | Pros | Cons | Best For |
 |-------------|------|------|----------|
@@ -2865,7 +2865,7 @@ class ConfigManager {
 | **IPFS** | Permanent storage; Content-addressed; Decentralized; Immutable | Slower access; Requires gateway; Complex setup; Not for mutable data | Public data sharing, immutable content, archival |
 | **Ceramic Network** | User-owned data; Cross-app portability; Decentralized identity; Verifiable | Emerging tech; Complex setup; Limited adoption; Infrastructure needs | User-owned configs, cross-app data, Web3 apps |
 
-##### Decision Matrix
+### Decision Matrix
 
 **Choose IndexedDB when:**
 - You need persistent, structured data storage
