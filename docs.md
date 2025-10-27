@@ -1,6 +1,6 @@
 ---
 title: "Extensible BI Dashboard Framework: Technical Documentation"
-author: "Technical Architecture Team"
+author: "Jehu Shalom Amanna"
 abstract: |
   **Extensible BI Dashboard Framework** is a browser-based, highly extensible framework designed for building dynamic Business Intelligence (BI) dashboards. The system features a minimal core with maximum extensibility, allowing developers to create, customize, and extend UI components on-the-fly using both a custom DSL and JavaScript.
 
@@ -17,7 +17,7 @@ The minimal core provides essential infrastructure for the extensible framework.
 
 ---
 
-#### Component Registry
+## Component Registry
 
 **Purpose**: Central registry for all UI components (built-in and user-defined)
 
@@ -120,7 +120,7 @@ class ComponentRegistry {
 
 *For detailed state management integration, see Section 1.3. For plugin lifecycle, see Section 1.4.*
 
-#### Event System
+## Event System
 
 **Purpose**: Pub/sub event bus for inter-component communication
 
@@ -220,7 +220,7 @@ class TypedEventBus {
 
 *For integration with hooks, see Section 2.2.6. For state synchronization, see Section 1.3.*
 
-#### State Management
+## State Management
 
 **Purpose**: Centralized, reactive state management
 
@@ -340,7 +340,7 @@ const useDashboardStore = create<DashboardState>()(
 
 > **Note**: This section consolidates state management information. Technology recommendations and settings management patterns have been integrated here for completeness.
 
-#### Plugin Loader
+## Plugin Loader
 
 **Purpose**: Dynamic loading and management of extensions
 
@@ -494,9 +494,9 @@ The framework provides comprehensive extension capabilities through dual languag
 
 ---
 
-### Extension Languages
+## Extension Languages
 
-#### Custom DSL
+## Custom DSL
 
 
 - **Purpose**: Declarative, safe UI composition
@@ -525,7 +525,7 @@ dashboard "Sales Overview" {
 }
 ```
 
-#### JavaScript Extensions
+## JavaScript Extensions
 
 
 - **Purpose**: Full programmatic control for advanced use cases
@@ -537,11 +537,11 @@ dashboard "Sales Overview" {
   - Sandboxed execution
 
 
-### Extension Points
+## Extension Points
 
 The framework provides multiple extension points for customizing every aspect of the system.
 
-#### UI Components
+## UI Components
 
 
 
@@ -603,7 +603,7 @@ extensionAPI.registerComponent({
 
 *For component registry details, see Section 1.1. For React integration, see Section 8.1.*
 
-#### Commands & Command Palette
+## Commands & Command Palette
 
 
 
@@ -856,7 +856,7 @@ extensionAPI.registerPipeline({
 
 *For command palette integration, see Section 2.2.2.*
 
-#### Keybindings
+## Keybindings
 
 
 
@@ -957,7 +957,7 @@ extensionAPI.registerMacro({
 
 > **Note**: Detailed keybinding architecture consolidated here from multiple sections.
 
-#### Themes
+## Themes
 
 
 
@@ -1016,7 +1016,7 @@ extensionAPI.registerTheme({
 
 *For theme architecture, see Section 9.1.3.*
 
-#### Layouts
+## Layouts
 
 **Buffer/Window Model**:
 
@@ -1083,7 +1083,7 @@ extensionAPI.registerLayoutTemplate({
 
 *For layout architecture, see Section 9.1.4.*
 
-#### Hooks & Advice
+## Hooks & Advice
 
 
 
@@ -1411,7 +1411,7 @@ class AdviceSystem {
 *For plugin architecture, see Section 1.4. For extension patterns, see Section 2.1.*
 
 
-### Hot Reloading
+## Hot Reloading
 
 
 
@@ -1526,9 +1526,9 @@ window.addEventListener('error', (event) => {
 
 **Overview**: A comprehensive security model protects users from malicious extensions while enabling powerful customization capabilities.
 
-### Sandboxing & Permissions
+## Sandboxing & Permissions
 
-#### Execution Environment
+## Execution Environment
 
 **Sandboxing Approaches**:
 
@@ -1591,7 +1591,7 @@ const createSandboxedAPI = (extensionId: string, permissions: string[]) => {
 
 *For DOM access patterns, see Section 4.1. For API design, see Section 6.3.*
 
-#### Capability-Based Permissions
+## Capability-Based Permissions
 
 **Permission Model**:
 
@@ -1668,7 +1668,7 @@ class PermissionManager {
 
 *For permission UI patterns, see Section 2.2. For audit logging, see Section 6.3.*
 
-#### API Surface
+## API Surface
 
 **API Design Principles**:
 
@@ -1725,7 +1725,7 @@ class AuditLogger {
 
 *For API design patterns, see Section 1. For versioning, see Section 6.*
 
-#### Code Review & Signing
+## Code Review & Signing
 
 **Extension Marketplace Security**:
 
@@ -1845,7 +1845,7 @@ Modern BI dashboard capabilities including canvas interfaces, SQL integration, r
 
 ---
 
-### Canvas Architecture
+## Canvas Architecture
 
 
 
@@ -1921,7 +1921,7 @@ class CanvasRenderer {
 
 *For state management, see Section 1.3. For collaboration, see Section 4.3.*
 
-### SQL Integration
+## SQL Integration
 
 
 
@@ -2023,7 +2023,7 @@ function DataCell({ sql, params }) {
 
 *For data persistence, see Section 9.3. For component binding, see Section 4.1.*
 
-### Real-Time Collaboration
+## Real-Time Collaboration
 
 
 
@@ -2145,7 +2145,7 @@ function CollaborativeCell({ cellId }) {
 
 *For state management, see Section 1.3. For canvas architecture, see Section 4.1.*
 
-### Performance Optimization
+## Performance Optimization
 
 
 
@@ -2253,13 +2253,13 @@ Configuration and data persistence strategies for the framework.
 
 ---
 
-### Storage Strategy & Configuration
+## Storage Strategy & Configuration
 
 
 
-#### User Configurations
+## User Configurations
 
-#### Settings Management
+## Settings Management
 
 **Concept**: Centralized system for user preferences and application options.
 
@@ -2316,7 +2316,7 @@ Configuration and data persistence strategies for the framework.
 
 **Recommended Architecture**: Hierarchical structure with Zustand, Zod validation, hybrid persistence (critical settings eager, UI preferences debounced), IndexedDB storage.
 
-#### Keybinding System
+## Keybinding System
 
 **Concept**: Customizable keyboard shortcuts for commands and actions.
 
@@ -2374,7 +2374,7 @@ Configuration and data persistence strategies for the framework.
 
 **Recommended Architecture**: Command-based with keymap hierarchy, context-aware execution, chord support, and user customization. Use tinykeys for minimal apps, hotkeys-js for feature-rich needs.
 
-#### Theme System
+## Theme System
 
 **Concept**: Visual styling and color schemes that can be switched dynamically.
 
@@ -2442,7 +2442,7 @@ Configuration and data persistence strategies for the framework.
 
 **Recommended Architecture**: CSS Variables for tokens, Tailwind CSS for utility classes, system preference detection with manual override, persistent user choice in IndexedDB.
 
-#### Layout System
+## Layout System
 
 **Concept**: Flexible, user-customizable arrangement of dashboard components and panels.
 
@@ -2711,12 +2711,12 @@ class ConfigManager {
 // Export/Import: JSON with schema validation
 ```
 
-#### Extension State
+## Extension State
 - **Plugin Configurations**: Extension-specific settings
 - **Installed Extensions**: List of active plugins
 - **Extension Data**: Plugin-managed data
 
-#### Storage Options & Strategy
+## Storage Options & Strategy
 
 ##### Client-Side Storage
 
@@ -2903,7 +2903,7 @@ class ConfigManager {
 - Building Web3 or P2P applications
 - Avoiding vendor lock-in is important
 
-#### Migration & Versioning
+## Migration & Versioning
 - **Schema Versioning**: Handle data format changes
 - **Automatic Migration**: Upgrade old configurations
 - **Rollback Support**: Revert to previous versions
@@ -2918,9 +2918,9 @@ class ConfigManager {
 
 
 
-### Technology Choices
+## Technology Choices
 
-#### Frontend Framework & UI Libraries
+## Frontend Framework & UI Libraries
 
 **Core Framework**:
 - **React**: Component-based UI library
@@ -2998,22 +2998,22 @@ class ConfigManager {
    - Error boundaries
    - Progress indicators
 
-#### State Management
+## State Management
 - **Zustand** or **Jotai**: Lightweight, flexible state management
 - **Immer**: Immutable state updates
 - **IndexedDB**: Client-side persistence
 
-#### Build System
+## Build System
 - **Vite**: Fast development server and build tool
 - **ESBuild**: Fast JavaScript bundler
 - **TypeScript**: Type-safe development
 
-#### Extension System
+## Extension System
 - **ES Modules**: Standard module format for extensions
 - **Dynamic Import**: Lazy loading of extensions
 - **Web Workers**: Isolated execution for heavy computations
 
-#### Security
+## Security
 - **SES (Secure ECMAScript)**: Hardened JavaScript environment
 - **Content Security Policy**: Browser-level security
 - **Subresource Integrity**: Verify external resources
@@ -3027,21 +3027,21 @@ class ConfigManager {
 
 
 
-### BI Dashboard Application
+## BI Dashboard Application
 
-#### Dashboard Builder
+## Dashboard Builder
 - **Drag-and-Drop**: Visual dashboard composition
 - **Data Binding**: Connect components to data sources
 - **Real-Time Updates**: Live data streaming and updates
 - **Responsive Design**: Adaptive layouts for different screen sizes
 
-#### Data Visualization
+## Data Visualization
 - **Chart Library**: Comprehensive set of chart types
 - **Custom Visualizations**: User-defined chart components
 - **Interactive Filters**: Cross-filtering between components
 - **Drill-Down**: Navigate from summary to detail views
 
-#### Developer Workflows
+## Developer Workflows
 - **Version Control**: Dashboard configurations as code
 - **Collaboration**: Share and fork dashboards
 - **Testing**: Unit and integration tests for extensions
@@ -3053,7 +3053,7 @@ class ConfigManager {
 
 
 
-### Open Source Projects
+## Open Source Projects
 
 **Observable Ecosystem**:
 - [Observable Runtime](https://github.com/observablehq/runtime) - Reactive notebook runtime with dependency resolution
@@ -3088,14 +3088,14 @@ class ConfigManager {
 - [PixiJS](https://github.com/pixijs/pixijs) - WebGL rendering engine
 - [rbush](https://github.com/mourner/rbush) - R-tree spatial indexing
 
-### Platform Documentation
+## Platform Documentation
 
 - [Observable Documentation](https://observablehq.com/documentation) - Notebook concepts and API
 - [Count.co Documentation](https://count.co/docs) - Canvas-based BI platform
 - [tldraw Developer Docs](https://tldraw.dev) - Canvas SDK and API reference
 - [Omni Docs](https://omnidocs.com) - Documentation platform architecture
 
-### Technical Articles & Resources
+## Technical Articles & Resources
 
 **Observable**:
 - [How Observable Runs](https://observablehq.com/@observablehq/how-observable-runs) - Runtime architecture
@@ -3116,7 +3116,7 @@ class ConfigManager {
 - [CRDT Explained](https://crdt.tech/) - Conflict-free replicated data types
 - [Real-time Collaboration Patterns](https://www.figma.com/blog/how-figmas-multiplayer-technology-works/) - Figma's approach
 
-### Design Patterns & Architecture
+## Design Patterns & Architecture
 
 - [Reactive Programming](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754) - Introduction to reactive thinking
 - [Flux Architecture](https://facebook.github.io/flux/) - Unidirectional data flow
@@ -3266,7 +3266,7 @@ User Action → UI Layer → Core System → Extension Layer
 
 
 
-### Phase 1: Core Foundation
+## Phase 1: Core Foundation
 1. **Core Architecture**
    - Component registry
    - Event system
@@ -3278,7 +3278,7 @@ User Action → UI Layer → Core System → Extension Layer
    - Context providers
    - Hook-based API
 
-### Phase 2: Core Patterns
+## Phase 2: Core Patterns
 1. **Buffer/Window System**
    - Buffer abstraction
    - Window management
@@ -3294,7 +3294,7 @@ User Action → UI Layer → Core System → Extension Layer
    - Fuzzy search
    - Command execution
 
-### Phase 3: Extension System
+## Phase 3: Extension System
 1. **DSL Development**
    - Parser and compiler
    - Type system
@@ -3310,7 +3310,7 @@ User Action → UI Layer → Core System → Extension Layer
    - Permission system
    - Code signing infrastructure
 
-### Phase 4: Canvas & Notebook Features
+## Phase 4: Canvas & Notebook Features
 1. **Canvas System**
    - Infinite canvas implementation
    - Viewport management (pan/zoom)
@@ -3339,7 +3339,7 @@ User Action → UI Layer → Core System → Extension Layer
    - Real-time sync
    - Conflict resolution
 
-### Phase 5: Polish & Production
+## Phase 5: Polish & Production
 1. **State Persistence**
    - IndexedDB integration
    - Migration system
