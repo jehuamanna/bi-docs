@@ -3006,87 +3006,46 @@ class ConfigManager {
 
 **Updated Architecture** (reflects comprehensive system design):
 
-```
-┌───────────────────────────────────────────────────────────────────────┐
-│                          User Interface Layer                         │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐     │
-│  │Dashboard │ │ Command  │ │Extension │ │ Settings │ │  Theme   │     │
-│  │ Builder  │ │ Palette  │ │ Manager  │ │  Panel   │ │ Switcher │     │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘     │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐                  │
-│  │  Layout  │ │Keybinding│ │  Hooks   │ │  Advice  │                  │
-│  │ Manager  │ │  Editor  │ │ Inspector│ │ Debugger │                  │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘                  │
-└───────────────────────────────────────────────────────────────────────┘
-                                    │
-┌───────────────────────────────────────────────────────────────────────┐
-│                           Core System Layer                           │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐             │
-│  │   Component    │ │     Event      │ │     State      │             │
-│  │    Registry    │ │     System     │ │  Management    │             │
-│  │  (Lazy Load)   │ │ (Typed Events) │ │   (Zustand)    │             │
-│  └────────────────┘ └────────────────┘ └────────────────┘             │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐             │
-│  │     Plugin     │ │   Keybinding   │ │    Command     │             │
-│  │     Loader     │ │     System     │ │    Registry    │             │
-│  │  (HMR + DI)    │ │ (Chord + Ctx)  │ │  (Palette)     │             │
-│  └────────────────┘ └────────────────┘ └────────────────┘             │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐             │
-│  │     Hooks &    │ │     Theme      │ │     Layout     │             │
-│  │     Advice     │ │     System     │ │     Engine     │             │
-│  │  (Priority)    │ │ (CSS Vars)     │ │ (Grid/Mosaic)  │             │
-│  └────────────────┘ └────────────────┘ └────────────────┘             │
-└───────────────────────────────────────────────────────────────────────┘
-                                    │
-┌───────────────────────────────────────────────────────────────────────┐
-│                         Extension Layer                               │
-│  ┌──────────┐ ┌──────────┐  ┌──────────┐ ┌──────────┐ ┌──────────┐    │
-│  │   DSL    │ │JavaScript│  │  React   │ │   Web    │ │  Themes  │    │
-│  │Extensions│ │Extensions│  │Components│ │Components│ │ & Layouts│    │
-│  └──────────┘ └──────────┘  └──────────┘ └──────────┘ └──────────┘    │
-│  ┌──────────┐ ┌───────────┐ ┌──────────┐ ┌──────────┐                 │
-│  │ Commands │ │Keybindings│ │  Hooks   │ │  Macros  │                 │
-│  │          │ │           │ │          │ │          │                 │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘                  │
-└───────────────────────────────────────────────────────────────────────┘
-                                    │
-┌───────────────────────────────────────────────────────────────────────┐
-│                          Security Layer                               │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐             │
-│  │   Sandboxed    │ │   Capability   │ │      Code      │             │
-│  │   Execution    │ │   Permissions  │ │    Signing     │             │
-│  │  (SES/iframe)  │ │  (Runtime)     │ │ (Crypto API)   │             │
-│  └────────────────┘ └────────────────┘ └────────────────┘             │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐             │
-│  │   API Surface  │ │  Audit Log     │ │   Marketplace  │             │
-│  │   (Versioned)  │ │  (Tracking)    │ │    Review      │             │
-│  └────────────────┘ └────────────────┘ └────────────────┘             │
-└───────────────────────────────────────────────────────────────────────┘
-                                    │
-┌───────────────────────────────────────────────────────────────────────┐
-│                        Persistence Layer                              │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐             │
-│  │   IndexedDB    │ │  LocalStorage  │ │      OPFS      │             │
-│  │  (Warm Data)   │ │  (Hot Data)    │ │  (Cold Data)   │             │
-│  └────────────────┘ └────────────────┘ └────────────────┘             │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐             │
-│  │   Cloud Sync   │ │   DuckDB WASM  │ │   Time-Travel  │             │
-│  │  (REST/GQL)    │ │  (Analytics)   │ │    (Zundo)     │             │
-│  └────────────────┘ └────────────────┘ └────────────────┘             │
-└───────────────────────────────────────────────────────────────────────┘
-                                    │
-┌───────────────────────────────────────────────────────────────────────┐
-│                       Development Layer                               │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐             │
-│  │      HMR       │ │  Source Maps   │ │ Error Overlay  │             │
-│  │  (Vite/WP)     │ │  (Debugging)   │ │  (Dev Mode)    │             │
-│  └────────────────┘ └────────────────┘ └────────────────┘             │
-│  ┌────────────────┐ ┌────────────────┐ ┌────────────────┐             │
-│  │ State Inspector│ │  Performance   │ │  Network Mon   │             │
-│  │  (DevTools)    │ │   Profiling    │ │  (Extension)   │             │
-│  └────────────────┘ └────────────────┘ └────────────────┘             │
-└───────────────────────────────────────────────────────────────────────┘
-```
+### Layer 1: User Interface Layer
+
+| Dashboard Builder | Command Palette | Extension Manager | Settings Panel | Theme Switcher |
+| Layout Manager | Keybinding Editor | Hooks Inspector | Advice Debugger | |
+
+↓
+
+### Layer 2: Core System Layer
+
+| Component Registry (Lazy Load) | Event System (Typed Events) | State Management (Zustand) |
+| Plugin Loader (HMR + DI) | Keybinding System (Chord + Ctx) | Command Registry (Palette) |
+| Hooks & Advice (Priority) | Theme System (CSS Vars) | Layout Engine (Grid/Mosaic) |
+
+↓
+
+### Layer 3: Extension Layer
+
+| DSL Extensions | JavaScript Extensions | React Components | Web Components | Themes & Layouts |
+| Commands | Keybindings | Hooks | Macros | |
+
+↓
+
+### Layer 4: Security Layer
+
+| Sandboxed Execution (SES/iframe) | Capability Permissions (Runtime) | Code Signing (Crypto API) |
+| API Surface (Versioned) | Audit Log (Tracking) | Marketplace Review |
+
+↓
+
+### Layer 5: Persistence Layer
+
+| IndexedDB (Warm Data) | LocalStorage (Hot Data) | OPFS (Cold Data) |
+| Cloud Sync (REST/GQL) | DuckDB WASM (Analytics) | Time-Travel (Zundo) |
+
+↓
+
+### Layer 6: Development Layer
+
+| HMR (Vite/WP) | Source Maps (Debugging) | Error Overlay (Dev Mode) |
+| State Inspector (DevTools) | Performance Profiling | Network Monitoring (Extension) |
 
 **Key Architecture Updates**:
 
